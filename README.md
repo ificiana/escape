@@ -10,3 +10,8 @@ Include a README file in all your packages. This is the perfect place to explain
 * The controls
 * What there is to see in the game
 * Copyright attributions (eg. CC-BY resources you have used)
+
+# Guidelines
+* Work in the `dev` branch before merging into the `main`
+* Rebase your work before pushing, try to keep the git history clean
+* Don't push directly to any branch, do a PR
