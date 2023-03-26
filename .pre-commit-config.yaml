@@ -14,15 +14,21 @@ repos:
     hooks:
       - id: pylint
         name: Pylint
-        entry: poetry run pylint **/*.py
+        entry: pylint
+        # poetry run raised error for some reason
         language: system
         types: [python]
+        args:
+          ["--rcfile=.pylintrc"]
 
   - repo: https://github.com/psf/black
     rev: 21.12b0
     hooks:
       - id: black
         name: Black
-        entry: poetry run black . --config pyproject.toml
+        entry: black
+        # poetry run raised error for some reason
         types: [ python ]
         language: system
+        args:
+          [ "--config=pyproject.toml" ]
