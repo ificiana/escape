@@ -104,9 +104,9 @@ STYLES = {
 def is_decorated():
     if WINDOWS:
         return (
-            os.getenv("ANSICON") is not None
-            or os.getenv("ConEmuANSI") == "ON"
-            or os.getenv("Term") == "xterm"
+                os.getenv("ANSICON") is not None
+                or os.getenv("ConEmuANSI") == "ON"
+                or os.getenv("Term") == "xterm"
         )
 
     if not hasattr(sys.stdout, "fileno"):
@@ -299,9 +299,9 @@ class VirtualEnvironment:
             context = builder.ensure_directories(target)
 
             if (
-                WINDOWS
-                and hasattr(context, "env_exec_cmd")
-                and context.env_exe != context.env_exec_cmd
+                    WINDOWS
+                    and hasattr(context, "env_exec_cmd")
+                    and context.env_exe != context.env_exec_cmd
             ):
                 target = target.resolve()
 
@@ -457,13 +457,13 @@ class Installer:
     )
 
     def __init__(
-        self,
-        version: Optional[str] = None,
-        preview: bool = False,
-        force: bool = False,
-        accept_all: bool = False,
-        git: Optional[str] = None,
-        path: Optional[str] = None,
+            self,
+            version: Optional[str] = None,
+            preview: bool = False,
+            force: bool = False,
+            accept_all: bool = False,
+            git: Optional[str] = None,
+            path: Optional[str] = None,
     ) -> None:
         self._version = version
         self._preview = preview
@@ -885,8 +885,8 @@ def main():
         preview=args.preview or string_to_bool(os.getenv("POETRY_PREVIEW", "0")),
         force=args.force,
         accept_all=args.accept_all
-        or string_to_bool(os.getenv("POETRY_ACCEPT", "0"))
-        or not is_interactive(),
+                   or string_to_bool(os.getenv("POETRY_ACCEPT", "0"))
+                   or not is_interactive(),
         path=args.path,
         git=args.git,
     )
