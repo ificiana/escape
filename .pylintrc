@@ -3,4 +3,4 @@ ignore = utils/install_poetry.py
 
 [MESSAGES CONTROL]
 # temporary, until documentation is complete
-disable=C0114, C0115, C0116
+disable=C0114, C0115, C0116, W0401
