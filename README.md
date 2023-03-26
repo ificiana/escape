@@ -4,9 +4,34 @@ Team submission for pyweek35, repo will be renamed once we have a name for the g
 
 # Setup Guide
 
-On windows, run `setup` and then `python run_game.py`
-Not tested on linux and mac yet.
+First install poetry following : https://python-poetry.org/docs/
 
+### For Windows run:
+
+  `curl -sSL https://install.python-poetry.org | python -`
+  
+  `set PATH=%PATH%;%USERPROFILE%\AppData\Roaming\pypoetry\venv\Scripts`
+
+### For Mac or Linux:
+
+  `curl -sSL https://install.python-poetry.org | python3 -`
+
+  `export PATH="$HOME/.local/bin:$PATH"`
+  
+### Then, start the poetry shell:
+  
+  `poetry shell`
+  
+### And install the dependencies:
+
+  `poetry install`
+  
+### Next to run the game:
+
+  `python run_game.py` on Windows
+  
+  `python3 run_game.py` on Linux or Mac
+  
 # What goes here?
 
 Include a README file in all your packages. This is the perfect place to explain:
@@ -22,6 +47,8 @@ Include a README file in all your packages. This is the perfect place to explain
 - Work in the `dev` branch before merging into the `main`
 - Rebase your work before pushing, try to keep the git history clean
 - Don't push directly to any branch, do a PR
+
+# Appendix
 
 ## Using Virtual Environment (venv)
 
@@ -72,3 +99,11 @@ When you are done working with the project, you can deactivate the virtual envir
 `deactivate`
 
 This will return your terminal or command prompt to its normal state.
+
+### Setting up pre-commit
+
+We use pre-commit to run some checks before committing. To set it up, run:
+
+`pre-commit install`
+
+This will install the pre-commit hook into your local git repository. Now, whenever you commit, the pre-commit hook will run and check for any errors. If there are any errors, the commit will fail and you will have to fix them before committing again.
