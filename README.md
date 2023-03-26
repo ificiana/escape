@@ -72,3 +72,11 @@ When you are done working with the project, you can deactivate the virtual envir
 `deactivate`
 
 This will return your terminal or command prompt to its normal state.
+
+### Setting up pre-commit
+
+We use pre-commit to run some checks before committing. To set it up, run:
+
+`pre-commit install`
+
+This will install the pre-commit hook into your local git repository. Now, whenever you commit, the pre-commit hook will run and check for any errors. If there are any errors, the commit will fail and you will have to fix them before committing again.
