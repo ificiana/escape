@@ -1,6 +1,9 @@
 # pyweek35
 Team submission for pyweek35, repo will be renamed once we have a name for the game
 
+# Setup Guide
+On windows, run `setup` and then `python run_game.py`
+Not tested on linux and mac yet.
 
 # What goes here?
 Include a README file in all your packages. This is the perfect place to explain:
