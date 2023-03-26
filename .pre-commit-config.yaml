@@ -1,0 +1,28 @@
+default_language_version:
+  python: python3.11
+
+repos:
+  -   repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v2.3.0
+      hooks:
+      -   id: check-yaml
+      -   id: end-of-file-fixer
+      -   id: trailing-whitespace
+
+  - repo: https://github.com/pycqa/pylint
+    rev: v2.17.1
+    hooks:
+      - id: pylint
+        name: Pylint
+        entry: poetry run pylint **/*.py
+        language: system
+        types: [python]
+
+  - repo: https://github.com/psf/black
+    rev: 21.12b0
+    hooks:
+      - id: black
+        name: Black
+        entry: poetry run black . --config pyproject.toml
+        types: [ python ]
+        language: system
