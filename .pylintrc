@@ -1,0 +1,2 @@
+[MASTER]
+ignore = utils/install_poetry.py
