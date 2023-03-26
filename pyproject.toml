@@ -92,3 +92,7 @@ addopts = [
   "--doctest-modules",
   "--doctest-continue-on-failure",
 ]
+
+# Scripts
+[tool.poetry.scripts]
+game = "scripts:run_game"
