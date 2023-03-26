@@ -16,10 +16,14 @@ jobs:
         with:
           python-version: 3.x
 
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
       - name: Install dependencies
         run: |
-          pip install pylint
+          poetry install
 
       - name: Run Pylint
         run: |
-          find . -type f -name "*.py" ! -path "./utils/install_poetry.py" | xargs pylint
+          poetry run find . -type f -name "*.py" ! -path "./utils/install_poetry.py" | xargs poetry run pylint
