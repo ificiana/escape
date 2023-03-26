@@ -23,6 +23,6 @@ repos:
     hooks:
       - id: black
         name: Black
-        entry: poetry run black --config pyproject.toml
+        entry: poetry run black . --config pyproject.toml
         types: [ python ]
         language: system
