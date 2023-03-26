@@ -33,6 +33,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.10.0"
 arcade = "^2.6.17"
+pygame = "^2.3.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
