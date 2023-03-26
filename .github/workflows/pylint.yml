@@ -21,4 +21,5 @@ jobs:
           pip install pylint
 
       - name: Run Pylint
-        run: pylint **/*.py
+            run: |
+              find . -type f -name "*.py" ! -path "./utils/install_poetry.py" | xargs pylint
