@@ -1,9 +1,9 @@
 import arcade
 from pyglet.math import clamp, Vec2
 from arcade.experimental.shadertoy import Shadertoy
-
 import assets
 
+from .inventory import Inventory
 from .config import *
 from .entities import MC
 
@@ -52,11 +52,19 @@ class Game(arcade.Window):
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.mc, self.walls
         )  # Create physics engine for collision
+
+        # Setup inventory
+        self.inventory = Inventory()
+
         # Shader related work
         self.shadertoy = None
         self.channel0 = None
         self.channel1 = None
         self.load_shader()
+
+    def setup(self):
+        # Initial items the player has
+        self.inventory.add_item("Knife")
 
     def load_shader(self):
         shader_file_path = assets.sprites.resolve("shadow.glsl")
@@ -109,6 +117,7 @@ class Game(arcade.Window):
         self.shadertoy.render()
         self.mc.draw()
         self.walls.draw()
+        self.inventory.draw()
 
     # Handle Keyboard Input
     # Navigate with WASD or Arrow keys and use Mouse for direction
@@ -123,6 +132,7 @@ class Game(arcade.Window):
         if symbol in [arcade.key.RIGHT, arcade.key.D]:
             x_input = 1
         x_input = clamp(x_input, -1, 1)
+        self.inventory.on_key_press(symbol, modifiers)
 
     def on_key_release(self, symbol: int, modifiers: int):
         global x_input, y_input
@@ -147,5 +157,6 @@ class Game(arcade.Window):
 
 
 def main():
-    Game(SCREEN_WIDTH, SCREEN_HEIGHT, "Mental Asylum")
+    game = Game(SCREEN_WIDTH, SCREEN_HEIGHT, "Mental Asylum")
+    game.setup()
     arcade.run()
