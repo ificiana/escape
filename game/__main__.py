@@ -10,12 +10,12 @@ from .entities import MC
 # pylint: disable=global-statement
 # TODO: fix this
 
-Xinput, Yinput = 0, 0
+x_input, y_input = 0, 0
 mouseX, mouseY = 0, 0
 worldMouseX, worldMouseY = mouseX, mouseY
 
 
-def placeWalls():
+def place_walls():
     walls = arcade.SpriteList()
     rect = [100, 100, 64 * 10, 64 * 10]  # Placing walls around this rect
     for i in range(rect[0], rect[0] + rect[2] + 64, 64):
@@ -56,9 +56,9 @@ class Game(arcade.Window):
         self.shadertoy = None
         self.channel0 = None
         self.channel1 = None
-        self.loadShader()
+        self.load_shader()
 
-    def loadShader(self):
+    def load_shader(self):
         shader_file_path = assets.sprites.resolve("shadow.glsl")
         window_size = self.get_size()
         self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
@@ -78,11 +78,11 @@ class Game(arcade.Window):
             mouseX + self.sceneCamera.position.x,
             mouseY + self.sceneCamera.position.y,
         )
-        self.mc.move(Xinput, Yinput, worldMouseX, worldMouseY)
-        camPos = Vec2(
+        self.mc.move(x_input, y_input, worldMouseX, worldMouseY)
+        cam_pos = Vec2(
             self.mc.center_x - SCREEN_WIDTH / 2, self.mc.center_y - SCREEN_HEIGHT / 2
         )
-        self.sceneCamera.move_to(camPos)
+        self.sceneCamera.move_to(cam_pos)
         self.physics_engine.update()
         # Collision is Glitchy
 
@@ -113,28 +113,28 @@ class Game(arcade.Window):
     # Handle Keyboard Input
     # Navigate with WASD or Arrow keys and use Mouse for direction
     def on_key_press(self, symbol: int, modifiers: int):
-        global Xinput, Yinput
+        global x_input, y_input
         if symbol in [arcade.key.DOWN, arcade.key.S]:
-            Yinput = -1
+            y_input = -1
         if symbol in [arcade.key.UP, arcade.key.W]:
-            Yinput = 1
+            y_input = 1
         if symbol in [arcade.key.LEFT, arcade.key.A]:
-            Xinput = -1
+            x_input = -1
         if symbol in [arcade.key.RIGHT, arcade.key.D]:
-            Xinput = 1
-        Xinput = clamp(Xinput, -1, 1)
+            x_input = 1
+        x_input = clamp(x_input, -1, 1)
 
     def on_key_release(self, symbol: int, modifiers: int):
-        global Xinput, Yinput
+        global x_input, y_input
         if symbol in [arcade.key.DOWN, arcade.key.S]:
-            Yinput = 0
+            y_input = 0
         if symbol in [arcade.key.UP, arcade.key.W]:
-            Yinput = 0
+            y_input = 0
         if symbol in [arcade.key.LEFT, arcade.key.A]:
-            Xinput = 0
+            x_input = 0
         if symbol in [arcade.key.RIGHT, arcade.key.D]:
-            Xinput = 0
-        Xinput = clamp(Xinput, -1, 1)
+            x_input = 0
+        x_input = clamp(x_input, -1, 1)
 
     # Handle Mouse Events
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
