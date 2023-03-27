@@ -117,7 +117,7 @@ class Game(arcade.Window):
         self.shadertoy.render()
         self.mc.draw()
         self.walls.draw()
-        self.inventory.draw()
+        self.inventory.display_menu(self.inventory.show_menu)
 
     # Handle Keyboard Input
     # Navigate with WASD or Arrow keys and use Mouse for direction
@@ -132,7 +132,7 @@ class Game(arcade.Window):
         if symbol in [arcade.key.RIGHT, arcade.key.D]:
             x_input = 1
         x_input = clamp(x_input, -1, 1)
-        self.inventory.on_key_press(symbol, modifiers)
+        self.inventory.handle_key_press(symbol)
 
     def on_key_release(self, symbol: int, modifiers: int):
         global x_input, y_input
