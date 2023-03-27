@@ -43,8 +43,8 @@ class MC(Entity):
         #     self.cur_texture = 0
         # self.texture = self.walk_textures[self.cur_texture]
 
-    def move(self, dx, dy, mouseX, mouseY):
-        direction = Vec2(mouseX, mouseY) - Vec2(self.center_x, self.center_y)
+    def move(self, dx, dy, mouse_x, mouse_y):
+        direction = Vec2(mouse_x, mouse_y) - Vec2(self.center_x, self.center_y)
         if direction.mag != 0:
             direction = direction.normalize()
             self.angle = math.degrees(direction.heading)
@@ -54,5 +54,5 @@ class MC(Entity):
     def show(self):
         self.draw()
 
-    def getPosition(self):
+    def get_position(self):
         return Vec2(self.center_x, self.center_y)
