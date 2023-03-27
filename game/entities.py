@@ -27,9 +27,9 @@ class Entity(arcade.Sprite):
 class MC(Entity):
     def __init__(self):
         super().__init__("mc_idle.png")
-        self.pos = Vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+        self.center_x, self.center_y = Vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
         self.angle = -90
-        self.speed = 6.0
+        self.speed = 4.0
 
     def update_animation(self, delta_time: float = 1 / 60):
         pass
@@ -43,14 +43,16 @@ class MC(Entity):
         #     self.cur_texture = 0
         # self.texture = self.walk_textures[self.cur_texture]
 
-    def move(self, dx, dy, mouseX, mouseY):
-        self.pos += Vec2(dx, dy)
-        direction = Vec2(mouseX, mouseY) - self.pos
+    def move(self, dx, dy, mouse_x, mouse_y):
+        direction = Vec2(mouse_x, mouse_y) - Vec2(self.center_x, self.center_y)
         if direction.mag != 0:
             direction = direction.normalize()
-            self.angle = math.degrees(math.atan2(direction.y, direction.x))
-        self.center_x = self.pos.x
-        self.center_y = self.pos.y
+            self.angle = math.degrees(direction.heading)
+        self.center_x += dx * self.speed
+        self.center_y += dy * self.speed
 
     def show(self):
         self.draw()
+
+    def get_position(self):
+        return Vec2(self.center_x, self.center_y)
