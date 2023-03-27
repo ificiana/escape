@@ -44,8 +44,10 @@ class Game(arcade.Window):
         super().__init__(width, height, title)
         self.mc = MC()
         # self.walls = placeWalls()
-        my_map = arcade.TileMap(assets.tilemaps.resolve("level1.tmx"), use_spatial_hash=True)
-        self.walls = my_map.sprite_lists['walls']
+        my_map = arcade.TileMap(
+            assets.tilemaps.resolve("level1.tmx"), use_spatial_hash=True
+        )
+        self.walls = my_map.sprite_lists["walls"]
         self.sceneCamera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.mc, self.walls
@@ -55,7 +57,7 @@ class Game(arcade.Window):
         self.channel0 = None
         self.channel1 = None
         self.loadShader()
-    
+
     def loadShader(self):
         shader_file_path = assets.sprites.resolve("shadow.glsl")
         window_size = self.get_size()
@@ -99,9 +101,11 @@ class Game(arcade.Window):
 
         self.use()
         self.clear()
-        self.shadertoy.program['lightPosition'] = Vec2(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-        self.shadertoy.program['lightSize'] = 300
-        self.shadertoy.program['angle'] = self.mc.angle
+        self.shadertoy.program["lightPosition"] = Vec2(
+            SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
+        )
+        self.shadertoy.program["lightSize"] = 300
+        self.shadertoy.program["angle"] = self.mc.angle
         self.shadertoy.render()
         self.mc.draw()
         self.walls.draw()
