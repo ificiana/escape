@@ -22,6 +22,7 @@ class Inventory:
             print(f"{item} is not in the inventory.")
 
     def display_menu(self, show=True):
+        self.show_menu = show
         if show:
             self.show_menu = True
             menu_text = "Inventory\n\n"
@@ -31,12 +32,16 @@ class Inventory:
                 else:
                     menu_text += f"  {item}\n"
 
+            menu_text += "\n(C)lose\n"
+
             arcade.start_render()
             arcade.draw_text(menu_text, 100, 400, arcade.color.WHITE, 20)
             arcade.finish_render()
-        else:
-            self.show_menu = False
 
     def handle_key_press(self, key):
         if key == arcade.key.I:
             self.display_menu(not self.show_menu)
+        elif key == arcade.key.ESCAPE:
+            self.display_menu(False)
+        elif key == arcade.key.C and self.show_menu:
+            self.display_menu(False)
