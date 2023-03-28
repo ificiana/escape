@@ -88,6 +88,7 @@ class BaseView(arcade.View):
                 node.draw()
 
         if self.ui_nodes:
+            self.window.ui_manager.clear()
             for node in self.ui_nodes:
                 self.window.ui_manager.add(node)
             self.window.ui_manager.draw()
