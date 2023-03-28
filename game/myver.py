@@ -58,6 +58,28 @@ class Game(arcade.Window):
             "Storybook": {
                 "color": arcade.color.BLACK,
                 "ui": get_storybook_ui(self),
+                # "text": [get_storybook_text(self)],
+            },
+            "About": {
+                "color": arcade.color.BLACK,
+                "text": [
+                    ViewText(
+                        "This is a team submission by BeeTLes for PyWeek35",
+                        self.width / 2,
+                        self.height / 2,
+                        font_size=15,
+                        anchor_x="center",
+                    ),
+                    ViewText(
+                        "Click to Return",
+                        self.width / 2,
+                        self.height / 2 - 75,
+                        arcade.color.WHITE,
+                        font_size=10,
+                        anchor_x="center",
+                    ),
+                ],
+                "next": "MenuView",
             },
             # TODO: Add rest of the Views here
         }

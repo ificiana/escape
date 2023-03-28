@@ -33,6 +33,11 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
         # window.hide_view()
         window.show_view(BaseView(window.views).configure("Storybook"))
 
+    @about_button.event("on_click")
+    def on_click_about(event):
+        print("About:", event)
+        window.show_view(BaseView(window.views).configure("About"))
+
     @quit_button.event("on_click")
     def on_click_quit(event):
         print("Quit:", event)
