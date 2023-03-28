@@ -29,8 +29,6 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @start_button.event("on_click")
     def on_click_start(event):
         print("Start:", event)
-        # TODO: The menu should be hidden but it won't hide
-        # window.hide_view()
         window.show_view(BaseView(window.views).configure("Storybook"))
 
     @about_button.event("on_click")
