@@ -71,11 +71,10 @@ class GameView(arcade.View):
         )
         self.sceneCamera.move_to(cam_pos)
         self.physics_engine.update()
-        # Collision is Glitchy
 
     def on_draw(self):
         arcade.start_render()
-        arcade.set_background_color((50, 50, 50))
+        arcade.set_background_color(arcade.color.BLACK)
         # self.channel0.use()
         # self.channel0.clear()
         self.sceneCamera.use()
