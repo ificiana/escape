@@ -4,7 +4,7 @@ import arcade
 import arcade.gui
 
 from game.config import *
-from game.story import get_storybook_ui
+from game.views.story import get_storybook_ui
 from game.views import ViewText, BaseView
 from game.views.menu import get_menu_view_ui
 
