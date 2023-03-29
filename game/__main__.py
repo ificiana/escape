@@ -85,6 +85,74 @@ class Game(arcade.Window):
                 ],
                 "next": "MenuView",
             },
+            "Credits": {
+                # This shows the credits section
+                "color": arcade.color.BLACK,
+                "text": [
+                    arcade.Text(
+                        "Here goes credits and contributions, to fill later",
+                        self.width / 2,
+                        self.height / 2,
+                        font_size=15,
+                        anchor_x="center",
+                    ),
+                    arcade.Text(
+                        "Click to Return",
+                        self.width / 2,
+                        self.height / 2 - 75,
+                        arcade.color.WHITE,
+                        font_size=10,
+                        anchor_x="center",
+                    ),
+                ],
+                "next": "MenuView",
+            },
+            "Levels": {
+                # This shows the settings section
+                # TODO: implement a proper levels view
+                "color": arcade.color.BLACK,
+                "text": [
+                    arcade.Text(
+                        "Level selections here, TODO",
+                        self.width / 2,
+                        self.height / 2,
+                        font_size=15,
+                        anchor_x="center",
+                    ),
+                    arcade.Text(
+                        "Click to Return",
+                        self.width / 2,
+                        self.height / 2 - 75,
+                        arcade.color.WHITE,
+                        font_size=10,
+                        anchor_x="center",
+                    ),
+                ],
+                "next": "MenuView",
+            },
+            "Settings": {
+                # This shows the settings section
+                # TODO: implement a proper settings view
+                "color": arcade.color.BLACK,
+                "text": [
+                    arcade.Text(
+                        "Here goes settings, TODO",
+                        self.width / 2,
+                        self.height / 2,
+                        font_size=15,
+                        anchor_x="center",
+                    ),
+                    arcade.Text(
+                        "Click to Return",
+                        self.width / 2,
+                        self.height / 2 - 75,
+                        arcade.color.WHITE,
+                        font_size=10,
+                        anchor_x="center",
+                    ),
+                ],
+                "next": "MenuView",
+            },
             # This shows the main game view, starts at level 1
             "GameView": self.get_level_view(1),
             # Shows the inventory
