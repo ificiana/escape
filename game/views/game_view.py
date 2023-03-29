@@ -1,9 +1,13 @@
+import time
+
 import arcade
 from pyglet.math import Vec2
 
 import assets
 from game.entities.player import Player
 from game.views import change_views
+
+arcade.enable_timings()
 
 
 class GameView(arcade.View):
@@ -16,6 +20,7 @@ class GameView(arcade.View):
         self.walls = None
         self.player = None
         self.physics_engine = None
+        self.start_time = None
 
         # movement states
         self.movement = Vec2(0, 0)
@@ -27,6 +32,7 @@ class GameView(arcade.View):
 
         # Setup camera
         self.scene_camera = arcade.Camera(*self.window.size)
+        self.gui_camera = arcade.Camera(*self.window.size)
 
         # select the level
         self.select_level(level)
@@ -48,6 +54,9 @@ class GameView(arcade.View):
 
         # Create physics engine for collision
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
+
+        # Start time
+        self.start_time = time.time()
 
     def on_show_view(self):
         """This is run once when we switch to this view"""
@@ -87,11 +96,12 @@ class GameView(arcade.View):
             case arcade.key.I:
                 print("Open Inventory: ")
                 change_views(self.window, "InventoryView")
+            case arcade.key.ESCAPE:
+                print("Pause Game: ")
+                change_views(self.window, "Pause")
 
         # add fail-check
         self.movement.clamp(-1, 1)
-
-        # TODO: implement ESC for pausing game
 
     def on_key_release(self, symbol: int, modifiers: int):
         match symbol:
@@ -114,5 +124,20 @@ class GameView(arcade.View):
         self.clear()
 
         self.scene_camera.use()
-        self.walls.draw()
         self.entities_list.draw()
+        self.walls.draw()
+
+        # Add GUI
+        self.gui_camera.use()
+        arcade.Text(
+            f"Health: 100, Time: "
+            f"{':'.join(map(lambda x: f'{int(x):02d}',divmod(time.time()-self.start_time, 60)))}",
+            self.window.width - 200,
+            self.window.height - 25,
+        ).draw()
+        arcade.Text(
+            f"FPS: {int(arcade.get_fps())}",
+            20,
+            self.window.height - 25,
+        ).draw()
+        arcade.Text("Press ESC to pause; press I to enter the inventory", 10, 10).draw()
