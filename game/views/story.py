@@ -1,5 +1,5 @@
 from typing import Union
-from assets import tilemaps
+from assets import tilemaps, fonts
 
 import arcade.gui
 
@@ -23,7 +23,7 @@ def get_storybook_ui(
         "cur_page": 1,
         "max_page": 5,
     }
-    arcade.load_font(tilemaps.resolve("melted_monster.ttf"))
+    arcade.load_font(fonts.resolve("Melted Monster.ttf"))
     text_area = arcade.gui.UITextArea(
         x=100,
         y=200,
