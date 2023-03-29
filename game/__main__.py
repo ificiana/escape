@@ -1,7 +1,7 @@
 import arcade
 import arcade.gui
 
-from game.config import *
+from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.views import BaseView
 from game.views.game_view import GameView
 from game.views.inventory import InventoryView

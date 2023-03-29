@@ -2,8 +2,8 @@ from typing import Union
 
 import arcade.gui
 
-from game.views import change_views
 from assets import fonts
+from game.views import change_views
 
 
 def get_storybook_ui(
