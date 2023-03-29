@@ -2,7 +2,7 @@ from typing import Union
 
 import arcade.gui
 
-from game.views import BaseView
+from game.views import change_views
 
 
 def get_storybook_ui(
@@ -50,7 +50,7 @@ def get_storybook_ui(
     def on_click_next(event):
         print("Next:", event)
         if data["cur_page"] == data["max_page"]:
-            window.show_view(BaseView(window.views).configure("GameView"))
+            change_views(window, "GameView")
             return
         data["cur_page"] = min(data["max_page"], data["cur_page"] + 1)
         text_area.text = data["pages"][data["cur_page"]]
@@ -58,7 +58,7 @@ def get_storybook_ui(
     @skip_button.event("on_click")
     def on_click_skip(event):
         print("Skip:", event)
-        window.show_view(BaseView(window.views).configure("GameView"))
+        change_views(window, "GameView")
 
     return [
         arcade.gui.UIAnchorWidget(anchor_x="center", anchor_y="bottom", child=h_box),

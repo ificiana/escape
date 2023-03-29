@@ -58,4 +58,10 @@ class BaseView(arcade.View):
         """If the user presses the mouse button, navigate to the next View."""
 
         if self.next:
+            self.window.ui_manager.clear()
             self.window.show_view(self.configure(self.next))
+
+
+def change_views(window: arcade.Window, dest_view: str):
+    window.ui_manager.clear()
+    window.show_view(BaseView(window.views).configure(dest_view))

@@ -3,7 +3,7 @@ from pyglet.math import Vec2
 
 import assets
 from game.entities.player import Player
-from game.views import BaseView
+from game.views import change_views
 
 
 class GameView(arcade.View):
@@ -86,9 +86,7 @@ class GameView(arcade.View):
                 self.movement.x = 1
             case arcade.key.I:
                 print("Open Inventory: ")
-                self.window.show_view(
-                    BaseView(self.window.views).configure("InventoryView")
-                )
+                change_views(self.window, "InventoryView")
 
         # add fail-check
         self.movement.clamp(-1, 1)

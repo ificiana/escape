@@ -1,6 +1,6 @@
 import arcade.gui
 
-from game.views import BaseView
+from game.views import change_views
 
 
 def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
@@ -29,12 +29,12 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @start_button.event("on_click")
     def on_click_start(event):
         print("Start:", event)
-        window.show_view(BaseView(window.views).configure("Storybook"))
+        change_views(window, "Storybook")
 
     @about_button.event("on_click")
     def on_click_about(event):
         print("About:", event)
-        window.show_view(BaseView(window.views).configure("About"))
+        change_views(window, "About")
 
     @quit_button.event("on_click")
     def on_click_quit(event):
@@ -44,6 +44,7 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @settings_button.event("on_click")
     def on_click_settings(event):
         print("Settings:", event)
+        change_views(window, "Settings")
 
     return arcade.gui.UIAnchorWidget(
         anchor_x="center_x", anchor_y="center_y", child=v_box
