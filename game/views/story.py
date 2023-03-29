@@ -1,8 +1,8 @@
 from typing import Union
-from assets import tilemaps, fonts
 
 import arcade.gui
 
+from assets import fonts
 from game.views import BaseView
 
 
@@ -15,10 +15,16 @@ def get_storybook_ui(
     data = {
         "pages": {
             1: "Welcome to the asylum. \n\nYou're surrounded by darkness and fear.",
-            2: "The doctors are after you, and you have to escape before it's too late. \nBut be warned, this asylum holds dark secrets and twisted experiments. \n\nThe path to freedom will not be easy.",
-            3: "Watch out for the doctors. Explore the asylum, search for clues, and solve puzzles. Collect batteries to keep your flashlight lit, use any tool you can find to defend yourself.",
-            4: "As you delve deeper into the asylum, you'll uncover its dark secrets and learn the truth about what really goes on behind its walls. But will you make it out alive, or will you become just another victim of its madness?",
-            5: "But remember, every step you take could be your last. Good luck."
+            2: "The doctors are after you, and you have to escape before it's too late. \nBut be "
+            "warned, this asylum holds dark secrets and twisted experiments. \n\nThe path to "
+            "freedom will not be easy.",
+            3: "Watch out for the doctors. Explore the asylum, search for clues, and solve "
+            "puzzles. Collect batteries to keep your flashlight lit, use any tool you can find "
+            "to defend yourself.",
+            4: "As you delve deeper into the asylum, you'll uncover its dark secrets and learn "
+            "the truth about what really goes on behind its walls. But will you make it out "
+            "alive, or will you become just another victim of its madness?",
+            5: "But remember, every step you take could be your last. Good luck.",
         },
         "cur_page": 1,
         "max_page": 5,
@@ -32,7 +38,7 @@ def get_storybook_ui(
         text=data["pages"][data["cur_page"]],
         text_color=arcade.csscolor.WHITE,
         font_size=20,
-        font_name="Melted Monster"
+        font_name="Melted Monster",
     )
 
     # Create the buttons
