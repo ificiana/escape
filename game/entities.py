@@ -1,6 +1,7 @@
 import math
-
+import random
 import arcade
+
 from pyglet.math import Vec2
 
 from assets import sprites
@@ -58,23 +59,37 @@ class Player(Entity):
         return Vec2(self.center_x, self.center_y)
 
 
-class Enemy(Entity):
+class Enemy(arcade.Sprite):
     def __init__(self, player):
-        super().__init__("slimeBlock.png")
-        self.center_x, self.center_y = Vec2(SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2)
-        self.angle = -90
-        self.speed = 3.0
+        super().__init__("assets/sprites/enemy.png", scale=0.5)
+
+        # Set initial position randomly across the whole map
+        self.center_x = random.randint(0, SCREEN_WIDTH)
+        self.center_y = random.randint(0, SCREEN_HEIGHT)
+
+        # Store reference to the player instance
         self.player = player
 
+        # Set speed and detection radius
+        self.speed = 2
+        self.detect_radius = 3 * self.width  # Only follows player if within 3 spaces
+
     def update(self):
-        # Calculate direction to the player
-        direction = self.player.get_position() - Vec2(self.center_x, self.center_y)
-        if direction.mag != 0:
-            direction = direction.normalize()
-            self.angle = math.degrees(direction.heading)
-        # Move towards the player
-        self.center_x += direction.x * self.speed
-        self.center_y += direction.y * self.speed
+        # Calculate distance to player
+        distance = Vec2(self.player.center_x, self.player.center_y).distance(
+            Vec2(self.center_x, self.center_y)
+        )
+
+        # Move towards player if within detection radius
+        if distance <= self.detect_radius:
+            direction = Vec2(self.player.center_x, self.player.center_y) - Vec2(
+                self.center_x, self.center_y
+            )
+            if direction.mag != 0:
+                direction = direction.normalize()
+                self.angle = -math.degrees(math.atan2(direction.y, direction.x))
+            self.center_x += direction.x * self.speed
+            self.center_y += direction.y * self.speed
 
     def show(self):
         self.draw()
