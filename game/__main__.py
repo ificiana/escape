@@ -2,7 +2,7 @@ import arcade
 import arcade.gui
 
 from game.config import *
-from game.views import ViewText, BaseView
+from game.views import BaseView
 from game.views.game_view import GameView
 from game.views.menu import get_menu_view_ui
 from game.views.story import get_storybook_ui
@@ -25,14 +25,14 @@ class Game(arcade.Window):
                 # This is the first view, the entrypoint
                 "color": arcade.color.BLACK,
                 "text": [
-                    ViewText(
+                    arcade.Text(
                         "Escape!!",
                         self.width / 2,
                         self.height / 2,
                         font_size=50,
                         anchor_x="center",
                     ),
-                    ViewText(
+                    arcade.Text(
                         "Click to advance",
                         self.width / 2,
                         self.height / 2 - 75,
@@ -47,7 +47,7 @@ class Game(arcade.Window):
                 # This shows the menus
                 "color": arcade.color.BLACK,
                 "text": [
-                    ViewText(
+                    arcade.Text(
                         "Escape!!",
                         self.width / 2,
                         self.height - 50,
@@ -68,14 +68,14 @@ class Game(arcade.Window):
                 # This shows the about section
                 "color": arcade.color.BLACK,
                 "text": [
-                    ViewText(
+                    arcade.Text(
                         "This is a team submission by BeeTLes for PyWeek35",
                         self.width / 2,
                         self.height / 2,
                         font_size=15,
                         anchor_x="center",
                     ),
-                    ViewText(
+                    arcade.Text(
                         "Click to Return",
                         self.width / 2,
                         self.height / 2 - 75,
