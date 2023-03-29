@@ -54,11 +54,10 @@ class BaseView(arcade.View):
         # store the views data
         self.views: dict = views or {}
 
-    def configure(self, view: Union[str, arcade.View]) -> "Self":
+    def configure(self, view: str) -> "Self":
         """Configure the View"""
-
-        if isinstance(view, arcade.View):
-            return view
+        if isinstance(self.views[view], arcade.View):
+            return self.views[view]
         self.bg_color = self.views[view].get("color")
         self.text_nodes = self.views[view].get("text")
         self.ui_nodes = self.views[view].get("ui")

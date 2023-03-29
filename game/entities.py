@@ -24,7 +24,7 @@ class Entity(arcade.Sprite):
         self.set_hit_box(self.texture.hit_box_points)
 
 
-class MC(Entity):
+class Player(Entity):
     def __init__(self):
         super().__init__("mc_idle.png")
         self.center_x, self.center_y = Vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)

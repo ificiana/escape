@@ -2,6 +2,8 @@ from typing import Union
 
 import arcade.gui
 
+from game.views import BaseView
+
 
 def get_storybook_ui(
     window: arcade.Window,
@@ -47,15 +49,16 @@ def get_storybook_ui(
     @next_button.event("on_click")
     def on_click_next(event):
         print("Next:", event)
-        # TODO: Start the game after this reaches max_page
+        if data["cur_page"] == data["max_page"]:
+            window.show_view(BaseView(window.views).configure("GameView"))
+            return
         data["cur_page"] = min(data["max_page"], data["cur_page"] + 1)
         text_area.text = data["pages"][data["cur_page"]]
 
     @skip_button.event("on_click")
     def on_click_skip(event):
-        # TODO: Start the game after this
         print("Skip:", event)
-        arcade.exit()
+        window.show_view(BaseView(window.views).configure("GameView"))
 
     return [
         arcade.gui.UIAnchorWidget(anchor_x="center", anchor_y="bottom", child=h_box),
