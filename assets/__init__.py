@@ -1,3 +1,3 @@
-from .manager import sprites, tilemaps
+from .manager import sprites, tilemaps, sounds
 
-__all__ = ["sprites", "tilemap"]
+__all__ = ["sprites", "tilemap", "sounds"]
