@@ -25,6 +25,10 @@ class GameView(arcade.View):
         )
         self.walls = tile_map.sprite_lists["walls"]
 
+        # Barrier List for pathfinding
+        self.barrier_list = arcade.AStarBarrierList(self.player, self.walls, 32, 0, 80*32, 0, 50*32)
+        self.barrier_list.recalculate()
+
         # Setup camera
         self.sceneCamera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -36,8 +40,8 @@ class GameView(arcade.View):
 
         # Add enemies to the game
         self.enemies = arcade.SpriteList()
-        for i in range(3):
-            enemy = Enemy(self.player)
+        for i in range(1):
+            enemy = Enemy(self.player, self.barrier_list)
             self.enemies.append(enemy)
 
         # Shader related work
@@ -144,3 +148,5 @@ class GameView(arcade.View):
             mouseX + self.sceneCamera.position.x,
             mouseY + self.sceneCamera.position.y,
         )
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
+        print(worldMouseX, worldMouseY)

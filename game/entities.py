@@ -23,6 +23,8 @@ class Entity(arcade.Sprite):
         #     self.walk_textures.append(texture)
         self.texture = self.idle_texture
         self.set_hit_box(self.texture.hit_box_points)
+    def get_position(self):
+        return Vec2(self.center_x, self.center_y)
 
 
 class Player(Entity):
@@ -55,41 +57,43 @@ class Player(Entity):
     def show(self):
         self.draw()
 
-    def get_position(self):
-        return Vec2(self.center_x, self.center_y)
-
-
-class Enemy(arcade.Sprite):
-    def __init__(self, player):
-        super().__init__("assets/sprites/enemy.png", scale=0.5)
-
-        # Set initial position randomly across the whole map
-        self.center_x = random.randint(0, SCREEN_WIDTH)
-        self.center_y = random.randint(0, SCREEN_HEIGHT)
-
-        # Store reference to the player instance
+class Enemy(Entity):
+    def __init__(self, player, barrier_list):
+        super().__init__("slimeBlock.png")
+        self.angle = -90
+        self.speed = 3.0
         self.player = player
+        self.barrier_list = barrier_list
+        start = Vec2(300, 900)
+        end = Vec2(1200, 1280)
+        self.patrol_path = self.calculate_path(start, end)
+        self.patrol_path_index = 0
+        self.center_x, self.center_y = self.patrol_path[self.patrol_path_index]
+        self.state = "patrolling"
+        self.moving_forward = True
 
-        # Set speed and detection radius
-        self.speed = 2
-        self.detect_radius = 3 * self.width  # Only follows player if within 3 spaces
-
+    def calculate_path(self, start, end):
+        return arcade.astar_calculate_path(start, end, self.barrier_list, True)
+        
     def update(self):
-        # Calculate distance to player
-        distance = Vec2(self.player.center_x, self.player.center_y).distance(
-            Vec2(self.center_x, self.center_y)
-        )
+        if self.state == "patrolling":
+            # Patrolling
+            point = self.patrol_path[self.patrol_path_index]
+            direction = Vec2(point[0], point[1]) - self.get_position()
+            if direction.mag < 5:
+                self.patrol_path_index += 1 if self.moving_forward else -1
+                if self.patrol_path_index == len(self.patrol_path)-1: self.moving_forward = False
+                elif self.patrol_path_index == 0: self.moving_forward = True
+        elif self.state == "chasing":
+            # Calculate direction to the player
+            direction = self.player.get_position() - self.get_position()
+        if direction.mag != 0:
+            direction = direction.normalize()
+            self.angle = math.degrees(direction.heading)
+        # Move towards the player
+        self.center_x += direction.x * self.speed
+        self.center_y += direction.y * self.speed
 
-        # Move towards player if within detection radius
-        if distance <= self.detect_radius:
-            direction = Vec2(self.player.center_x, self.player.center_y) - Vec2(
-                self.center_x, self.center_y
-            )
-            if direction.mag != 0:
-                direction = direction.normalize()
-                self.angle = -math.degrees(math.atan2(direction.y, direction.x))
-            self.center_x += direction.x * self.speed
-            self.center_y += direction.y * self.speed
 
     def show(self):
         self.draw()
