@@ -1,9 +1,8 @@
 import arcade
 from pyglet.math import clamp, Vec2
 
-# from arcade.experimental.shadertoy import Shadertoy
 import assets
-
+from game.torch import TorchShaderToy  # Import the TorchShaderToy class from torch.py
 from game.inventory import Inventory
 from game.config import *
 from game.entities import Player
@@ -34,28 +33,14 @@ class GameView(arcade.View):
         # Setup inventory
         self.inventory = Inventory()
 
-        # Shader related work
-        # self.shadertoy = None
-        # self.channel0 = None
-        # self.channel1 = None
-        # self.load_shader()
+        # Create an instance of TorchShaderToy and set its position and radius
+        self.torch = TorchShaderToy()
+        self.torch.set_torch_pos(0.5, 0.5)
+        self.torch.set_torch_radius(0.2)
 
     def setup(self):
         # Initial items the player has
         self.inventory.add_item("Knife")
-
-    # def load_shader(self):
-    #     shader_file_path = assets.sprites.resolve("shadow.glsl")
-    #     window_size = self.get_size()
-    #     self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
-    #     self.channel0 = self.shadertoy.ctx.framebuffer(
-    #         color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
-    #     )
-    #     self.channel1 = self.shadertoy.ctx.framebuffer(
-    #         color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
-    #     )
-    #     self.shadertoy.channel_0 = self.channel0.color_attachments[0]
-    #     self.shadertoy.channel_1 = self.channel1.color_attachments[0]
 
     def on_update(self, delta_time: float):
         super().on_update(delta_time)
@@ -72,33 +57,34 @@ class GameView(arcade.View):
         self.sceneCamera.move_to(cam_pos)
         self.physics_engine.update()
 
+        # Set the position of the torch to the player's position
+        self.torch.set_torch_pos(
+            self.player.center_x / SCREEN_WIDTH, self.player.center_y / SCREEN_HEIGHT
+        )
+
     def on_draw(self):
         arcade.start_render()
         arcade.set_background_color(arcade.color.BLACK)
-        # self.channel0.use()
-        # self.channel0.clear()
         self.sceneCamera.use()
         self.walls.draw()
 
-        # self.channel1.use()
-        # self.channel1.clear()
-        # Draw everything that can be hidden in shadows bur does not cast shadow
-        # self.walls.draw()
-
-        # self.use()
         self.clear()
-        # self.shadertoy.program["lightPosition"] = Vec2(
-        #     SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
-        # )
-        # self.shadertoy.program["lightSize"] = 300
-        # self.shadertoy.program["angle"] = self.player.angle
-        # self.shadertoy.render()
+
+        # Draw the player sprite
         self.player.draw()
+
+        # Render the torch shader program on the player sprite
+        with self.torch:
+            self.torch.set_resolution(self.player.width, self.player.height)
+            self.torch.set_light_intensity(1.0)
+            self.torch.render(self.player.center_x, self.player.center_y)
+
         self.walls.draw()
         self.inventory.display_menu(self.inventory.show_menu)
 
-    # Handle Keyboard Input
-    # Navigate with WASD or Arrow keys and use Mouse for direction
+        # Handle Keyboard Input
+        # Navigate with WASD or Arrow keys and use Mouse for direction
+
     def on_key_press(self, symbol: int, modifiers: int):
         global x_input, y_input
         if symbol in [arcade.key.DOWN, arcade.key.S]:
@@ -124,7 +110,8 @@ class GameView(arcade.View):
             x_input = 0
         x_input = clamp(x_input, -1, 1)
 
-    # Handle Mouse Events
+        # Handle Mouse Events
+
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         global mouseX, mouseY, worldMouseX, worldMouseY
         mouseX, mouseY = x, y
