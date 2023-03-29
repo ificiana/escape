@@ -1,88 +1,73 @@
 import arcade
 
-from .config import SCREEN_WIDTH, SCREEN_HEIGHT
+from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
+from game.views.game_view import GameView
 
 
-class Inventory:
-    def __init__(self, items=None):
-        if items is None:
-            items = []
-        self.items = items
+class InventoryView(arcade.View):
+    def __init__(self, game, items=None):
+        super().__init__()
+        self.game = game
+        self.items = items or []
         self.selected_item = None
         self.show_menu = False
         self.background_sprite = None
         self.close_button_sprite = None
 
-    def add_item(self, item):
-        if item not in self.items:
-            self.items.append(item)
-        else:
-            print(f"{item} is already in the inventory.")
+        self.setup()
 
-    def select_item(self, item):
-        if item in self.items:
-            self.selected_item = item
-        else:
-            print(f"{item} is not in the inventory.")
+    def setup(self):
+        # Create a background sprite
+        if self.background_sprite is None:
+            self.background_sprite = arcade.SpriteSolidColor(
+                SCREEN_WIDTH, SCREEN_HEIGHT, arcade.color.GRAY
+            )
 
-    def display_menu(self, show=True):
-        self.show_menu = show
-        if show:
-            # Create a background sprite
-            if self.background_sprite is None:
-                self.background_sprite = arcade.SpriteSolidColor(
-                    SCREEN_WIDTH, SCREEN_HEIGHT, arcade.color.GRAY
-                )
+        # Create a close button sprite
+        if self.close_button_sprite is None:
+            self.close_button_sprite = arcade.Sprite(
+                ":resources:onscreen_controls/shaded_light/close.png"
+            )
+            self.close_button_sprite.center_x = SCREEN_WIDTH - 50
+            self.close_button_sprite.center_y = 50
 
-            # Create a close button sprite
-            if self.close_button_sprite is None:
-                self.close_button_sprite = arcade.Sprite(
-                    ":resources:onscreen_controls/shaded_light/close.png"
-                )
-                self.close_button_sprite.center_x = SCREEN_WIDTH - 50
-                self.close_button_sprite.center_y = 50
+    def on_draw(self):
+        arcade.start_render()
+        self.background_sprite.draw()
+        arcade.draw_text(
+            "Inventory",
+            SCREEN_WIDTH / 2,
+            SCREEN_HEIGHT - 40,
+            arcade.color.BLACK,
+            28,
+            anchor_x="center",
+        )
 
-            # Create a sprite for each item
-            item_sprites = []
-            for item in self.items:
-                item_sprite = arcade.Sprite(f"assets/items/{item}.png")
-                item_sprite.name = item
-                item_sprite.center_x = 80
-                item_sprite.center_y = 510 - len(item_sprites) * 100
-                item_sprites.append(item_sprite)
-
-            # Render the menu
-            arcade.set_background_color(arcade.color.WHITE)
-            arcade.start_render()
-            self.background_sprite.draw()
+        # Draw items
+        for i, item in enumerate(self.items):
+            item_sprite = arcade.Sprite(f"assets/items/{item}.png")
+            item_sprite.name = item
+            item_sprite.center_x = 80
+            item_sprite.center_y = 510 - i * 100
+            item_sprite.draw()
             arcade.draw_text(
-                "Inventory",
-                SCREEN_WIDTH / 2,
-                SCREEN_HEIGHT - 40,
+                item_sprite.name,
+                item_sprite.center_x,
+                item_sprite.center_y - 50,
                 arcade.color.BLACK,
-                28,
+                14,
                 anchor_x="center",
             )
-            for item_sprite in item_sprites:
-                item_sprite.draw()
-                arcade.draw_text(
-                    item_sprite.name,
-                    item_sprite.center_x,
-                    item_sprite.center_y - 50,
-                    arcade.color.BLACK,
-                    14,
-                    anchor_x="center",
-                )
-            self.close_button_sprite.draw()
-            arcade.finish_render()
 
-    def handle_mouse_press(self, x, y, button):
-        if self.show_menu and button == arcade.MOUSE_BUTTON_LEFT:
+        self.close_button_sprite.draw()
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if button == arcade.MOUSE_BUTTON_LEFT:
             if self.close_button_sprite.collides_with_point((x, y)):
-                self.display_menu(False)
+                if isinstance(self.game.current_view, InventoryView):
+                    self.game.hide_inventory_view()
 
-    def handle_key_press(self, key):
-        if key == arcade.key.I:
-            self.display_menu(not self.show_menu)
-        elif key == arcade.key.ESCAPE:
-            self.display_menu(False)
+    def on_key_press(self, symbol, modifiers):
+        if symbol in (arcade.key.I, arcade.key.ESCAPE):
+            if isinstance(self.game.current_view, GameView):
+                self.game.show_inventory_view()

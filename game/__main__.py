@@ -6,6 +6,7 @@ from game.views import ViewText, BaseView
 from game.views.game_view import GameView
 from game.views.menu import get_menu_view_ui
 from game.views.story import get_storybook_ui
+from game.inventory import InventoryView
 
 
 class Game(arcade.Window):
@@ -16,6 +17,7 @@ class Game(arcade.Window):
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
         self.game_view = GameView()
+        self.inventory_view = InventoryView(self)
 
     def setup(self):
         self.views = {
@@ -86,12 +88,22 @@ class Game(arcade.Window):
             },
             # This shows the main game view
             "GameView": self.game_view,
+            "InventoryView": self.inventory_view,
             # TODO: Add rest of the Views here
         }
 
         entrypoint = "StartView"
         view = BaseView(self.views)
         self.show_view(view.configure(entrypoint))
+
+    def show_game_view(self):
+        self.show_view(self.game_view)
+
+    def show_inventory_view(self):
+        self.show_view(self.inventory_view)
+
+    def hide_inventory_view(self):
+        self.show_game_view()
 
 
 def main():
