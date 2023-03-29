@@ -1,6 +1,7 @@
 import math
-
+import random
 import arcade
+
 from pyglet.math import Vec2
 
 from assets import sprites
@@ -56,7 +57,6 @@ class Player(Entity):
     def show(self):
         self.draw()
 
-
 class Enemy(Entity):
     def __init__(self, player, barrier_list):
         super().__init__("slimeBlock.png")
@@ -93,6 +93,7 @@ class Enemy(Entity):
         # Move towards the player
         self.center_x += direction.x * self.speed
         self.center_y += direction.y * self.speed
+
 
     def show(self):
         self.draw()
