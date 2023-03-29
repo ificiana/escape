@@ -169,15 +169,6 @@ class Game(arcade.Window):
     def get_level_view(level: int) -> GameView:
         return GameView(level)
 
-    def show_game_view(self):
-        self.show_view(self.game_view)
-
-    def show_inventory_view(self):
-        self.show_view(self.inventory_view)
-
-    def hide_inventory_view(self):
-        self.show_game_view()
-
 
 def main():
     game = Game(SCREEN_WIDTH, SCREEN_HEIGHT, "Escape!!")
