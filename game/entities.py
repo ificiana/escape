@@ -56,3 +56,25 @@ class Player(Entity):
 
     def get_position(self):
         return Vec2(self.center_x, self.center_y)
+
+
+class Enemy(Entity):
+    def __init__(self, player):
+        super().__init__("slimeBlock.png")
+        self.center_x, self.center_y = Vec2(SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2)
+        self.angle = -90
+        self.speed = 3.0
+        self.player = player
+
+    def update(self):
+        # Calculate direction to the player
+        direction = self.player.get_position() - Vec2(self.center_x, self.center_y)
+        if direction.mag != 0:
+            direction = direction.normalize()
+            self.angle = math.degrees(direction.heading)
+        # Move towards the player
+        self.center_x += direction.x * self.speed
+        self.center_y += direction.y * self.speed
+
+    def show(self):
+        self.draw()

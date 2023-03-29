@@ -6,7 +6,7 @@ import assets
 
 from game.inventory import Inventory
 from game.config import *
-from game.entities import Player
+from game.entities import Player, Enemy
 
 # pylint: disable=global-statement
 # TODO: fix this
@@ -33,6 +33,12 @@ class GameView(arcade.View):
 
         # Setup inventory
         self.inventory = Inventory()
+
+        # Add enemies to the game
+        self.enemies = arcade.SpriteList()
+        for i in range(3):
+            enemy = Enemy(self.player)
+            self.enemies.append(enemy)
 
         # Shader related work
         # self.shadertoy = None
@@ -72,6 +78,10 @@ class GameView(arcade.View):
         self.sceneCamera.move_to(cam_pos)
         self.physics_engine.update()
 
+        # Update enemies
+        for enemy in self.enemies:
+            enemy.update()
+
     def on_draw(self):
         arcade.start_render()
         arcade.set_background_color(arcade.color.BLACK)
@@ -93,6 +103,8 @@ class GameView(arcade.View):
         # self.shadertoy.program["lightSize"] = 300
         # self.shadertoy.program["angle"] = self.player.angle
         # self.shadertoy.render()
+        # Draw enemies and player
+        self.enemies.draw()
         self.player.draw()
         self.walls.draw()
         self.inventory.display_menu(self.inventory.show_menu)
