@@ -24,7 +24,6 @@ class GameView(arcade.View):
             assets.tilemaps.resolve("level1.tmx"), use_spatial_hash=True
         )
         self.walls = tile_map.sprite_lists["walls"]
-
         # Setup camera
         self.sceneCamera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
