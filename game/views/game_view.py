@@ -78,14 +78,16 @@ class GameView(arcade.View):
         self.mouse_pos.x, self.mouse_pos.y = x, y
 
     def on_update(self, delta_time: float):
-        self.player.move(*self.movement, *self.screen_to_world_point(self.mouse_pos))
+        self.player.move(self.movement, self.screen_to_world_point(self.mouse_pos))
         cam_pos = Vec2(
             self.player.center_x - self.window.width / 2,
             self.player.center_y - self.window.height / 2,
         )
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
-
+    def gameover(self):
+        change_views(self.window, "GameOver")
+    
     def on_key_press(self, symbol: int, modifiers: int):
         """Handle Keyboard Input."""
         # Navigate with WASD or Arrow keys"""
@@ -100,6 +102,8 @@ class GameView(arcade.View):
                 self.movement.x = 1
             case arcade.key.Q:
                 self.player.attack(self.entities_list)
+            case arcade.key.G:
+                self.gameover()
             case arcade.key.I:
                 print("Open Inventory: ")
                 assets.sounds.click.play()
