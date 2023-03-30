@@ -1,4 +1,5 @@
 import math
+import arcade
 
 from pyglet.math import Vec2
 
@@ -11,7 +12,8 @@ class Player(Entity):
         super().__init__("mc_idle.png")
         self.center_x, self.center_y = Vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
         self.angle = -90
-        self.speed = 4.0
+        self.normal_speed = 4.0
+        self.speed = self.normal_speed
 
     def update_animation(self, delta_time: float = 1 / 60):
         pass
@@ -32,6 +34,21 @@ class Player(Entity):
             self.angle = math.degrees(direction.heading)
         self.center_x += delta_pos.x * self.speed
         self.center_y += delta_pos.y * self.speed
+
+    def attack(self, entities_list: arcade.SpriteList):
+        nearest_enemy, nearest_dist = None, 99999
+        for entity in entities_list:
+            distance = self.get_position() - entity.get_position()
+            if distance.mag < nearest_dist:
+                nearest_dist = distance.mag
+                nearest_enemy = entity
+        if nearest_enemy != None:
+            # TODO: Play attack animation
+            nearest_enemy.take_damage(25)      # In Enemy class implement take_damage() function
+
+    def change_speed(self, slow_factor: float = 0.25):
+        """1.0 for normal speed and 0.0 for complete stop"""
+        self.speed = self.normal_speed * slow_factor
 
     def show(self):
         self.draw()

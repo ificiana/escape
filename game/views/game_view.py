@@ -98,6 +98,8 @@ class GameView(arcade.View):
                 self.movement.x = -1
             case arcade.key.RIGHT | arcade.key.D:
                 self.movement.x = 1
+            case arcade.key.Q:
+                self.player.attack(self.entities_list)
             case arcade.key.I:
                 print("Open Inventory: ")
                 assets.sounds.click.play()
