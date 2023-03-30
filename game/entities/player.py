@@ -33,9 +33,11 @@ class Player(Entity):
             if distance.mag < nearest_dist:
                 nearest_dist = distance.mag
                 nearest_enemy = entity
-        if nearest_enemy != None:
+        if nearest_enemy is not None:
             # TODO: Play attack animation
-            nearest_enemy.take_damage(25)      # In Enemy class implement take_damage() function
+            nearest_enemy.take_damage(
+                25
+            )  # In Enemy class implement take_damage() function
 
     def change_speed(self, slow_factor: float = 0.25):
         """1.0 for normal speed and 0.0 for complete stop"""

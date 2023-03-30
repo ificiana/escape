@@ -21,6 +21,7 @@ class Game(arcade.Window):
         self.ui_manager.enable()
         self.bgm = None
         self.change_bgm = False
+        self.level = None
 
     def setup(self):
         self.views = {

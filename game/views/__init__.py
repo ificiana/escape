@@ -76,5 +76,12 @@ class BaseView(arcade.View):
 
 
 def change_views(window: arcade.Window, dest_view: str):
+    if dest_view == "GameView":
+        # Reset the level and all entities
+        window.show_view(window.get_level_view(window.level))
     window.ui_manager.clear()
-    window.show_view(BaseView(window.views).configure(dest_view))
+    if dest_view == "GameView":
+        # Reset the level and all entities
+        window.show_view(window.get_level_view(window.level))
+    else:
+        window.show_view(BaseView(window.views).configure(dest_view))

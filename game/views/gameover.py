@@ -5,7 +5,6 @@ import arcade.gui
 import assets
 from assets import fonts
 from game.views import change_views
-from game.sounds import change_music
 
 
 def get_gameover_ui(
@@ -33,18 +32,17 @@ def get_gameover_ui(
     menu_button = arcade.gui.UIFlatButton(text="Main Menu", width=200)
     h_box.add(menu_button.with_space_around(bottom=40))
 
+    # noinspection PyUnusedLocal
     @menu_button.event("on_click")
     def on_click_menu(event):
         assets.sounds.click.play()
-        window.bgm = change_music(window.bgm, assets.sounds.bg1, looping=True)
+        window.change_bgm = True
         change_views(window, "MenuView")
-        
 
     @restart_button.event("on_click")
     def on_click_restart(event):
         print("Restart:", event)
         assets.sounds.click.play()
-        # TODO: Reset the level and all entities
         change_views(window, "GameView")
 
     return [

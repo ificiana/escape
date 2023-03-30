@@ -44,6 +44,7 @@ class GameView(arcade.View):
         level_map = arcade.TileMap(
             assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
         )
+        self.window.level = level
 
         # place objects
         self.walls = level_map.sprite_lists["walls"]
@@ -95,9 +96,10 @@ class GameView(arcade.View):
         )
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
+
     def gameover(self):
         change_views(self.window, "GameOver")
-    
+
     def on_key_press(self, symbol: int, modifiers: int):
         """Handle Keyboard Input."""
         # Navigate with WASD or Arrow keys"""
