@@ -2,6 +2,7 @@ from typing import Union
 
 import arcade.gui
 
+import assets
 from assets import fonts
 from game.views import change_views
 
@@ -55,12 +56,14 @@ def get_storybook_ui(
     def on_click_prev(event):
         print("Prev:", event)
         # TODO: Greyout if cur_page = 1
+        assets.sounds.click.play()
         data["cur_page"] = max(1, data["cur_page"] - 1)
         text_area.text = data["pages"][data["cur_page"]]
 
     @next_button.event("on_click")
     def on_click_next(event):
         print("Next:", event)
+        assets.sounds.click.play()
         if data["cur_page"] == data["max_page"]:
             change_views(window, "GameView")
             return
@@ -70,6 +73,7 @@ def get_storybook_ui(
     @skip_button.event("on_click")
     def on_click_skip(event):
         print("Skip:", event)
+        assets.sounds.click.play()
         change_views(window, "GameView")
 
     return [

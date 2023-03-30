@@ -1,5 +1,6 @@
 import arcade.gui
 
+import assets
 from game.views import change_views
 
 
@@ -29,11 +30,13 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @start_button.event("on_click")
     def on_click_start(event):
         print("Start:", event)
+        assets.sounds.click.play()
         change_views(window, "Storybook")
 
     @about_button.event("on_click")
     def on_click_about(event):
         print("About:", event)
+        assets.sounds.click.play()
         change_views(window, "About")
 
     @quit_button.event("on_click")
@@ -44,16 +47,19 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @settings_button.event("on_click")
     def on_click_settings(event):
         print("Settings:", event)
+        assets.sounds.click.play()
         change_views(window, "Settings")
 
     @credits_button.event("on_click")
     def on_click_credits(event):
         print("Credits:", event)
+        assets.sounds.click.play()
         change_views(window, "Credits")
 
     @continue_button.event("on_click")
     def on_click_continue(event):
         print("Continue:", event)
+        assets.sounds.click.play()
         change_views(window, "Levels")
 
     return arcade.gui.UIAnchorWidget(
