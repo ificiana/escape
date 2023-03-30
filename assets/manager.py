@@ -1,5 +1,7 @@
 import pathlib
 
+import arcade
+
 
 class AssetManager:
     def __init__(self, root):
@@ -17,6 +19,22 @@ class AssetManager:
 
 sprites = AssetManager("sprites")
 tilemaps = AssetManager("tilemaps")
-sounds = AssetManager("sounds")
 fonts = AssetManager("fonts")
 items = AssetManager("items")
+
+
+class AudioManager:
+    # pylint: disable=R0903
+    def __init__(self, sound_folder):
+        self.sound_folder = sound_folder
+        self.path = AssetManager(sound_folder)
+
+        # declare the sounds
+        self.click = arcade.Sound(self.path.resolve("click.wav"))
+        self.bg1 = arcade.Sound(self.path.resolve("creepy_tomb.wav"))
+        self.bg2 = arcade.Sound(self.path.resolve("cinematic_heartbeat.wav"))
+        self.bg3 = arcade.Sound(self.path.resolve("horror_ambience.wav"))
+        self.whoosh = arcade.Sound(self.path.resolve("woosh_hit.wav"))
+
+
+sounds = AudioManager("sounds")
