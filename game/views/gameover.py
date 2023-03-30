@@ -6,6 +6,8 @@ import assets
 from assets import fonts
 from game.views import change_views
 
+# pylint: disable=R0801
+
 
 def get_gameover_ui(
     window: arcade.Window,
@@ -39,9 +41,9 @@ def get_gameover_ui(
         window.change_bgm = True
         change_views(window, "MenuView")
 
+    # noinspection PyUnusedLocal
     @restart_button.event("on_click")
     def on_click_restart(event):
-        print("Restart:", event)
         assets.sounds.click.play()
         change_views(window, "GameView")
 
