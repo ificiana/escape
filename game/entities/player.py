@@ -15,15 +15,6 @@ class Player(Entity):
 
     def update_animation(self, delta_time: float = 1 / 60):
         pass
-        # # Idle animation
-        # if self.change_x == 0 and self.change_y == 0:
-        #     self.texture = self.idle_texture
-        #     return
-        # # Walking animation
-        # self.cur_texture += 1
-        # if self.cur_texture > 7:
-        #     self.cur_texture = 0
-        # self.texture = self.walk_textures[self.cur_texture]
 
     def move(self, dx, dy, mouse_x, mouse_y):
         direction = Vec2(mouse_x, mouse_y) - Vec2(self.center_x, self.center_y)
