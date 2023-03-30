@@ -1,27 +1,9 @@
 import math
 
-import arcade
 from pyglet.math import Vec2
 
-from assets import sprites
-
-from .config import *
-
-MC_SCALE = 0.4
-
-
-class Entity(arcade.Sprite):
-    def __init__(self, sprite_file):
-        super().__init__()
-        self.cur_texture = 0
-        self.scale = MC_SCALE
-        self.idle_texture = arcade.load_texture(sprites.resolve(sprite_file))
-        # self.walk_textures = []
-        # for i in range(8):
-        #     texture = arcade.load_texture(f"{main_path}_walk{i}.png")
-        #     self.walk_textures.append(texture)
-        self.texture = self.idle_texture
-        self.set_hit_box(self.texture.hit_box_points)
+from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
+from game.entities import Entity
 
 
 class Player(Entity):
