@@ -1,6 +1,7 @@
 import arcade
 import arcade.gui
 
+import assets
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.views import BaseView
 from game.views.game_view import GameView
@@ -17,8 +18,10 @@ class Game(arcade.Window):
         self.views = None
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
+        self.bgm = None
 
     def setup(self):
+        self.bgm = arcade.play_sound(assets.sounds.bg1, looping=True)
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint

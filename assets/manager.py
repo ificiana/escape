@@ -31,6 +31,8 @@ class AudioManager:
 
         # declare the sounds
         self.click = arcade.Sound(self.path.resolve("click.wav"))
+        self.bg1 = arcade.Sound(self.path.resolve("creepy_tomb.wav"))
+        self.bg2 = arcade.Sound(self.path.resolve("cinematic_heartbeat.wav"))
 
 
 sounds = AudioManager("sounds")
