@@ -68,9 +68,9 @@ class InventoryView(arcade.View):
             and self.close_button_sprite.collides_with_point((x, y))
             and isinstance(self.game.current_view, InventoryView)
         ):
-            change_views(self.game, "GameView")
+            change_views(self.game, "GameView-same")
 
     def on_key_press(self, symbol, modifiers):
         match symbol:
             case arcade.key.ESCAPE:
-                change_views(self.game, "GameView")
+                change_views(self.game, "GameView-same")
