@@ -52,17 +52,18 @@ def get_storybook_ui(
     next_button = arcade.gui.UIFlatButton(text="Next", width=200)
     h_box.add(next_button.with_space_around(right=20))
 
+    # noinspection PyUnusedLocal
     @prev_button.event("on_click")
     def on_click_prev(event):
-        print("Prev:", event)
-        # TODO: Greyout if cur_page = 1
+        if data["cur_page"] == 1:
+            return
         assets.sounds.click.play()
         data["cur_page"] = max(1, data["cur_page"] - 1)
         text_area.text = data["pages"][data["cur_page"]]
 
+    # noinspection PyUnusedLocal
     @next_button.event("on_click")
     def on_click_next(event):
-        print("Next:", event)
         assets.sounds.click.play()
         if data["cur_page"] == data["max_page"]:
             change_views(window, "GameView")
@@ -70,9 +71,9 @@ def get_storybook_ui(
         data["cur_page"] = min(data["max_page"], data["cur_page"] + 1)
         text_area.text = data["pages"][data["cur_page"]]
 
+    # noinspection PyUnusedLocal
     @skip_button.event("on_click")
     def on_click_skip(event):
-        print("Skip:", event)
         assets.sounds.click.play()
         change_views(window, "GameView")
 
