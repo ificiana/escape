@@ -1,6 +1,7 @@
 import arcade.gui
 
-from game.views import BaseView
+import assets
+from game.views import change_views
 
 
 def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
@@ -8,33 +9,35 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     v_box = arcade.gui.UIBoxLayout()
 
     # Create the buttons
-    start_button = arcade.gui.UIFlatButton(text="New Game", width=200)
+    start_button = arcade.gui.UIFlatButton(text="New Game", width=250)
     v_box.add(start_button.with_space_around(bottom=20))
 
-    continue_button = arcade.gui.UIFlatButton(text="Continue", width=200)
+    continue_button = arcade.gui.UIFlatButton(text="Continue", width=250)
     v_box.add(continue_button.with_space_around(bottom=20))
 
-    settings_button = arcade.gui.UIFlatButton(text="Settings", width=200)
+    settings_button = arcade.gui.UIFlatButton(text="Settings", width=250)
     v_box.add(settings_button.with_space_around(bottom=20))
 
-    about_button = arcade.gui.UIFlatButton(text="About", width=200)
+    about_button = arcade.gui.UIFlatButton(text="About", width=250)
     v_box.add(about_button.with_space_around(bottom=20))
 
-    credits_button = arcade.gui.UIFlatButton(text="Credits", width=200)
+    credits_button = arcade.gui.UIFlatButton(text="Credits & Contributions", width=250)
     v_box.add(credits_button.with_space_around(bottom=20))
 
-    quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
+    quit_button = arcade.gui.UIFlatButton(text="Quit", width=250)
     v_box.add(quit_button)
 
     @start_button.event("on_click")
     def on_click_start(event):
         print("Start:", event)
-        window.show_view(BaseView(window.views).configure("Storybook"))
+        assets.sounds.click.play()
+        change_views(window, "Storybook")
 
     @about_button.event("on_click")
     def on_click_about(event):
         print("About:", event)
-        window.show_view(BaseView(window.views).configure("About"))
+        assets.sounds.click.play()
+        change_views(window, "About")
 
     @quit_button.event("on_click")
     def on_click_quit(event):
@@ -44,6 +47,20 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @settings_button.event("on_click")
     def on_click_settings(event):
         print("Settings:", event)
+        assets.sounds.click.play()
+        change_views(window, "Settings")
+
+    @credits_button.event("on_click")
+    def on_click_credits(event):
+        print("Credits:", event)
+        assets.sounds.click.play()
+        change_views(window, "Credits")
+
+    @continue_button.event("on_click")
+    def on_click_continue(event):
+        print("Continue:", event)
+        assets.sounds.click.play()
+        change_views(window, "Levels")
 
     return arcade.gui.UIAnchorWidget(
         anchor_x="center_x", anchor_y="center_y", child=v_box

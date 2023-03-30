@@ -1,152 +1,145 @@
+import time
+
 import arcade
-from pyglet.math import clamp, Vec2
+from pyglet.math import Vec2
 
-# from arcade.experimental.shadertoy import Shadertoy
 import assets
+from game.entities.player import Player
+from game.sounds import change_music
+from game.views import change_views
 
-from game.inventory import Inventory
-from game.config import *
-from game.entities import Player, Enemy
-
-# pylint: disable=global-statement
-# TODO: fix this
-
-x_input, y_input = 0, 0
-mouseX, mouseY = 0, 0
-worldMouseX, worldMouseY = mouseX, mouseY
+arcade.enable_timings()
 
 
 class GameView(arcade.View):
-    def __init__(self):
-        super().__init__()
-        self.player = Player()
-        tile_map = arcade.TileMap(
-            assets.tilemaps.resolve("level1.tmx"), use_spatial_hash=True
-        )
-        self.walls = tile_map.sprite_lists["walls"]
+    """The game window"""
 
-        # Barrier List for pathfinding
-        self.barrier_list = arcade.AStarBarrierList(self.player, self.walls, 32, 0, 80*32, 0, 50*32)
-        self.barrier_list.recalculate()
+    def __init__(self, level):
+        super().__init__()
+
+        # declare objects and entities
+        self.walls = None
+        self.player = None
+        self.physics_engine = None
+        self.start_time = None
+
+        # movement states
+        self.movement = Vec2(0, 0)
+        self.mouse_pos = Vec2(0, 0)
+
+        # sprite lists
+        self.entities_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
 
         # Setup camera
-        self.sceneCamera = arcade.Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.scene_camera = arcade.Camera(*self.window.size)
+        self.gui_camera = arcade.Camera(*self.window.size)
+
+        # select the level
+        self.select_level(level)
+
+    def select_level(self, level: int = 1):
+        """Select the level and set up the game view"""
+        level_map = arcade.TileMap(
+            assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
+        )
+
+        # place objects
+        self.walls = level_map.sprite_lists["walls"]
+
+        # Set up the player
+        self.player = Player()
+        self.player.center_x = self.window.width / 2
+        self.player.center_y = self.window.height / 2
+        self.entities_list.append(self.player)
 
         # Create physics engine for collision
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
 
-        # Setup inventory
-        self.inventory = Inventory()
+        # Start time
+        self.start_time = time.time()
 
-        # Add enemies to the game
-        self.enemies = arcade.SpriteList()
-        for i in range(1):
-            enemy = Enemy(self.player, self.barrier_list)
-            self.enemies.append(enemy)
+    def on_show_view(self):
+        """This is run once when we switch to this view"""
 
-        # Shader related work
-        # self.shadertoy = None
-        # self.channel0 = None
-        # self.channel1 = None
-        # self.load_shader()
+        # set game background
+        arcade.set_background_color(arcade.csscolor.BLACK)
 
-    def setup(self):
-        # Initial items the player has
-        self.inventory.add_item("Knife")
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, self.window.width, 0, self.window.height)
+        self.window.bgm = change_music(self.window.bgm, assets.sounds.bg2, looping=True)
 
-    # def load_shader(self):
-    #     shader_file_path = assets.sprites.resolve("shadow.glsl")
-    #     window_size = self.get_size()
-    #     self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
-    #     self.channel0 = self.shadertoy.ctx.framebuffer(
-    #         color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
-    #     )
-    #     self.channel1 = self.shadertoy.ctx.framebuffer(
-    #         color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
-    #     )
-    #     self.shadertoy.channel_0 = self.channel0.color_attachments[0]
-    #     self.shadertoy.channel_1 = self.channel1.color_attachments[0]
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        # Use the mouse to look around
+        self.mouse_pos.x, self.mouse_pos.y = x, y
 
     def on_update(self, delta_time: float):
-        super().on_update(delta_time)
-        global worldMouseX, worldMouseY
-        worldMouseX, worldMouseY = (
-            mouseX + self.sceneCamera.position.x,
-            mouseY + self.sceneCamera.position.y,
-        )
-        self.player.move(x_input, y_input, worldMouseX, worldMouseY)
+        self.player.move(*self.movement, *self.mouse_pos)
         cam_pos = Vec2(
-            self.player.center_x - SCREEN_WIDTH / 2,
-            self.player.center_y - SCREEN_HEIGHT / 2,
+            self.player.center_x - self.window.width / 2,
+            self.player.center_y - self.window.height / 2,
         )
-        self.sceneCamera.move_to(cam_pos)
+        self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
 
-        # Update enemies
-        for enemy in self.enemies:
-            enemy.update()
-
-    def on_draw(self):
-        arcade.start_render()
-        arcade.set_background_color(arcade.color.BLACK)
-        # self.channel0.use()
-        # self.channel0.clear()
-        self.sceneCamera.use()
-        self.walls.draw()
-
-        # self.channel1.use()
-        # self.channel1.clear()
-        # Draw everything that can be hidden in shadows bur does not cast shadow
-        # self.walls.draw()
-
-        # self.use()
-        self.clear()
-        # self.shadertoy.program["lightPosition"] = Vec2(
-        #     SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
-        # )
-        # self.shadertoy.program["lightSize"] = 300
-        # self.shadertoy.program["angle"] = self.player.angle
-        # self.shadertoy.render()
-        # Draw enemies and player
-        self.enemies.draw()
-        self.player.draw()
-        self.walls.draw()
-        self.inventory.display_menu(self.inventory.show_menu)
-
-    # Handle Keyboard Input
-    # Navigate with WASD or Arrow keys and use Mouse for direction
     def on_key_press(self, symbol: int, modifiers: int):
-        global x_input, y_input
-        if symbol in [arcade.key.DOWN, arcade.key.S]:
-            y_input = -1
-        if symbol in [arcade.key.UP, arcade.key.W]:
-            y_input = 1
-        if symbol in [arcade.key.LEFT, arcade.key.A]:
-            x_input = -1
-        if symbol in [arcade.key.RIGHT, arcade.key.D]:
-            x_input = 1
-        x_input = clamp(x_input, -1, 1)
-        self.inventory.handle_key_press(symbol)
+        """Handle Keyboard Input."""
+        # Navigate with WASD or Arrow keys"""
+        match symbol:
+            case arcade.key.DOWN | arcade.key.S:
+                self.movement.y = -1
+            case arcade.key.UP | arcade.key.W:
+                self.movement.y = 1
+            case arcade.key.LEFT | arcade.key.A:
+                self.movement.x = -1
+            case arcade.key.RIGHT | arcade.key.D:
+                self.movement.x = 1
+            case arcade.key.I:
+                assets.sounds.click.play()
+                change_views(self.window, "InventoryView")
+            case arcade.key.ESCAPE:
+                assets.sounds.click.play()
+                change_views(self.window, "Pause")
+
+        # add fail-check
+        self.movement.clamp(-1, 1)
 
     def on_key_release(self, symbol: int, modifiers: int):
-        global x_input, y_input
-        if symbol in [arcade.key.DOWN, arcade.key.S]:
-            y_input = 0
-        if symbol in [arcade.key.UP, arcade.key.W]:
-            y_input = 0
-        if symbol in [arcade.key.LEFT, arcade.key.A]:
-            x_input = 0
-        if symbol in [arcade.key.RIGHT, arcade.key.D]:
-            x_input = 0
-        x_input = clamp(x_input, -1, 1)
+        match symbol:
+            case arcade.key.DOWN | arcade.key.S:
+                self.movement.y = 0
+            case arcade.key.UP | arcade.key.W:
+                self.movement.y = 0
+            case arcade.key.LEFT | arcade.key.A:
+                self.movement.x = 0
+            case arcade.key.RIGHT | arcade.key.D:
+                self.movement.x = 0
 
-    # Handle Mouse Events
-    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
-        global mouseX, mouseY, worldMouseX, worldMouseY
-        mouseX, mouseY = x, y
-        worldMouseX, worldMouseY = (
-            mouseX + self.sceneCamera.position.x,
-            mouseY + self.sceneCamera.position.y,
-        )
-    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
-        print(worldMouseX, worldMouseY)
+            # add fail-check
+        self.movement.clamp(-1, 1)
+
+    def on_draw(self):
+        """Draw this view"""
+
+        # clean view
+        self.clear()
+
+        self.scene_camera.use()
+        self.entities_list.draw()
+        self.walls.draw()
+
+        # Add GUI
+        self.gui_camera.use()
+        arcade.Text(
+            f"Health: 100, Time: "
+            f"{':'.join(map(lambda x: f'{int(x):02d}',divmod(time.time()-self.start_time, 60)))}",
+            self.window.width - 200,
+            self.window.height - 25,
+        ).draw()
+        arcade.Text(
+            f"FPS: {int(arcade.get_fps())}",
+            20,
+            self.window.height - 25,
+        ).draw()
+        arcade.Text("Press ESC to pause; press I to enter the inventory", 10, 10).draw()
