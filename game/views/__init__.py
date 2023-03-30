@@ -1,44 +1,6 @@
-from dataclasses import dataclass
 from typing import Union, Self
 
 import arcade
-from arcade.text_pyglet import FontNameOrNames
-
-
-@dataclass
-class ViewText:
-    text: str
-    start_x: float
-    start_y: float
-    color: arcade.Color = arcade.color.WHITE
-    font_size: float = 12
-    width: int = 0
-    align: str = "left"
-    font_name: FontNameOrNames = ("calibri", "arial")
-    bold: bool = False
-    italic: bool = False
-    anchor_x: str = "left"
-    anchor_y: str = "baseline"
-    multiline: bool = False
-    rotation: float = 0
-
-    def draw(self):
-        arcade.draw_text(
-            self.text,
-            self.start_x,
-            self.start_y,
-            self.color,
-            self.font_size,
-            self.width,
-            self.align,
-            self.font_name,
-            self.bold,
-            self.italic,
-            self.anchor_x,
-            self.anchor_y,
-            self.multiline,
-            self.rotation,
-        )
 
 
 class BaseView(arcade.View):
@@ -47,7 +9,7 @@ class BaseView(arcade.View):
     def __init__(self, views: dict = None):
         super().__init__()
         self.ui_nodes = None
-        self.text_nodes: Union[list[ViewText], ViewText, None] = None
+        self.text_nodes: Union[list[arcade.Text], arcade.Text, None] = None
         self.bg_color: arcade.csscolor = None
         self.next = None
 
@@ -96,4 +58,10 @@ class BaseView(arcade.View):
         """If the user presses the mouse button, navigate to the next View."""
 
         if self.next:
+            self.window.ui_manager.clear()
             self.window.show_view(self.configure(self.next))
+
+
+def change_views(window: arcade.Window, dest_view: str):
+    window.ui_manager.clear()
+    window.show_view(BaseView(window.views).configure(dest_view))

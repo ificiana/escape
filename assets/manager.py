@@ -16,5 +16,7 @@ class AssetManager:
 
 
 sprites = AssetManager("sprites")
-tilemaps = AssetManager("tilemap")
+tilemaps = AssetManager("tilemaps")
 sounds = AssetManager("sounds")
+fonts = AssetManager("fonts")
+items = AssetManager("items")

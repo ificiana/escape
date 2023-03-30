@@ -2,7 +2,8 @@ from typing import Union
 
 import arcade.gui
 
-from game.views import BaseView
+from assets import fonts
+from game.views import change_views
 
 
 def get_storybook_ui(
@@ -13,20 +14,31 @@ def get_storybook_ui(
 
     data = {
         "pages": {
-            1: "This is page 1",
-            2: "This is page 2",
+            1: "Welcome to the asylum. \n\nYou're surrounded by darkness and fear.",
+            2: "The doctors are after you, and you have to escape before it's too late. \nBut be "
+            "warned, this asylum holds dark secrets and twisted experiments. \n\nThe path to "
+            "freedom will not be easy.",
+            3: "Watch out for the doctors. Explore the asylum, search for clues, and solve "
+            "puzzles. Collect batteries to keep your flashlight lit, use any tool you can find "
+            "to defend yourself.",
+            4: "As you delve deeper into the asylum, you'll uncover its dark secrets and learn "
+            "the truth about what really goes on behind its walls. But will you make it out "
+            "alive, or will you become just another victim of its madness?",
+            5: "But remember, every step you take could be your last. Good luck.",
         },
         "cur_page": 1,
-        "max_page": 2,
+        "max_page": 5,
     }
-
+    arcade.load_font(fonts.resolve("Melted Monster.ttf"))
     text_area = arcade.gui.UITextArea(
         x=100,
         y=200,
-        width=200,
+        width=500,
         height=300,
         text=data["pages"][data["cur_page"]],
         text_color=arcade.csscolor.WHITE,
+        font_size=20,
+        font_name="Melted Monster",
     )
 
     # Create the buttons
@@ -50,7 +62,7 @@ def get_storybook_ui(
     def on_click_next(event):
         print("Next:", event)
         if data["cur_page"] == data["max_page"]:
-            window.show_view(BaseView(window.views).configure("GameView"))
+            change_views(window, "GameView")
             return
         data["cur_page"] = min(data["max_page"], data["cur_page"] + 1)
         text_area.text = data["pages"][data["cur_page"]]
@@ -58,7 +70,7 @@ def get_storybook_ui(
     @skip_button.event("on_click")
     def on_click_skip(event):
         print("Skip:", event)
-        window.show_view(BaseView(window.views).configure("GameView"))
+        change_views(window, "GameView")
 
     return [
         arcade.gui.UIAnchorWidget(anchor_x="center", anchor_y="bottom", child=h_box),
