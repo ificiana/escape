@@ -21,7 +21,8 @@ class Game(arcade.Window):
         self.bgm = None
 
     def setup(self):
-        self.bgm = arcade.play_sound(assets.sounds.bg1, looping=True)
+        self.bgm = arcade.play_sound(assets.sounds.whoosh)
+        self.bgm.queue(assets.sounds.bg1.source)
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint

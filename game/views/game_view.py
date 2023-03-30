@@ -97,9 +97,11 @@ class GameView(arcade.View):
                 self.movement.x = 1
             case arcade.key.I:
                 print("Open Inventory: ")
+                assets.sounds.click.play()
                 change_views(self.window, "InventoryView")
             case arcade.key.ESCAPE:
                 print("Pause Game: ")
+                assets.sounds.click.play()
                 change_views(self.window, "Pause")
 
         # add fail-check
