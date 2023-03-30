@@ -70,12 +70,15 @@ class GameView(arcade.View):
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
         self.window.bgm = change_music(self.window.bgm, assets.sounds.bg2, looping=True)
 
+    def screen_to_world_point(self, screen_point: Vec2):
+        return screen_point + self.scene_camera.position
+
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         # Use the mouse to look around
         self.mouse_pos.x, self.mouse_pos.y = x, y
 
     def on_update(self, delta_time: float):
-        self.player.move(*self.movement, *self.mouse_pos)
+        self.player.move(*self.movement, *self.screen_to_world_point(self.mouse_pos))
         cam_pos = Vec2(
             self.player.center_x - self.window.width / 2,
             self.player.center_y - self.window.height / 2,

@@ -25,13 +25,13 @@ class Player(Entity):
         #     self.cur_texture = 0
         # self.texture = self.walk_textures[self.cur_texture]
 
-    def move(self, dx, dy, mouse_x, mouse_y):
-        direction = Vec2(mouse_x, mouse_y) - Vec2(self.center_x, self.center_y)
+    def move(self, delta_pos: Vec2, mouse_pos: Vec2):
+        direction = mouse_pos - self.get_position()
         if direction.mag != 0:
             direction = direction.normalize()
             self.angle = math.degrees(direction.heading)
-        self.center_x += dx * self.speed
-        self.center_y += dy * self.speed
+        self.center_x += delta_pos.x * self.speed
+        self.center_y += delta_pos.y * self.speed
 
     def show(self):
         self.draw()
