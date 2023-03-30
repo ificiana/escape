@@ -22,6 +22,7 @@ class GameView(arcade.View):
         self.player = None
         self.physics_engine = None
         self.start_time = None
+        self.bgm = None
 
         # movement states
         self.movement = Vec2(0, 0)
@@ -68,7 +69,16 @@ class GameView(arcade.View):
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
-        self.window.bgm = change_music(self.window.bgm, assets.sounds.bg2, looping=True)
+        self.window.bgm = change_music(
+            self.window.bgm, assets.sounds.horror, looping=True, volume=0.5, speed=0.5
+        )
+        if self.bgm is None:
+            self.bgm = change_music(self.bgm, assets.sounds.heart, looping=True)
+        else:
+            self.bgm.play()
+
+    def on_hide_view(self):
+        self.bgm.pause()
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         # Use the mouse to look around

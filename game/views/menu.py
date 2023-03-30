@@ -54,6 +54,7 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     def on_click_credits(event):
         print("Credits:", event)
         assets.sounds.click.play()
+        window.change_bgm = True
         change_views(window, "Credits")
 
     @continue_button.event("on_click")

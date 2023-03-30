@@ -19,10 +19,10 @@ class Game(arcade.Window):
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
         self.bgm = None
+        self.change_bgm = False
 
     def setup(self):
-        self.bgm = arcade.play_sound(assets.sounds.whoosh)
-        self.bgm.queue(assets.sounds.bg1.source)
+        self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint
@@ -49,7 +49,7 @@ class Game(arcade.Window):
             "MenuView": {
                 # This shows the menus
                 "color": arcade.color.BLACK,
-                "bgm": assets.sounds.bg1,
+                "bgm": assets.sounds.glacier,
                 "text": [
                     arcade.Text(
                         "Escape!!",
@@ -93,6 +93,8 @@ class Game(arcade.Window):
             "Credits": {
                 # This shows the credits section
                 "color": arcade.color.BLACK,
+                "bgm": assets.sounds.japan,
+                "next_bgm_diff": True,
                 "text": [
                     arcade.Text(
                         "Here goes credits and contributions, to fill later",
@@ -160,7 +162,7 @@ class Game(arcade.Window):
             },
             "Pause": {
                 # This shows when the game is paused
-                "bgm": assets.sounds.bg1,
+                "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(

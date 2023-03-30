@@ -31,10 +31,12 @@ class AudioManager:
 
         # declare the sounds
         self.click = arcade.Sound(self.path.resolve("click.wav"))
-        self.bg1 = arcade.Sound(self.path.resolve("creepy_tomb.wav"))
-        self.bg2 = arcade.Sound(self.path.resolve("cinematic_heartbeat.wav"))
-        self.bg3 = arcade.Sound(self.path.resolve("horror_ambience.wav"))
+        self.tomb = arcade.Sound(self.path.resolve("creepy_tomb.wav"))
+        self.heart = arcade.Sound(self.path.resolve("cinematic_heartbeat.wav"))
+        self.horror = arcade.Sound(self.path.resolve("horror_ambience.wav"))
         self.whoosh = arcade.Sound(self.path.resolve("woosh_hit.wav"))
+        self.glacier = arcade.Sound(self.path.resolve("glacier.mp3"))
+        self.japan = arcade.Sound(self.path.resolve("japan.mp3"))
 
 
 sounds = AudioManager("sounds")

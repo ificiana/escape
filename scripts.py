@@ -23,6 +23,7 @@ def run_game():
     # pylint: disable=import-outside-toplevel
     from game import main
 
+    print("Loading...")
     main()
 
 

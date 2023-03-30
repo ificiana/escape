@@ -1,7 +1,6 @@
 import arcade.gui
 
 import assets
-from game.sounds import change_music
 from game.views import change_views
 
 
@@ -19,17 +18,20 @@ def get_pause_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     quit_button = arcade.gui.UIFlatButton(text="Quit to main menu", width=250)
     v_box.add(quit_button)
 
+    # noinspection PyUnusedLocal
     @resume_button.event("on_click")
     def on_click_start(event):
         assets.sounds.click.play()
         change_views(window, "GameView")
 
+    # noinspection PyUnusedLocal
     @quit_button.event("on_click")
     def on_click_quit(event):
         assets.sounds.click.play()
-        window.bgm = change_music(window.bgm, assets.sounds.bg1, looping=True)
+        window.change_bgm = True
         change_views(window, "MenuView")
 
+    # noinspection PyUnusedLocal
     @inventory_button.event("on_click")
     def on_click_settings(event):
         assets.sounds.click.play()
