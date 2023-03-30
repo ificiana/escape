@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" source="sprites.tsx"/>
- <layer id="1" name="walls" width="80" height="50">
+ <tileset firstgid="10" source="sprites.tsx"/>
+ <layer id="1" name="walls" width="30" height="20" locked="1">
   <data encoding="base64" compression="zlib">
-   eJztmMEOwyAMQ8v///S006aq2jBxggE/adoOVQyvNIVd1ziN+DkVxtzRGjvdm1n+smpXY38x7C/GDH8qtVVQ8TfyXlJ4Zyn5Y2VWOtzNH7sWOyvLif3VXauUi/YLhWvVcjPyMtc1s9YMfxln31P8ZWF/OthfjMxzD9KnVvgP7wmVMdufPhlztT+9mqrYXwz2XE9y96baX3Rvgp6zGPujf+Nh0jufyrzMrJH6vxxUzqc6r/d5iO750TFEqFzvFb1dzR8z81R/K2VV9yP7y8tio+JvpX5UnafazxmZ9leXl5lhf5966HmUOY7V/Y2i4C/jbFXFLH+Ip9FnK7NWT03WOVyJlcY6m3b7bW8Y7evb7nDa7dtgrNab1bC7GIi/3dfq6NkK9cHcz7HvB3McPWNTWU8sv+y59PhTB+0vldnI2n4BK/wBqA==
+   eJzVlVsKACAIBPX+l+4/fORabQlCmDqmRSoiSlJPdFpHvl6ct1/J9QrXi838un3ucpHZ7+BW857mZr5MbmazZtZ96yt+6N2pnM2yRbWcFCv/D1y0xoi74w9BuKvxDC4qLK4lN/oc5WLoANh9AMY=
+  </data>
+ </layer>
+ <layer id="2" name="arrows" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDHXAj0Ocj66uGAWjYBSMglEAAwCqSAAe
+  </data>
+ </layer>
+ <layer id="4" name="enemies" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF1ACiA+2AUTBiATXS3mj6pQ8YSuE8lNw6CoYOICVdUZIGB0P6BQBergCp
+  </data>
+ </layer>
+ <layer id="3" name="player" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh5QGygHTAKRsEoGAWjYBSMgmENAMKoABc=
   </data>
  </layer>
 </map>
