@@ -6,6 +6,7 @@ from game.views import BaseView
 from game.views.game_view import GameView
 from game.views.inventory import InventoryView
 from game.views.menu import get_menu_view_ui
+from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.story import get_storybook_ui
 
 
@@ -16,7 +17,6 @@ class Game(arcade.Window):
         self.views = None
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
-        self.inventory_view = InventoryView(self)
 
     def setup(self):
         self.views = {
@@ -153,10 +153,26 @@ class Game(arcade.Window):
                 ],
                 "next": "MenuView",
             },
+            "Pause": {
+                # This shows when the game is paused
+                "color": arcade.color.BLACK,
+                "text": [
+                    arcade.Text(
+                        "Escape!!",
+                        self.width / 2,
+                        self.height - 100,
+                        font_size=50,
+                        anchor_x="center",
+                    ),
+                ],
+                "ui": [
+                    get_pause_menu_view_ui(self),
+                ],
+            },
             # This shows the main game view, starts at level 1
             "GameView": self.get_level_view(1),
             # Shows the inventory
-            "InventoryView": self.inventory_view,
+            "InventoryView": InventoryView(self),
             # TODO: Add rest of the Views here
         } | {f"Level-{n}": self.get_level_view(n) for n in range(1, 2)}
 
