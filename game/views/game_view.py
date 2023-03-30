@@ -23,6 +23,8 @@ class GameView(arcade.View):
         self.physics_engine = None
         self.start_time = None
         self.bgm = None
+        # special purpose bgm
+        self.bgm2 = None
 
         # movement states
         self.movement = Vec2(0, 0)
@@ -71,15 +73,20 @@ class GameView(arcade.View):
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
         self.window.bgm = change_music(
-            self.window.bgm, assets.sounds.horror, looping=True, volume=0.5, speed=0.5
+            self.window.bgm, assets.sounds.horror, looping=True, volume=0.2, speed=0.5
         )
         if self.bgm is None:
-            self.bgm = change_music(self.bgm, assets.sounds.heart, looping=True)
+            self.bgm = change_music(
+                self.bgm, assets.sounds.heart, volume=0.6, looping=True
+            )
+            # self.bgm2 = change_music(self.bgm2, assets.sounds.insomnia, volume=0.2, looping=True)
         else:
             self.bgm.play()
+            # self.bgm2.play()
 
     def on_hide_view(self):
         self.bgm.pause()
+        # self.bgm2.pause()
 
     def screen_to_world_point(self, screen_point: Vec2):
         return screen_point + self.scene_camera.position

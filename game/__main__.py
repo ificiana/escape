@@ -24,6 +24,7 @@ class Game(arcade.Window):
         self.level = None
 
     def setup(self):
+        self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint
@@ -194,14 +195,11 @@ class Game(arcade.Window):
         # entrypoint = "GameView"  # <- use this for game debug
         view = BaseView(self.views)
         self.show_view(view.configure(entrypoint))
+        print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")
 
     @staticmethod
     def get_level_view(level: int) -> GameView:
         return GameView(level)
-
-    def on_activate(self):
-        print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")
-        self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
 
 
 def main():
