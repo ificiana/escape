@@ -159,6 +159,7 @@ class Game(arcade.Window):
             },
             "Pause": {
                 # This shows when the game is paused
+                "bgm": assets.sounds.bg1,
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
