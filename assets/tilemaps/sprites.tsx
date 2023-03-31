@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.0" name="sprites" tilewidth="128" tileheight="150" tilecount="24" columns="0">
+<tileset version="1.10" tiledversion="1.10.0" name="sprites" tilewidth="128" tileheight="150" tilecount="25" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="32" height="32" source="../sprites/wall.png"/>
@@ -72,5 +72,8 @@
  </tile>
  <tile id="34">
   <image width="96" height="150" source="../sprites/table_side.png"/>
+ </tile>
+ <tile id="37">
+  <image width="70" height="70" source="../items/knife.png"/>
  </tile>
 </tileset>

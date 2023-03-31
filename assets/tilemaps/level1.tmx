@@ -13,12 +13,12 @@
  </layer>
  <layer id="3" name="objects" width="80" height="50">
   <data encoding="base64" compression="zlib">
-   eJzt2UEKgCAQBVDvEAWtsrr/HdtLIIg2SO9tZAT1r/0pAQAAfGsrVpjZWZkBAAD4pzs6ADS6ogMAMDV/5jF0bwAwTo4OABAkN55beoYAmq0ve3vQuzDSMejesi+rzTW6Y2b1AP9qAmA=
+   eJzt2TsKwCAQBUDvEBJIld/975heAoKoi2SmkRXUV/tSAgAAGGvLVpjZVZgBAAD4pyc6AFS6owMAMDV/5jF0bwDQzxkdACDIWXluaRkCqLZ+7O1B70JPR6d7876sNJe07I51eYz0AlJZAoI=
   </data>
  </layer>
  <layer id="4" name="pickables" width="80" height="50">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAGo+gAAB
+   eJztzjERAAAIBKBPYy77pzCCk+cCCUgAAAAAAAAAAAAAAAAAAOBWJf19AHYDKYYAhw==
   </data>
  </layer>
 </map>
