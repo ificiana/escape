@@ -8,6 +8,8 @@ from game.entities.player import Player
 from game.sounds import change_music
 from game.views import change_views
 
+from game.torch import TorchShaderToy
+
 arcade.enable_timings()
 
 
@@ -42,6 +44,13 @@ class GameView(arcade.View):
 
         # select the level
         self.select_level(level)
+
+        # create instance of TorchShaderToy and assign to torch attribute
+        self.torch = TorchShaderToy(
+            size=(self.player.width, self.player.height),
+            main_source=assets.shaders.torch_main,
+            shadow_source=assets.shaders.torch_shadow,
+        )
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
@@ -160,18 +169,32 @@ class GameView(arcade.View):
         self.clear()
 
         self.scene_camera.use()
-        if self.floor is not None:
-            self.floor.draw()
-        self.walls.draw()
-        if self.objects is not None:
-            self.objects.draw()
+
+        # Render the torch shader program on the player sprite
+        with self.torch:
+            # Set the resolution of the torch to match the player sprite size
+            self.torch.set_resolution(self.player.width, self.player.height)
+
+            # Set the position of the torch to the player's position
+            self.torch.set_torch_pos(
+                self.player.center_x / self.window.width,
+                self.player.center_y / self.window.height,
+            )
+
+            # Set the light intensity of the torch
+            self.torch.set_light_intensity(1.0)
+
+            # Render the torch on the player sprite
+            self.torch.render(self.player.center_x, self.player.center_y)
+
+        # Draw other entities and walls
         self.entities_list.draw()
 
         # Add GUI
         self.gui_camera.use()
         arcade.Text(
             f"Health: 100, Time: "
-            f"{':'.join(map(lambda x: f'{int(x):02d}',divmod(time.time()-self.start_time, 60)))}",
+            f"{':'.join(map(lambda x: f'{int(x):02d}', divmod(time.time() - self.start_time, 60)))}",
             self.window.width - 200,
             self.window.height - 25,
         ).draw()
