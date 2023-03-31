@@ -4,10 +4,12 @@ import arcade
 from pyglet.math import Vec2
 
 import assets
+from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.entities.player import Player
 from game.entities.enemy import Enemy
 from game.sounds import change_music
 from game.views import change_views
+from game.views.inventory import Item
 
 arcade.enable_timings()
 
@@ -29,6 +31,9 @@ class GameView(arcade.View):
         self.bgm = None
         # special purpose bgm
         self.bgm2 = None
+
+        # in game text popup
+        self.display_text = ""
 
         # movement states
         self.movement = Vec2(0, 0)
@@ -56,7 +61,13 @@ class GameView(arcade.View):
         self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
         self.objects = level_map.sprite_lists["objects"]
-        self.pickables = level_map.sprite_lists["pickables"]
+        pickables = level_map.sprite_lists["pickables"]
+        self.pickables = arcade.SpriteList(use_spatial_hash=True)
+
+        for item in pickables:
+            self.pickables.append(
+                Item("knife.png", "knife", item.center_x, item.center_y, item.angle)
+            )
 
         # Set up the player
         self.player = Player(self)
@@ -77,6 +88,9 @@ class GameView(arcade.View):
 
     def remove_enemy_from_world(self, enemy: Enemy):
         self.entities_list.remove(enemy)
+
+    def set_display_text(self, text: str):
+        self.display_text = text
 
     def on_show_view(self):
         """This is run once when we switch to this view"""
@@ -193,3 +207,13 @@ class GameView(arcade.View):
             self.window.height - 25,
         ).draw()
         arcade.Text("Press ESC to pause; press I to enter the inventory", 10, 10).draw()
+        arcade.Text(
+            self.display_text,
+            0,
+            SCREEN_HEIGHT / 2 + 100,
+            width=SCREEN_WIDTH,
+            align="center",
+            font_size=24,
+            bold=True,
+            color=arcade.color.BLACK,
+        ).draw()

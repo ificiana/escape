@@ -32,9 +32,10 @@ class Player(Entity):
             if distance.mag < nearest_dist:
                 nearest_dist = distance.mag
                 nearest_item = item
-        if nearest_item is not None and nearest_dist < 64 * 1.5:
-            # TODO: Display text "Press H to pick"
-            print("Press H to pick")
+        if nearest_item is not None and nearest_dist < 64:
+            self.game_view.set_display_text("Press H to pick up")
+        else:
+            self.game_view.set_display_text("")
 
     def attack(self):
         nearest_enemy, nearest_dist = None, 99999
