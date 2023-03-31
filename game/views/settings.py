@@ -5,7 +5,9 @@ import arcade.gui
 import assets
 
 
-def get_settings_ui() -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
+def get_settings_ui(
+    window: arcade.Window,
+) -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
     # Create a vertical BoxGroup to align buttons
     h_box = arcade.gui.UIBoxLayout(vertical=False)
 
@@ -78,11 +80,16 @@ def get_settings_ui() -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
         print("Prev:", event)
         # TODO: Greyout if cur_page = 1
         assets.sounds.click.play()
+        window.music_vol = max(0.0, window.music_vol - 0.1)
+        window.bgm.volume = window.music_vol
+        print("Red:", window.music_vol)
 
     @inc_music_button.event("on_click")
     def on_click_inc_music(event):
-        print("Next:", event)
         assets.sounds.click.play()
+        window.music_vol = min(1.0, window.music_vol + 0.1)
+        window.bgm.volume = window.music_vol
+        print("Inc:", window.music_vol)
 
     return [
         arcade.gui.UIAnchorWidget(

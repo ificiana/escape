@@ -24,10 +24,14 @@ class Game(arcade.Window):
         self.bgm = None
         self.change_bgm = False
         self.level = None
+        self.music_vol = 1.0
+        self.sfx_vol = 1.0
 
     def setup(self):
         arcade.load_font(fonts.resolve("Melted Monster.ttf"))
-        self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
+        self.bgm = arcade.play_sound(
+            assets.sounds.glacier, looping=True, volume=self.music_vol
+        )
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint
@@ -84,7 +88,7 @@ class Game(arcade.Window):
                 # This shows the pre-game storyline
                 "keys": return_to_menu_binding,
                 "color": arcade.color.BLACK,
-                "ui": get_settings_ui(),
+                "ui": get_settings_ui(self),
             },
             "About": {
                 # This shows the about section
