@@ -5,6 +5,7 @@ from pyglet.math import Vec2
 
 import assets
 from game.entities.player import Player
+from game.entities.enemy import Enemy
 from game.sounds import change_music
 from game.views import change_views
 
@@ -21,6 +22,7 @@ class GameView(arcade.View):
         self.walls = None
         self.floor = None
         self.objects = None
+        self.pickables = None
         self.player = None
         self.physics_engine = None
         self.start_time = None
@@ -54,12 +56,16 @@ class GameView(arcade.View):
         self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
         self.objects = level_map.sprite_lists["objects"]
+        self.pickables = level_map.sprite_lists["pickables"]
 
         # Set up the player
-        self.player = Player()
+        self.player = Player(self)
         self.player.center_x = self.window.width / 2
         self.player.center_y = self.window.height / 2
         self.entities_list.append(self.player)
+
+        # Set up enemies
+        self.entities_list.append(Enemy(self.player, self))
 
         # Create physics engine for collision
         self.physics_engine = arcade.PhysicsEngineSimple(
@@ -68,6 +74,9 @@ class GameView(arcade.View):
 
         # Start time
         self.start_time = time.time()
+
+    def remove_enemy_from_world(self, enemy: Enemy):
+        self.entities_list.remove(enemy)
 
     def on_show_view(self):
         """This is run once when we switch to this view"""
@@ -103,6 +112,7 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time: float):
         self.player.move(self.movement, self.screen_to_world_point(self.mouse_pos))
+        self.player.update_player()
         cam_pos = Vec2(
             self.player.center_x - self.window.width / 2,
             self.player.center_y - self.window.height / 2,
@@ -126,7 +136,7 @@ class GameView(arcade.View):
             case arcade.key.RIGHT | arcade.key.D:
                 self.movement.x = 1
             case arcade.key.Q:
-                self.player.attack(self.entities_list)
+                self.player.attack()
             case arcade.key.G:
                 self.gameover()
             case arcade.key.I:
@@ -165,6 +175,8 @@ class GameView(arcade.View):
         self.walls.draw()
         if self.objects is not None:
             self.objects.draw()
+        if self.pickables is not None:
+            self.pickables.draw()
         self.entities_list.draw()
 
         # Add GUI
