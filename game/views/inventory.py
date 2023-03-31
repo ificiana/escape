@@ -1,7 +1,19 @@
 import arcade
 
+from pyglet.math import Vec2
 import assets
 from game.views import change_views
+
+
+class Item(arcade.Sprite):
+    def __init__(self, sprite_file: str, name: str, pos: Vec2, angle: int):
+        super().__init__(assets.items.resolve(sprite_file))
+        self.name = name or sprite_file
+        self.center_x, self.center_y = pos
+        self.angle = angle
+
+    def get_position(self):
+        return Vec2(self.center_x, self.center_y)
 
 
 class InventoryView(arcade.View):
@@ -73,4 +85,5 @@ class InventoryView(arcade.View):
     def on_key_press(self, symbol, modifiers):
         match symbol:
             case arcade.key.ESCAPE:
+                print("ESCAPE to Game View")
                 change_views(self.game, "GameView-same")
