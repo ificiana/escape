@@ -1,0 +1,52 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "level1.tmx": {
+            "scale": 0.890625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 491.2280701754385,
+                "y": 320.56140350877195
+            }
+        },
+        "level1_.tmx": {
+            "scale": 1.2191666666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 480.2460697197539,
+                "y": 320.30075187969925
+            }
+        },
+        "level2.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 495.4545454545455,
+                "y": 513.6363636363635
+            }
+        },
+        "sprites.tsx": {
+            "dynamicWrapping": true
+        }
+    },
+    "last.imagePath": "C:/Users/This PC/OneDrive/Desktop/pyweek35/assets/items",
+    "map.fixedSize": true,
+    "map.height": 50,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.width": 80,
+    "openFiles": [
+    ],
+    "project": "levels.tiled-project",
+    "recentFiles": [
+        "level1_.tmx",
+        "level1.tmx",
+        "level2.tmx"
+    ]
+}

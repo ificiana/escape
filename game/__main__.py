@@ -9,6 +9,7 @@ from game.views.inventory import InventoryView
 from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.story import get_storybook_ui
+from game.views.gameover import get_gameover_ui
 
 
 class Game(arcade.Window):
@@ -19,10 +20,11 @@ class Game(arcade.Window):
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
         self.bgm = None
+        self.change_bgm = False
+        self.level = None
 
     def setup(self):
-        self.bgm = arcade.play_sound(assets.sounds.whoosh)
-        self.bgm.queue(assets.sounds.bg1.source)
+        self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint
@@ -49,6 +51,7 @@ class Game(arcade.Window):
             "MenuView": {
                 # This shows the menus
                 "color": arcade.color.BLACK,
+                "bgm": assets.sounds.glacier,
                 "text": [
                     arcade.Text(
                         "Escape!!",
@@ -66,6 +69,11 @@ class Game(arcade.Window):
                 # This shows the pre-game storyline
                 "color": arcade.color.BLACK,
                 "ui": get_storybook_ui(self),
+            },
+            "GameOver": {
+                # This is the GameOver Screen
+                "color": (20, 7, 7, 255),
+                "ui": get_gameover_ui(self),
             },
             "About": {
                 # This shows the about section
@@ -92,6 +100,8 @@ class Game(arcade.Window):
             "Credits": {
                 # This shows the credits section
                 "color": arcade.color.BLACK,
+                "bgm": assets.sounds.japan,
+                "next_bgm_diff": True,
                 "text": [
                     arcade.Text(
                         "Here goes credits and contributions, to fill later",
@@ -159,7 +169,7 @@ class Game(arcade.Window):
             },
             "Pause": {
                 # This shows when the game is paused
-                "bgm": assets.sounds.bg1,
+                "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -185,6 +195,7 @@ class Game(arcade.Window):
         # entrypoint = "GameView"  # <- use this for game debug
         view = BaseView(self.views)
         self.show_view(view.configure(entrypoint))
+        print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")
 
     @staticmethod
     def get_level_view(level: int) -> GameView:

@@ -27,38 +27,39 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     quit_button = arcade.gui.UIFlatButton(text="Quit", width=250)
     v_box.add(quit_button)
 
+    # noinspection PyUnusedLocal
     @start_button.event("on_click")
     def on_click_start(event):
-        print("Start:", event)
         assets.sounds.click.play()
         change_views(window, "Storybook")
 
+    # noinspection PyUnusedLocal
     @about_button.event("on_click")
     def on_click_about(event):
-        print("About:", event)
         assets.sounds.click.play()
         change_views(window, "About")
 
+    # noinspection PyUnusedLocal
     @quit_button.event("on_click")
     def on_click_quit(event):
-        print("Quit:", event)
         arcade.exit()
 
+    # noinspection PyUnusedLocal
     @settings_button.event("on_click")
     def on_click_settings(event):
-        print("Settings:", event)
         assets.sounds.click.play()
         change_views(window, "Settings")
 
+    # noinspection PyUnusedLocal
     @credits_button.event("on_click")
     def on_click_credits(event):
-        print("Credits:", event)
         assets.sounds.click.play()
+        window.change_bgm = True
         change_views(window, "Credits")
 
+    # noinspection PyUnusedLocal
     @continue_button.event("on_click")
     def on_click_continue(event):
-        print("Continue:", event)
         assets.sounds.click.play()
         change_views(window, "Levels")
 

@@ -20,6 +20,8 @@ def check_system():
 
 
 def run_game():
+    print("Loading the game, please be patient...", flush=True)
+
     # pylint: disable=import-outside-toplevel
     from game import main
 

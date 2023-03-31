@@ -11,6 +11,7 @@ class BaseView(arcade.View):
 
     def __init__(self, views: dict = None):
         super().__init__()
+        self.next_bgm_diff = None
         self.ui_nodes = None
         self.text_nodes: Union[list[arcade.Text], arcade.Text, None] = None
         self.bg_color: arcade.csscolor = None
@@ -29,6 +30,7 @@ class BaseView(arcade.View):
         self.ui_nodes = self.views[view].get("ui")
         self.next = self.views[view].get("next")
         self.bgm = self.views[view].get("bgm")
+        self.next_bgm_diff = self.views[view].get("next_bgm_diff")
         return self
 
     def on_show_view(self):
@@ -39,8 +41,9 @@ class BaseView(arcade.View):
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
-        if self.bgm:
-            self.window.bgm = change_music(self.window.bgm, self.bgm)
+        if self.bgm and self.window.change_bgm:
+            self.window.bgm = change_music(self.window.bgm, self.bgm, looping=True)
+        self.window.change_bgm = False
 
     def on_hide_view(self):
         pass
@@ -65,11 +68,20 @@ class BaseView(arcade.View):
         """If the user presses the mouse button, navigate to the next View."""
 
         if self.next:
-            self.window.bgm = change_music(self.window.bgm, assets.sounds.bg1)
+            assets.sounds.click.play()
             self.window.ui_manager.clear()
+            if self.next_bgm_diff:
+                self.window.change_bgm = True
             self.window.show_view(self.configure(self.next))
 
 
 def change_views(window: arcade.Window, dest_view: str):
     window.ui_manager.clear()
-    window.show_view(BaseView(window.views).configure(dest_view))
+    if dest_view.startswith("GameView"):
+        if dest_view.endswith("same"):
+            window.show_view(BaseView(window.views).configure("GameView"))
+        else:
+            # Reset the level and all entities
+            window.show_view(window.get_level_view(window.level))
+    else:
+        window.show_view(BaseView(window.views).configure(dest_view))

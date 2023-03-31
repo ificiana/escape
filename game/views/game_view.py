@@ -19,9 +19,14 @@ class GameView(arcade.View):
 
         # declare objects and entities
         self.walls = None
+        self.floor = None
+        self.objects = None
         self.player = None
         self.physics_engine = None
         self.start_time = None
+        self.bgm = None
+        # special purpose bgm
+        self.bgm2 = None
 
         # movement states
         self.movement = Vec2(0, 0)
@@ -43,9 +48,12 @@ class GameView(arcade.View):
         level_map = arcade.TileMap(
             assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
         )
+        self.window.level = level
 
         # place objects
+        self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
+        self.objects = level_map.sprite_lists["objects"]
 
         # Set up the player
         self.player = Player()
@@ -54,7 +62,9 @@ class GameView(arcade.View):
         self.entities_list.append(self.player)
 
         # Create physics engine for collision
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player, [self.walls, self.objects]
+        )
 
         # Start time
         self.start_time = time.time()
@@ -68,20 +78,40 @@ class GameView(arcade.View):
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
-        self.window.bgm = change_music(self.window.bgm, assets.sounds.bg2, looping=True)
+        self.window.bgm = change_music(
+            self.window.bgm, assets.sounds.horror, looping=True, volume=0.2, speed=0.5
+        )
+        if self.bgm is None:
+            self.bgm = change_music(
+                self.bgm, assets.sounds.heart, volume=0.6, looping=True
+            )
+            # self.bgm2 = change_music(self.bgm2, assets.sounds.insomnia, volume=0.2, looping=True)
+        else:
+            self.bgm.play()
+            # self.bgm2.play()
+
+    def on_hide_view(self):
+        self.bgm.pause()
+        # self.bgm2.pause()
+
+    def screen_to_world_point(self, screen_point: Vec2):
+        return screen_point + self.scene_camera.position
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         # Use the mouse to look around
         self.mouse_pos.x, self.mouse_pos.y = x, y
 
     def on_update(self, delta_time: float):
-        self.player.move(*self.movement, *self.mouse_pos)
+        self.player.move(self.movement, self.screen_to_world_point(self.mouse_pos))
         cam_pos = Vec2(
             self.player.center_x - self.window.width / 2,
             self.player.center_y - self.window.height / 2,
         )
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
+
+    def gameover(self):
+        change_views(self.window, "GameOver")
 
     def on_key_press(self, symbol: int, modifiers: int):
         """Handle Keyboard Input."""
@@ -95,12 +125,14 @@ class GameView(arcade.View):
                 self.movement.x = -1
             case arcade.key.RIGHT | arcade.key.D:
                 self.movement.x = 1
+            case arcade.key.Q:
+                self.player.attack(self.entities_list)
+            case arcade.key.G:
+                self.gameover()
             case arcade.key.I:
-                print("Open Inventory: ")
                 assets.sounds.click.play()
                 change_views(self.window, "InventoryView")
             case arcade.key.ESCAPE:
-                print("Pause Game: ")
                 assets.sounds.click.play()
                 change_views(self.window, "Pause")
 
@@ -128,8 +160,12 @@ class GameView(arcade.View):
         self.clear()
 
         self.scene_camera.use()
-        self.entities_list.draw()
+        if self.floor is not None:
+            self.floor.draw()
         self.walls.draw()
+        if self.objects is not None:
+            self.objects.draw()
+        self.entities_list.draw()
 
         # Add GUI
         self.gui_camera.use()
