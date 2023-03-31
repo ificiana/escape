@@ -12,7 +12,7 @@ class Player(Entity):
         super().__init__("mc_idle.png")
         self.center_x, self.center_y = Vec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
         self.angle = -90
-        self.normal_speed = 4.0
+        self.normal_speed = 2.0
         self.speed = self.normal_speed
 
     def update_animation(self, delta_time: float = 1 / 60):

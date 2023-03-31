@@ -20,6 +20,7 @@ class GameView(arcade.View):
         # declare objects and entities
         self.walls = None
         self.floor = None
+        self.objects = None
         self.player = None
         self.physics_engine = None
         self.start_time = None
@@ -52,6 +53,7 @@ class GameView(arcade.View):
         # place objects
         self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
+        self.objects = level_map.sprite_lists["objects"]
 
         # Set up the player
         self.player = Player()
@@ -60,7 +62,7 @@ class GameView(arcade.View):
         self.entities_list.append(self.player)
 
         # Create physics engine for collision
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.walls)
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player, [self.walls, self.objects])
 
         # Start time
         self.start_time = time.time()
@@ -158,6 +160,7 @@ class GameView(arcade.View):
         self.scene_camera.use()
         if self.floor != None: self.floor.draw()
         self.walls.draw()
+        if self.objects != None: self.objects.draw()
         self.entities_list.draw()
 
         # Add GUI
