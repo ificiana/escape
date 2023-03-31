@@ -6,7 +6,7 @@ from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.views import BaseView
 from game.views.game_view import GameView
 from game.views.inventory import InventoryView
-from game.views.menu import get_menu_view_ui
+from game.views.menu import get_menu_view_ui, return_to_menu_binding
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.story import get_storybook_ui
 from game.views.gameover import get_gameover_ui
@@ -77,6 +77,7 @@ class Game(arcade.Window):
             },
             "About": {
                 # This shows the about section
+                "keys": return_to_menu_binding,
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -99,6 +100,7 @@ class Game(arcade.Window):
             },
             "Credits": {
                 # This shows the credits section
+                "keys": return_to_menu_binding,
                 "color": arcade.color.BLACK,
                 "bgm": assets.sounds.japan,
                 "next_bgm_diff": True,
@@ -124,6 +126,7 @@ class Game(arcade.Window):
             "Levels": {
                 # This shows the settings section
                 # TODO: implement a proper levels view
+                "keys": return_to_menu_binding,
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -144,33 +147,11 @@ class Game(arcade.Window):
                 ],
                 "next": "MenuView",
             },
-            "Settings": {
-                # This shows the settings section
-                # TODO: implement a proper settings view
-                "color": arcade.color.BLACK,
-                "text": [
-                    arcade.Text(
-                        "Here goes settings, TODO",
-                        self.width / 2,
-                        self.height / 2,
-                        font_size=15,
-                        anchor_x="center",
-                    ),
-                    arcade.Text(
-                        "Click to Return",
-                        self.width / 2,
-                        self.height / 2 - 75,
-                        arcade.color.WHITE,
-                        font_size=10,
-                        anchor_x="center",
-                    ),
-                ],
-                "next": "MenuView",
-            },
             "Pause": {
                 # This shows when the game is paused
                 "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
+                "keys": return_to_menu_binding,
                 "text": [
                     arcade.Text(
                         "Escape!!",
