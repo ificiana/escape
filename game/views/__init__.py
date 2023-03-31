@@ -17,6 +17,7 @@ class BaseView(arcade.View):
         self.bg_color: arcade.csscolor = None
         self.next = None
         self.bgm = None
+        self.keys = None
 
         # store the views data
         self.views: dict = views or {}
@@ -31,6 +32,7 @@ class BaseView(arcade.View):
         self.next = self.views[view].get("next")
         self.bgm = self.views[view].get("bgm")
         self.next_bgm_diff = self.views[view].get("next_bgm_diff")
+        self.keys = self.views[view].get("keys")
         return self
 
     def on_show_view(self):
@@ -73,6 +75,12 @@ class BaseView(arcade.View):
             if self.next_bgm_diff:
                 self.window.change_bgm = True
             self.window.show_view(self.configure(self.next))
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        """Handle Keyboard Input."""
+
+        if self.keys:
+            self.keys(self.window, symbol)
 
 
 def change_views(window: arcade.Window, dest_view: str):
