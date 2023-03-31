@@ -1,9 +1,10 @@
-import time
+from time import time
 
 import arcade
 from pyglet.math import Vec2
 
 import assets
+from game.entities.enemy import Enemy
 from game.entities.player import Player
 from game.sounds import change_music
 from game.views import change_views
@@ -33,7 +34,7 @@ class GameView(arcade.View):
         self.mouse_pos = Vec2(0, 0)
 
         # sprite lists
-        self.entities_list = arcade.SpriteList()
+        self.enemies = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
 
         # Setup camera
@@ -45,8 +46,19 @@ class GameView(arcade.View):
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
+
+        # TODO: fix bugs and remove this
+        use_guided_path = False
+
+        # if guided path is used, enemies get stuck to the wall...
+        # if not used, the enemies just fly past like jets!!? huh? fixme
+
         level_map = arcade.TileMap(
-            assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
+            # assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True,  # <- real one
+            assets.tilemaps.resolve(
+                "level1_.tmx" if use_guided_path else "level1.tmx"
+            ),  # <- test
+            use_spatial_hash=True,
         )
         self.window.level = level
 
@@ -57,17 +69,35 @@ class GameView(arcade.View):
 
         # Set up the player
         self.player = Player()
-        self.player.center_x = self.window.width / 2
-        self.player.center_y = self.window.height / 2
-        self.entities_list.append(self.player)
+        self.player.position = level_map.sprite_lists["player"][0].position
+
+        # Set up the enemies
+        if use_guided_path:
+            arrows = [
+                level_map.sprite_lists["arrow_left"],
+                level_map.sprite_lists["arrow_right"],
+                level_map.sprite_lists["arrow_up"],
+                level_map.sprite_lists["arrow_down"],
+            ]
+        else:
+            arrows = None
+
+        barriers = [self.walls, self.objects]
+
+        for enemy in level_map.sprite_lists["enemies"]:
+            if use_guided_path:
+                e = Enemy(initial_pos=enemy.position, arrows=arrows, barriers=barriers)
+            else:
+                e = Enemy(initial_pos=enemy.position, barriers=barriers)
+            self.enemies.append(e)
 
         # Create physics engine for collision
         self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player, [self.walls, self.objects]
+            self.player, barriers + [self.enemies]
         )
 
         # Start time
-        self.start_time = time.time()
+        self.start_time = time()
 
     def on_show_view(self):
         """This is run once when we switch to this view"""
@@ -110,6 +140,8 @@ class GameView(arcade.View):
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
 
+        self.enemies.update()
+
     def gameover(self):
         change_views(self.window, "GameOver")
 
@@ -126,7 +158,7 @@ class GameView(arcade.View):
             case arcade.key.RIGHT | arcade.key.D:
                 self.movement.x = 1
             case arcade.key.Q:
-                self.player.attack(self.entities_list)
+                self.player.attack(self.enemies)
             case arcade.key.G:
                 self.gameover()
             case arcade.key.I:
@@ -165,13 +197,23 @@ class GameView(arcade.View):
         self.walls.draw()
         if self.objects is not None:
             self.objects.draw()
-        self.entities_list.draw()
+        self.enemies.draw()
+
+        # TODO: remove this after debug
+        for i in self.walls:
+            i.draw_hit_box()
+        if self.enemies[0].arrows:
+            for i in self.enemies[0].arrows:
+                for j in i:
+                    j.draw_hit_box()
+
+        self.player.draw()
 
         # Add GUI
         self.gui_camera.use()
         arcade.Text(
             f"Health: 100, Time: "
-            f"{':'.join(map(lambda x: f'{int(x):02d}',divmod(time.time()-self.start_time, 60)))}",
+            f"{':'.join(map(lambda x: f'{int(x):02d}', divmod(time() - self.start_time, 60)))}",
             self.window.width - 200,
             self.window.height - 25,
         ).draw()

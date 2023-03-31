@@ -1,4 +1,4 @@
-import math
+import random
 
 import arcade
 from pyglet.math import Vec2
@@ -7,40 +7,62 @@ from game.entities import Entity
 
 
 class Enemy(Entity):
-    def __init__(self, player, barrier_list):
-        super().__init__("slimeBlock.png")
-        self.angle = -90
-        self.speed = 3.0
-        self.player = player
-        self.barrier_list = barrier_list
-        start = Vec2(300, 900)
-        end = Vec2(1200, 1280)
-        self.patrol_path = self.calculate_path(start, end)
-        self.patrol_path_index = 0
-        self.center_x, self.center_y = self.patrol_path[self.patrol_path_index]
-        self.state = "patrolling"
-        self.moving_forward = True
+    def __init__(self, initial_pos, barriers, arrows=None):
+        super().__init__("enemy.png")
+        self.speed = 1.8
+        self.position = initial_pos
+        self.rng = random.Random(f"{str(self.position)}1")
+        self.arrows = arrows
+        if arrows:
+            (
+                self.arrows_left,
+                self.arrows_right,
+                self.arrows_up,
+                self.arrows_down,
+            ) = arrows
+        self.movement = Vec2(0, 0)
+        self.state = 300
 
-    def calculate_path(self, start, end):
-        return arcade.astar_calculate_path(start, end, self.barrier_list, True)
+        if self.arrows:
+            if self.collides_with_list(self.arrows_up):
+                self.movement = Vec2(0, 1)
+            elif self.collides_with_list(self.arrows_down):
+                self.movement = Vec2(0, -1)
+            elif self.collides_with_list(self.arrows_left):
+                self.movement = Vec2(-1, 0)
+            elif self.collides_with_list(self.arrows_right):
+                self.movement = Vec2(1, 0)
+
+        self.collision_radius = 2
+        self.physics_engine = arcade.PhysicsEngineSimple(self, barriers)
+
+    def move(self, reverse=False):
+        n = Vec2(-1, -1) if reverse else Vec2(1, 1)
+        if self.arrows:
+            pos = Vec2(*self.position)
+            self.position = pos + n * self.movement * Vec2(self.speed, self.speed)
+        else:
+            if self.state:
+                if not self.state % 300:
+                    self.angle = self.rng.choice(
+                        [0, 45, 90, 135, 180, 225, 270, 315, 360]
+                    )
+                self.state -= 1
+            else:
+                self.state = 300
+            self.forward(self.speed)
 
     def update(self):
-        if self.state == "patrolling":
-            # Patrolling
-            point = self.patrol_path[self.patrol_path_index]
-            direction = Vec2(point[0], point[1]) - self.get_position()
-            if direction.mag < 5:
-                self.patrol_path_index += 1 if self.moving_forward else -1
-                if self.patrol_path_index == len(self.patrol_path) - 1:
-                    self.moving_forward = False
-                elif self.patrol_path_index == 0:
-                    self.moving_forward = True
-        elif self.state == "chasing":
-            # Calculate direction to the player
-            direction = self.player.get_position() - self.get_position()
-        if direction.mag != 0:
-            direction = direction.normalize()
-            self.angle = math.degrees(direction.heading)
-        # Move towards the player
-        self.center_x += direction.x * self.speed
-        self.center_y += direction.y * self.speed
+        if self.arrows:
+            if self.collides_with_list(self.arrows_up):
+                self.movement = Vec2(0, 1)
+            elif self.collides_with_list(self.arrows_down):
+                self.movement = Vec2(0, -1)
+            elif self.collides_with_list(self.arrows_left):
+                self.movement = Vec2(-1, 0)
+            elif self.collides_with_list(self.arrows_right):
+                self.movement = Vec2(1, 0)
+
+        self.move()
+        if self.physics_engine.update():
+            self.move(True)
