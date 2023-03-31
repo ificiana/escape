@@ -48,8 +48,8 @@ class GameView(arcade.View):
         # create instance of TorchShaderToy and assign to torch attribute
         self.torch = TorchShaderToy(
             size=(self.player.width, self.player.height),
-            main_source=assets.shaders.torch_main,
-            shadow_source=assets.shaders.torch_shadow,
+            main_source=assets.shaders.resolve("torch_main.glsl"),
+            shadow_source=assets.shaders.resolve("torch_shadow.glsl"),
         )
 
     def select_level(self, level: int = 1):

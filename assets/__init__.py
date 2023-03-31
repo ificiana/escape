@@ -1,3 +1,3 @@
-from .manager import sprites, tilemaps, sounds, fonts, items
+from .manager import sprites, tilemaps, sounds, fonts, items, shaders
 
 __all__ = ["sprites", "tilemaps", "sounds", "fonts", "items", "shaders"]
