@@ -6,7 +6,7 @@ from game.views import change_views
 
 
 class Item(arcade.Sprite):
-    def __init__(self, sprite_file: str, name: str, pos: Vec2, angle: int):
+    def __init__(self, sprite_file: str, name: str, pos: Vec2, angle: float):
         super().__init__(assets.items.resolve(sprite_file))
         self.name = name or sprite_file
         self.center_x, self.center_y = pos

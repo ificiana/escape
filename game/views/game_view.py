@@ -66,7 +66,7 @@ class GameView(arcade.View):
 
         for item in pickables:
             self.pickables.append(
-                Item("knife.png", "knife", item.center_x, item.center_y, item.angle)
+                Item("knife.png", "knife", Vec2(*item.position), item.angle)
             )
 
         # Set up the player
