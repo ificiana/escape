@@ -4,8 +4,8 @@ from arcade.experimental import Shadertoy
 class TorchShaderToy(Shadertoy):
     """ShaderToy program to create a torch with shadow effect."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, size, main_source, shadow_source):
+        super().__init__(size, main_source)
 
         # Define the uniforms
         self.set_uniform("time", 0.0)

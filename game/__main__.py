@@ -24,7 +24,7 @@ class Game(arcade.Window):
         self.level = None
 
     def setup(self):
-        self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
+        # self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
         self.views = {
             "StartView": {
                 # This is the first view, the entrypoint
@@ -51,7 +51,7 @@ class Game(arcade.Window):
             "MenuView": {
                 # This shows the menus
                 "color": arcade.color.BLACK,
-                "bgm": assets.sounds.glacier,
+                # "bgm": assets.sounds.glacier,
                 "text": [
                     arcade.Text(
                         "Escape!!",
