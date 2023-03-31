@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" source="sprites.tsx"/>
  <layer id="2" name="floor" width="80" height="50">
   <data encoding="base64" compression="zlib">
@@ -9,6 +9,16 @@
  <layer id="1" name="walls" width="80" height="50">
   <data encoding="base64" compression="zlib">
    eJztmksOgzAMBeECvf9xKxaoKKog8cvHxjNSNq1s06lRcNNtAwAAAIBM7CxpfdqVm2LUnCtq1sTjT4vHnxaf2V8P8KeR2V+m+3cE+FtbM5I/j9/Z2/1d54R/r+Fvfs4y/ljlTHdyN/PdzYTWa1Hen5WzjO/dS9Z8+PvlHBGHPy0Of1pcJn8te1Hts8TTnmXNqeCp/1aAPw1LT5f9Henz9sZj/0Vi1PxRs0Zd00w8zr/403NGwas/63520uNcuyZXpvs3y++n+NPq4k+riz+tbkZ/rXvfW57/VCL1n0ci+fN8//asiz+tLv60uvjT6uJPq4s/rS7+tLoZ/VnOnaz/LVLOurzlPOK/tYYNcQ==
+  </data>
+ </layer>
+ <layer id="3" name="objects" width="80" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2UEKgCAQBVDvEAWtsrr/HdtLIIg2SO9tZAT1r/0pAQAAfGsrVpjZWZkBAAD4pzs6ADS6ogMAMDV/5jF0bwAwTo4OABAkN55beoYAmq0ve3vQuzDSMejesi+rzTW6Y2b1AP9qAmA=
+  </data>
+ </layer>
+ <layer id="4" name="pickables" width="80" height="50">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAGo+gAAB
   </data>
  </layer>
 </map>
