@@ -7,6 +7,7 @@ Team submission for pyweek35, repo will be renamed once we have a name for the g
 First install poetry following : https://python-poetry.org/docs/
 
 ### For Windows run:
+  #### Make sure to run in Command Prompt (NOT in powershell)
 
   `curl -sSL https://install.python-poetry.org | python -`
 
