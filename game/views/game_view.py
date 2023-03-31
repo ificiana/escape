@@ -62,7 +62,9 @@ class GameView(arcade.View):
         self.entities_list.append(self.player)
 
         # Create physics engine for collision
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player, [self.walls, self.objects])
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player, [self.walls, self.objects]
+        )
 
         # Start time
         self.start_time = time.time()
@@ -158,9 +160,11 @@ class GameView(arcade.View):
         self.clear()
 
         self.scene_camera.use()
-        if self.floor != None: self.floor.draw()
+        if self.floor is not None:
+            self.floor.draw()
         self.walls.draw()
-        if self.objects != None: self.objects.draw()
+        if self.objects is not None:
+            self.objects.draw()
         self.entities_list.draw()
 
         # Add GUI
