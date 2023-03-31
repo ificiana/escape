@@ -19,6 +19,7 @@ class GameView(arcade.View):
 
         # declare objects and entities
         self.walls = None
+        self.floor = None
         self.player = None
         self.physics_engine = None
         self.start_time = None
@@ -49,6 +50,7 @@ class GameView(arcade.View):
         self.window.level = level
 
         # place objects
+        self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
 
         # Set up the player
@@ -154,8 +156,9 @@ class GameView(arcade.View):
         self.clear()
 
         self.scene_camera.use()
-        self.entities_list.draw()
+        if self.floor != None: self.floor.draw()
         self.walls.draw()
+        self.entities_list.draw()
 
         # Add GUI
         self.gui_camera.use()
