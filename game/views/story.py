@@ -3,7 +3,6 @@ from typing import Union
 import arcade.gui
 
 import assets
-from assets import fonts
 from game.views import change_views
 
 
@@ -30,7 +29,6 @@ def get_storybook_ui(
         "cur_page": 1,
         "max_page": 5,
     }
-    arcade.load_font(fonts.resolve("Melted Monster.ttf"))
     text_area = arcade.gui.UITextArea(
         x=100,
         y=200,
@@ -43,13 +41,19 @@ def get_storybook_ui(
     )
 
     # Create the buttons
-    prev_button = arcade.gui.UIFlatButton(text="Prev", width=200)
+    prev_button = arcade.gui.UIFlatButton(
+        text="Prev", width=200, style={"font_name": "Melted Monster"}
+    )
     h_box.add(prev_button.with_space_around(right=20))
 
-    skip_button = arcade.gui.UIFlatButton(text="Skip", width=200)
+    skip_button = arcade.gui.UIFlatButton(
+        text="Skip", width=200, style={"font_name": "Melted Monster"}
+    )
     h_box.add(skip_button.with_space_around(right=20))
 
-    next_button = arcade.gui.UIFlatButton(text="Next", width=200)
+    next_button = arcade.gui.UIFlatButton(
+        text="Next", width=200, style={"font_name": "Melted Monster"}
+    )
     h_box.add(next_button.with_space_around(right=20))
 
     # noinspection PyUnusedLocal
