@@ -9,22 +9,34 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     v_box = arcade.gui.UIBoxLayout()
 
     # Create the buttons
-    start_button = arcade.gui.UIFlatButton(text="New Game", width=250)
+    start_button = arcade.gui.UIFlatButton(
+        text="New Game", width=250, style={"font_name": "Melted Monster"}
+    )
     v_box.add(start_button.with_space_around(bottom=20))
 
-    continue_button = arcade.gui.UIFlatButton(text="Continue", width=250)
+    continue_button = arcade.gui.UIFlatButton(
+        text="Continue", width=250, style={"font_name": "Melted Monster"}
+    )
     v_box.add(continue_button.with_space_around(bottom=20))
 
-    settings_button = arcade.gui.UIFlatButton(text="Settings", width=250)
+    settings_button = arcade.gui.UIFlatButton(
+        text="Settings", width=250, style={"font_name": "Melted Monster"}
+    )
     v_box.add(settings_button.with_space_around(bottom=20))
 
-    about_button = arcade.gui.UIFlatButton(text="About", width=250)
+    about_button = arcade.gui.UIFlatButton(
+        text="About", width=250, style={"font_name": "Melted Monster"}
+    )
     v_box.add(about_button.with_space_around(bottom=20))
 
-    credits_button = arcade.gui.UIFlatButton(text="Credits & Contributions", width=250)
+    credits_button = arcade.gui.UIFlatButton(
+        text="Credits & Contributions", width=250, style={"font_name": "Melted Monster"}
+    )
     v_box.add(credits_button.with_space_around(bottom=20))
 
-    quit_button = arcade.gui.UIFlatButton(text="Quit", width=250)
+    quit_button = arcade.gui.UIFlatButton(
+        text="Quit", width=250, style={"font_name": "Melted Monster"}
+    )
     v_box.add(quit_button)
 
     # noinspection PyUnusedLocal

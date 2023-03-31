@@ -2,6 +2,7 @@ import arcade
 import arcade.gui
 
 import assets
+from assets import fonts
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.views import BaseView
 from game.views.game_view import GameView
@@ -25,6 +26,7 @@ class Game(arcade.Window):
         self.level = None
 
     def setup(self):
+        arcade.load_font(fonts.resolve("Melted Monster.ttf"))
         self.bgm = arcade.play_sound(assets.sounds.glacier, looping=True)
         self.views = {
             "StartView": {
@@ -37,6 +39,7 @@ class Game(arcade.Window):
                         self.height / 2,
                         font_size=50,
                         anchor_x="center",
+                        font_name="Melted Monster",
                     ),
                     arcade.Text(
                         "Click to advance",
@@ -60,6 +63,7 @@ class Game(arcade.Window):
                         self.height - 50,
                         font_size=20,
                         anchor_x="center",
+                        font_name="Melted Monster",
                     ),
                 ],
                 "ui": [
@@ -166,6 +170,7 @@ class Game(arcade.Window):
                         self.height - 100,
                         font_size=50,
                         anchor_x="center",
+                        font_name="Melted Monster",
                     ),
                 ],
                 "ui": [

@@ -3,8 +3,8 @@ from typing import Union
 import arcade.gui
 
 import assets
-from assets import fonts
 from game.views import change_views
+
 
 # pylint: disable=R0801
 
@@ -15,7 +15,6 @@ def get_gameover_ui(
     # Create a vertical BoxGroup to align buttons
     h_box = arcade.gui.UIBoxLayout(vertical=True)
 
-    arcade.load_font(fonts.resolve("Melted Monster.ttf"))
     text_area = arcade.gui.UITextArea(
         x=100,
         y=200,
