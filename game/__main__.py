@@ -8,6 +8,7 @@ from game.views.game_view import GameView
 from game.views.inventory import InventoryView
 from game.views.menu import get_menu_view_ui, return_to_menu_binding
 from game.views.pause_menu import get_pause_menu_view_ui
+from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
 from game.views.gameover import get_gameover_ui
 
@@ -74,6 +75,12 @@ class Game(arcade.Window):
                 # This is the GameOver Screen
                 "color": (20, 7, 7, 255),
                 "ui": get_gameover_ui(self),
+            },
+            "Settings": {
+                # This shows the pre-game storyline
+                "keys": return_to_menu_binding,
+                "color": arcade.color.BLACK,
+                "ui": get_settings_ui(),
             },
             "About": {
                 # This shows the about section
