@@ -79,13 +79,19 @@ class GameView(arcade.View):
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
         self.window.bgm = change_music(
-            self.window.bgm, assets.sounds.horror, looping=True, volume=0.2, speed=0.5
+            self.window,
+            self.window.bgm,
+            assets.sounds.horror,
+            looping=True,
+            volume=0.2,
+            speed=0.5,
         )
         if self.bgm is None:
             self.bgm = change_music(
-                self.bgm, assets.sounds.heart, volume=0.6, looping=True
+                self.window, self.bgm, assets.sounds.heart, volume=0.6, looping=True
             )
-            # self.bgm2 = change_music(self.bgm2, assets.sounds.insomnia, volume=0.2, looping=True)
+            # self.bgm2 = change_music(self.window, self.bgm2,
+            # assets.sounds.insomnia, volume=0.2, looping=True)
         else:
             self.bgm.play()
             # self.bgm2.play()

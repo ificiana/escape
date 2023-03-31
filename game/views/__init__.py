@@ -44,7 +44,9 @@ class BaseView(arcade.View):
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
         if self.bgm and self.window.change_bgm:
-            self.window.bgm = change_music(self.window.bgm, self.bgm, looping=True)
+            self.window.bgm = change_music(
+                self.window, self.window.bgm, self.bgm, looping=True
+            )
         self.window.change_bgm = False
 
     def on_hide_view(self):
