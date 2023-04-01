@@ -1,17 +1,18 @@
 import arcade
 import arcade.gui
+import pyglet.media
 
 import assets
 from assets import fonts
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.views import BaseView, return_to_view
 from game.views.game_view import GameView
-from game.views.inventory import get_inventory_ui
+from game.views.gameover import get_gameover_ui
+from game.views.inventory import Inventory
 from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
-from game.views.gameover import get_gameover_ui
 
 
 class Game(arcade.Window):
@@ -21,11 +22,12 @@ class Game(arcade.Window):
         self.views = None
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
-        self.bgm = None
+        self.bgm: pyglet.media.Player | None = None
         self.change_bgm = False
-        self.level = None
+        self.level: int = 1
         self.music_vol = 1.0
         self.sfx_vol = 1.0
+        self.inventory = Inventory()
 
     def setup(self):
         arcade.load_font(fonts.resolve("Melted Monster.ttf"))
@@ -166,7 +168,7 @@ class Game(arcade.Window):
                 # This shows when the game is paused
                 "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
-                "keys": return_to_view("GameView-same"),
+                "keys": return_to_view("GameView"),
                 "text": [
                     arcade.Text(
                         "Escape!!",
@@ -181,19 +183,15 @@ class Game(arcade.Window):
                     get_pause_menu_view_ui(self),
                 ],
             },
-            "InventoryView": {
-                # Shows the inventory
-                "keys": return_to_view("GameView-same"),
-                "color": arcade.color.BLACK,
-                "ui": get_inventory_ui(self),
-            },
             # This shows the main game view, starts at level 1
             "GameView": self.get_level_view(1),
             # TODO: Add rest of the Views here
         } | {f"Level-{n}": self.get_level_view(n) for n in range(1, 2)}
 
-        # entrypoint = "StartView"
-        entrypoint = "GameView"  # <- use this for game debug
+        self.views["GameView"].attach_inventory()
+
+        entrypoint = "StartView"
+        # entrypoint = "GameView"  # <- use this for game debug
         view = BaseView(self.views)
         self.show_view(view.configure(entrypoint))
         print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")
