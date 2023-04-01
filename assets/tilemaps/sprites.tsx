@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.0" name="sprites" tilewidth="128" tileheight="150" tilecount="25" columns="0">
+<tileset version="1.10" tiledversion="1.10.0" name="sprites" tilewidth="128" tileheight="150" tilecount="33" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <image width="32" height="32" source="../sprites/wall.png"/>
@@ -79,7 +79,32 @@
  <tile id="37">
   <properties>
    <property name="file" value="knife.png"/>
+   <property name="name" value="knife"/>
   </properties>
   <image width="70" height="70" source="../items/knife.png"/>
+ </tile>
+ <tile id="38">
+  <image width="64" height="38" source="../sprites/door_red.png"/>
+ </tile>
+ <tile id="39">
+  <image width="64" height="38" source="../sprites/door_golden.png"/>
+ </tile>
+ <tile id="40">
+  <image width="64" height="38" source="../sprites/door_silver.png"/>
+ </tile>
+ <tile id="41">
+  <image width="64" height="38" source="../sprites/door_wood.png"/>
+ </tile>
+ <tile id="42">
+  <image width="14" height="64" source="../sprites/door_golden_side.png"/>
+ </tile>
+ <tile id="43">
+  <image width="14" height="64" source="../sprites/door_red_side.png"/>
+ </tile>
+ <tile id="44">
+  <image width="14" height="64" source="../sprites/door_silver_side.png"/>
+ </tile>
+ <tile id="45">
+  <image width="14" height="64" source="../sprites/door_wood_side.png"/>
  </tile>
 </tileset>

@@ -22,7 +22,8 @@ class Enemy(Entity):
         print(self.health)
         if self.health <= 0:
             print("DEATH")
-            self.game_view.remove_enemy_from_world(self)
+            self.kill()
+            # self.game_view.remove_enemy_from_world(self)
 
     def update(self):
         pass
