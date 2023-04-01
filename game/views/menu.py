@@ -14,10 +14,10 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     )
     v_box.add(start_button.with_space_around(bottom=20))
 
-    continue_button = arcade.gui.UIFlatButton(
-        text="Continue", width=250, style={"font_name": "Melted Monster"}
+    level_button = arcade.gui.UIFlatButton(
+        text="Select Level", width=250, style={"font_name": "Melted Monster"}
     )
-    v_box.add(continue_button.with_space_around(bottom=20))
+    v_box.add(level_button.with_space_around(bottom=20))
 
     settings_button = arcade.gui.UIFlatButton(
         text="Settings", width=250, style={"font_name": "Melted Monster"}
@@ -70,7 +70,7 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
         change_views(window, "Credits")
 
     # noinspection PyUnusedLocal
-    @continue_button.event("on_click")
+    @level_button.event("on_click")
     def on_click_continue(event):
         assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "Levels")
