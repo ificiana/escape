@@ -84,27 +84,59 @@
   <image width="70" height="70" source="../items/knife.png"/>
  </tile>
  <tile id="38">
+  <properties>
+   <property name="file" value="door_red.png"/>
+   <property name="name_color" value="door-red"/>
+  </properties>
   <image width="64" height="38" source="../sprites/door_red.png"/>
  </tile>
  <tile id="39">
+  <properties>
+   <property name="file" value="door_golden.png"/>
+   <property name="name_color" value="door-golden"/>
+  </properties>
   <image width="64" height="38" source="../sprites/door_golden.png"/>
  </tile>
  <tile id="40">
+  <properties>
+   <property name="file" value="door_silver.png"/>
+   <property name="name_color" value="door-silver"/>
+  </properties>
   <image width="64" height="38" source="../sprites/door_silver.png"/>
  </tile>
  <tile id="41">
+  <properties>
+   <property name="file" value="door_wood.png"/>
+   <property name="name_color" value="door-wood"/>
+  </properties>
   <image width="64" height="38" source="../sprites/door_wood.png"/>
  </tile>
  <tile id="42">
+  <properties>
+   <property name="file" value="door_golden_side.png"/>
+   <property name="name_color" value="door-golden"/>
+  </properties>
   <image width="14" height="64" source="../sprites/door_golden_side.png"/>
  </tile>
  <tile id="43">
+  <properties>
+   <property name="file" value="door_red_side.png"/>
+   <property name="name_color" value="door-red"/>
+  </properties>
   <image width="14" height="64" source="../sprites/door_red_side.png"/>
  </tile>
  <tile id="44">
+  <properties>
+   <property name="file" value="door_silver_side.png"/>
+   <property name="name_color" value="door_silver"/>
+  </properties>
   <image width="14" height="64" source="../sprites/door_silver_side.png"/>
  </tile>
  <tile id="45">
+  <properties>
+   <property name="file" value="door_wood_side.png"/>
+   <property name="name_color" value="door-wood"/>
+  </properties>
   <image width="14" height="64" source="../sprites/door_wood_side.png"/>
  </tile>
 </tileset>

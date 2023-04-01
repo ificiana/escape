@@ -17,7 +17,7 @@ item_functionality = {
 class Door(arcade.Sprite):
     def __init__(self, sprite_file: str, pos: Vec2, angle: float, name_color: str):
         super().__init__(assets.sprites.resolve(sprite_file))
-        self.name, self.item_color = name_color.split("_")
+        self.name, self.item_color = name_color.split("-")
         self.center_x, self.center_y = pos
         self.angle = angle
 
@@ -35,16 +35,17 @@ class Item(arcade.Sprite):
         self, sprite_file: str, pos: Vec2, angle: float, name_color: str = None
     ):
         super().__init__(assets.items.resolve(sprite_file))
-        self.name, self.item_color = name_color.split("_")
+        # self.name, self.item_color = name_color.split("_")
         self.center_x, self.center_y = pos
         self.angle = angle
-        self.funciotnality = item_functionality[self.name]
+        # self.functionality = item_functionality[self.name]
 
+    # pylint: disable=E1101
     def use(self, game: arcade.View):
         # TODO : Replace with Match Case
-        if self.funciotnality == "equip":
+        if self.functionality == "equip":
             game.player.holding_item = self
-        elif self.funciotnality == "read":
+        elif self.functionality == "read":
             # TODO Display the letter on screen
             pass
         elif self.name == "key":

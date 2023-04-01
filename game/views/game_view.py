@@ -74,7 +74,7 @@ class GameView(arcade.View):
                     item.properties["file"],
                     Vec2(*item.position),
                     item.angle,
-                    name_color=item.properties["name_color"],
+                    name_color=item.properties.get("name_color"),
                 )
             )
 
