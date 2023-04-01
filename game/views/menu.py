@@ -43,7 +43,6 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     @start_button.event("on_click")
     def on_click_start(event):
         assets.sounds.click.play(volume=window.sfx_vol)
-        print("loaded")
         change_views(window, "Storybook")
 
     # noinspection PyUnusedLocal

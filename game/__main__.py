@@ -9,12 +9,11 @@ from game.views import BaseView, return_to_view
 from game.views.game_view import GameView
 from game.views.gameover import get_gameover_ui
 from game.views.inventory import Inventory
+from game.views.level_selection import get_level_menu_view_ui
 from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
-from game.views.gameover import get_gameover_ui
-from game.views.level_selection import get_level_menu_view_ui
 
 
 class Game(arcade.Window):
@@ -158,9 +157,7 @@ class Game(arcade.Window):
                         font_name="Melted Monster",
                     ),
                 ],
-                "ui": [
-                    get_level_menu_view_ui(self)
-                ]
+                "ui": [get_level_menu_view_ui(self)],
             },
             "Pause": {
                 # This shows when the game is paused
@@ -183,15 +180,16 @@ class Game(arcade.Window):
             },
             # This shows the main game view, starts at level 1
             "GameView": GameView(1),
-            # Shows the inventory
-            "InventoryView": InventoryView(self)
             # TODO: Add rest of the levels
-        }| {f"Level{i}": GameView(i) for i in range(1, LEVEL_COUNT+1)}
+        } | {f"Level{i}": GameView(i) for i in range(1, LEVEL_COUNT + 1)}
 
         entrypoint = "StartView"
         # entrypoint = "GameView"  # <- use this for game debug
+
         view = BaseView(self.views)
         self.show_view(view.configure(entrypoint))
+
+        self.views["GameView"].attach_inventory()
         print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")
 
     @staticmethod

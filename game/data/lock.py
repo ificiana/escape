@@ -1,19 +1,18 @@
-from encrypt import SymmetricEncryption
-from game.config import SECRET_KEY   
-
 import os
-print('Get current working directory : ', os.getcwd())
-data=None
-cy=SymmetricEncryption(SECRET_KEY)
+
+from game.data.encrypt import SymmetricEncryption
+from game.config import SECRET_KEY
+
+print("Get current working directory : ", os.getcwd())
+cy = SymmetricEncryption(SECRET_KEY)
 
 
 # open file in read mode and print its contents
-with open("game\data\DB.json", 'r') as file:
-    data=file.read()
-    encr=cy.encrypt(data)
+with open(r"game\data\DB.json", "r", encoding="utf8") as file:
+    data = file.read()
+    encr = cy.encrypt(data)
     print(encr)
     print(cy.decrypt(encr))
 
-with open("game\data\DB.json", 'w') as file:
-    file.write(encr.decode('utf-8'))
-
+with open(r"game\data\DB.json", "w", encoding="utf8") as file:
+    file.write(encr.decode("utf-8"))
