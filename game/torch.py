@@ -22,14 +22,14 @@ class Torch(Shadertoy):
         shader_file_path = main_source
         window_size = size
         self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
-        self.channel0 = self.shadertoy.ctx.framebuffer(
-            color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
-        )
-        self.channel1 = self.shadertoy.ctx.framebuffer(
-            color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
-        )
-        self.shadertoy.channel_0 = self.channel0.color_attachments[0]
-        self.shadertoy.channel_1 = self.channel1.color_attachments[0]
+        # self.channel0 = self.shadertoy.ctx.framebuffer(
+        #     color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
+        # )
+        # self.channel1 = self.shadertoy.ctx.framebuffer(
+        #     color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
+        # )
+        # self.shadertoy.channel_0 = self.channel0.color_attachments[0]
+        # self.shadertoy.channel_1 = self.channel1.color_attachments[0]
         print("Torch load_shader")
 
     def draw(self, angle):
