@@ -92,7 +92,7 @@ class GameView(arcade.View):
     def attach_inventory(self):
         self.window.views["InventoryView"] = {
             # Shows the inventory
-            "keys": return_to_view("GameView-same"),
+            "keys": return_to_view("GameView"),
             "color": arcade.color.BLACK,
             "ui": get_inventory_ui(self),
         }

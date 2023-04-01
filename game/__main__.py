@@ -168,7 +168,7 @@ class Game(arcade.Window):
                 # This shows when the game is paused
                 "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
-                "keys": return_to_view("GameView-same"),
+                "keys": return_to_view("GameView"),
                 "text": [
                     arcade.Text(
                         "Escape!!",
