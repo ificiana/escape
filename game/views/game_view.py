@@ -1,12 +1,11 @@
-import time
+from time import time
 
 import arcade
 from pyglet.math import Vec2
 
 import assets
-from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
-from game.entities.enemy import Enemy
 from game.entities.player import Player
+from game.entities.enemy import Enemy
 from game.sounds import change_music
 from game.views import change_views, return_to_view
 from game.views.inventory import Item, get_inventory_ui
@@ -42,21 +41,32 @@ class GameView(arcade.View):
         self.mouse_pos = Vec2(0, 0)
 
         # sprite lists
-        self.entities_list = arcade.SpriteList()
+        self.enemies = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
 
         # Setup camera
         self.scene_camera = arcade.Camera(*self.window.size)
         self.gui_camera = arcade.Camera(*self.window.size)
-
         # select the level
         self.select_level(level)
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
 
+        # use_guided_path = True
+
+        # if guided path is used, enemies get stuck to the wall...
+        # if not used, the enemies just fly past like jets!!? huh? fixme
+
+        # Fixed you. enemies never get stuck to wall.
+        # No need of physics engine for enemies. Game runs faster
+        # I'll let you choose what to keep
+
+        # let's use guided path
+
         level_map = arcade.TileMap(
-            assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
+            assets.tilemaps.resolve(f"level{level}.tmx"),
+            use_spatial_hash=True,
         )
         self.window.level = level
 
@@ -66,28 +76,37 @@ class GameView(arcade.View):
         self.objects = level_map.sprite_lists["objects"]
         self.pickables = arcade.SpriteList(use_spatial_hash=True)
 
-        for item in level_map.sprite_lists["pickables"]:
-            self.pickables.append(
-                Item(item.properties["file"], Vec2(*item.position), item.angle)
-            )
+        if level_map.sprite_lists.get("pickables") is not None:
+            for item in level_map.sprite_lists["pickables"]:
+                self.pickables.append(
+                    Item(item.properties["file"], Vec2(*item.position), item.angle)
+                )
 
         # Set up the player
         self.player = Player(self)
-        self.player.center_x = self.window.width / 2
-        self.player.center_y = self.window.height / 2
+        self.player.position = level_map.sprite_lists["player"][0].position
         self.window.player = self.player
-        self.entities_list.append(self.player)
 
-        # Set up enemies
-        self.entities_list.append(Enemy(self.player, self))
+        # Set up the enemies
+        arrows = level_map.sprite_lists["arrows"]
+        barriers = [self.walls, self.objects]
+
+        for enemy in level_map.sprite_lists["enemies"]:
+            e = Enemy(
+                initial_pos=enemy.position,
+                arrows=arrows,
+                barriers=barriers,
+                game_view=self,
+            )
+            self.enemies.append(e)
 
         # Create physics engine for collision
         self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player, [self.walls, self.objects]
+            self.player, barriers + [self.enemies]
         )
 
         # Start time
-        self.start_time = time.time()
+        self.start_time = time()
 
     def attach_inventory(self):
         self.window.views["InventoryView"] = {
@@ -105,7 +124,7 @@ class GameView(arcade.View):
         self.window.inventory.clear()
 
     def remove_enemy_from_world(self, enemy: Enemy):
-        self.entities_list.remove(enemy)
+        self.enemies.remove(enemy)
 
     def set_display_text(self, text: str):
         self.display_text = text
@@ -157,6 +176,15 @@ class GameView(arcade.View):
         )
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
+
+        # if player is close to enemy update movement
+        for enemy in self.enemies:
+            if enemy.is_close_to_player(self.player.get_position()):
+                enemy.chase_player(self.player.get_position())
+            else:
+                enemy.back_to_patrolling()
+
+        self.enemies.update()
 
     def gameover(self):
         self.clear_inventory()
@@ -226,13 +254,20 @@ class GameView(arcade.View):
             self.objects.draw()
         if self.pickables is not None:
             self.pickables.draw()
-        self.entities_list.draw()
+        self.enemies.draw()
+
+        # TODO: remove from final, for debug
+        if self.enemies[0].arrows:
+            for i in self.enemies[0].arrows:
+                i.draw_hit_box()
+
+        self.player.draw()
 
         # Add GUI
         self.gui_camera.use()
         arcade.Text(
             f"Health: 100, Time: "
-            f"{':'.join(map(lambda x: f'{int(x):02d}',divmod(time.time()-self.start_time, 60)))}",
+            f"{':'.join(map(lambda x: f'{int(x):02d}', divmod(time() - self.start_time, 60)))}",
             self.window.width - 200,
             self.window.height - 25,
         ).draw()
@@ -245,8 +280,8 @@ class GameView(arcade.View):
         arcade.Text(
             self.display_text,
             0,
-            SCREEN_HEIGHT / 2 + 100,
-            width=SCREEN_WIDTH,
+            self.window.height / 2 + 100,
+            width=self.window.width,
             align="center",
             font_size=24,
             bold=True,
