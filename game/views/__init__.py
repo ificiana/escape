@@ -1,4 +1,4 @@
-from typing import Union, Self
+from typing import Union
 
 import arcade
 
@@ -22,7 +22,7 @@ class BaseView(arcade.View):
         # store the views data
         self.views: dict = views or {}
 
-    def configure(self, view: str) -> "Self":
+    def configure(self, view: str) -> "BaseView":
         """Configure the View"""
         if isinstance(self.views[view], arcade.View):
             return self.views[view]
