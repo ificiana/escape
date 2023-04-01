@@ -39,6 +39,18 @@ class Enemy(Entity):
             if self.collides_with_list(barrier):
                 print("hitting walls, fixme", self.position)
 
+    def is_close_to_player(self, player_position: Vec2):
+        distance = player_position - self.get_position()
+        if distance.mag <= 100 * self.speed:
+            return True
+        return False
+
+    def chase_player(self, player_position: Vec2):
+        self.movement = (player_position - self.get_position()).normalize()
+
+    def back_to_patrolling(self):
+        self.movement = Vec2(0, 0)
+
     def take_damage(
         self,
         amount: int = 20,

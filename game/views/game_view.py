@@ -161,6 +161,13 @@ class GameView(arcade.View):
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
 
+        # if player is close to enemy update movement
+        for enemy in self.enemies:
+            if enemy.is_close_to_player(self.player.get_position()):
+                enemy.chase_player(self.player.get_position())
+            else:
+                enemy.back_to_patrolling()
+
         self.enemies.update()
 
     def gameover(self):
