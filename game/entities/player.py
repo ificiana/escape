@@ -3,7 +3,6 @@ import math
 from pyglet.math import Vec2
 
 from game.entities import Entity
-from game.views.inventory import Inventory
 
 
 class Player(Entity):
@@ -14,7 +13,6 @@ class Player(Entity):
         self.normal_speed = 2.0
         self.speed = self.normal_speed
         self.game_view = game_view
-        self.inventory = Inventory()
 
     def update_animation(self, delta_time: float = 1 / 60):
         pass

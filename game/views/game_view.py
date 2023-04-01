@@ -92,14 +92,17 @@ class GameView(arcade.View):
     def attach_inventory(self):
         self.window.views["InventoryView"] = {
             # Shows the inventory
-            "keys": return_to_view("GameView-same"),
+            "keys": return_to_view("GameView"),
             "color": arcade.color.BLACK,
-            "ui": get_inventory_ui(self),
+            "ui": get_inventory_ui(self.window),
         }
         return self
 
     def update_inventory(self):
         self.attach_inventory()
+
+    def clear_inventory(self):
+        self.window.inventory.clear()
 
     def remove_enemy_from_world(self, enemy: Enemy):
         self.entities_list.remove(enemy)
@@ -156,6 +159,8 @@ class GameView(arcade.View):
         self.physics_engine.update()
 
     def gameover(self):
+        self.clear_inventory()
+        self.window.views["GameView"] = self.window.get_level_view(1)
         change_views(self.window, "GameOver")
 
     def on_key_press(self, symbol: int, modifiers: int):
@@ -183,7 +188,7 @@ class GameView(arcade.View):
                 if self.cur_item:
                     assets.sounds.click.play(volume=self.window.sfx_vol)
                     self.display_text = ""
-                    self.player.inventory.add_item(self.cur_item)
+                    self.window.inventory.add_item(self.cur_item)
                     self.update_inventory()
                     self.cur_item = None
             case arcade.key.ESCAPE:

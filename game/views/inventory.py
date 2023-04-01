@@ -34,9 +34,13 @@ class Inventory:
             return self.items.pop(item_name)
         return self.items[item_name]
 
+    def clear(self):
+        self.items.clear()
+        self.quantities.clear()
+
 
 def get_inventory_ui(
-    game: arcade.View,
+    window: arcade.Window,
 ) -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
     text_area0 = arcade.gui.UITextArea(
         x=270,
@@ -68,7 +72,7 @@ def get_inventory_ui(
         font_name="Melted Monster",
     )
 
-    inventory: Inventory = game.player.inventory
+    inventory: Inventory = window.inventory
     items_view = arcade.gui.UIBoxLayout(vertical=True)
     if inventory.items:
         for item in inventory.items:
