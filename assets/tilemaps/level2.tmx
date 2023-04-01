@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" source="sprites.tsx"/>
+ <layer id="1" name="floor" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJwTYGBgEBjFo5gMLATFA+2OUUxe3IzG38BjfiyYHvGCzV4YHrV31F5a2EvLND1Q9hLCAA30JV8=
+  </data>
+ </layer>
+ <layer id="4" name="player" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFvAPtgFEwCkbBKBgFo2AUDCsAAHYMAA4=
+  </data>
+ </layer>
+ <layer id="3" name="object" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFwx0Ik6BWnmauGAVDFSgOtANGwbABolQwQ4wKZoyCUUAPAACflgB/
+  </data>
+ </layer>
+ <layer id="2" name="wall" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzjY2Bg4BsgjA8QkidH7ai9lNvLiIRhgBENDyf/DgV70cOfEU0NNnls8UdN/9ICDDd7CcULNntx6cGmHxcgJq2S6l9i1A82e0kpr7CZSSjMaeFfYsBgtZdYNbSyl5i8QwomxkwAYyAFTQ==
+  </data>
+ </layer>
+ <layer id="5" name="enemy" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFlACegXbAKMAAhOJkNM5GwWgaGAWjYBTQGgAAO28AMQ==
+  </data>
+ </layer>
+ <layer id="6" name="arrows" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFlAI2HOKsdHXFKEAG6HGCHhe44gyb2lEw+AC++CMGsFDFFaNgFAxtwE6h/tGyEj8AACxvADg=
+  </data>
+ </layer>
+</map>
