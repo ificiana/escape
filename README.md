@@ -103,9 +103,11 @@ We use pre-commit to run some checks before committing. To set it up, run:
 
 This will install the pre-commit hook into your local git repository. Now, whenever you commit, the pre-commit hook will run and check for any errors. If there are any errors, the commit will fail and you will have to fix them before committing again.
 
-## Sources
+## License
 
-The following sources were used for the sound effects:
+All code is licensed under the [MIT License](https://github.com/ificiana/pyweek35/blob/dev/LICENSE).
+
+The licenses for the `/assets/sounds` are as follows:
 
 - [Glacier](https://freemusicarchive.org/music/SalmonLikeTheFish/Music_for_the_Sleepy_Traveler/03_-_Glacier/) by [SalmonLikeTheFish](https://freemusicarchive.org/music/SalmonLikeTheFish/) is under the licence [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 - [Insomnia](https://freemusicarchive.org/music/David_Hilowitz/Paralytic_Insomnia) by [David Hilowitz](https://freemusicarchive.org/music/David_Hilowitz/) is under the licence [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
