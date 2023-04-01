@@ -1,0 +1,29 @@
+name: Pylint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Run Pylint
+        run: |
+          poetry run find . -type f -name "*.py" ! -path "./utils/install_poetry.py" | xargs poetry run pylint

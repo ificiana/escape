@@ -1,0 +1,34 @@
+default_language_version:
+  python: python3.11
+
+repos:
+  -   repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v2.3.0
+      hooks:
+      -   id: check-yaml
+      -   id: end-of-file-fixer
+      -   id: trailing-whitespace
+
+  - repo: https://github.com/pycqa/pylint
+    rev: v2.17.1
+    hooks:
+      - id: pylint
+        name: Pylint
+        entry: pylint
+        # poetry run raised error for some reason
+        language: system
+        types: [python]
+        args:
+          ["--rcfile=.pylintrc"]
+
+  - repo: https://github.com/psf/black
+    rev: 21.12b0
+    hooks:
+      - id: black
+        name: Black
+        entry: black
+        # poetry run raised error for some reason
+        types: [ python ]
+        language: system
+        args:
+          [ "--config=pyproject.toml" ]

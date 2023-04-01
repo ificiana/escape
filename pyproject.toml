@@ -1,0 +1,97 @@
+# Poetry pyproject.toml: https://python-poetry.org/docs/pyproject/
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "Game" # TODO: to decide later
+version = "0.1"
+description = "Pyweek 35 submission by BeeTLes"
+license = "MIT"
+authors = ["Ificiana <ificiana@gmail.com>"] # TODO: add others
+readme = "README.md"
+homepage = "https://github.com/ificiana/pyweek35" # may change
+repository = "https://github.com/ificiana/pyweek35" # may change
+documentation = "https://ificiana.github.io/pyweek35" # may change
+
+# Keywords description https://python-poetry.org/docs/pyproject/#keywords
+keywords = ["pyweek", "game"]
+
+# Pypi classifiers: https://pypi.org/classifiers/
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.10.0"
+arcade = "^2.6.17"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+darglint = "^1.8.1"
+isort = { extras = ["colors"], version = "^5.10.1" }
+pylint = "^2.17.1"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.2.1"
+
+[tool.black]
+# https://github.com/psf/black
+target-version = ["py310"]
+line-length = 88
+color = true
+
+exclude = '''
+/(
+    \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | env
+    | venv
+)/
+'''
+
+[tool.isort]
+# https://github.com/timothycrosley/isort/
+py_version = 310
+line_length = 88
+
+known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
+sections = ["FUTURE", "TYPING", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+include_trailing_comma = true
+profile = "black"
+multi_line_output = 3
+indent = 4
+color_output = true
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml
+# Directories that are not visited by pytest collector:
+norecursedirs = ["hooks", "*.egg", ".eggs", "dist", "build", "docs", ".tox", ".git", "__pycache__"]
+doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+
+# Extra options:
+addopts = [
+  "--strict-markers",
+  "--tb=short",
+  "--doctest-modules",
+  "--doctest-continue-on-failure",
+]
+
+# Scripts
+[tool.poetry.scripts]
+game = "scripts:run_game"
