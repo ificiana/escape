@@ -8,8 +8,8 @@ from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.entities.player import Player
 from game.entities.enemy import Enemy
 from game.sounds import change_music
-from game.views import change_views
-from game.views.inventory import Item
+from game.views import change_views, return_to_view
+from game.views.inventory import Item, get_inventory_ui
 
 arcade.enable_timings()
 
@@ -75,6 +75,7 @@ class GameView(arcade.View):
         self.player = Player(self)
         self.player.center_x = self.window.width / 2
         self.player.center_y = self.window.height / 2
+        self.window.player = self.player
         self.entities_list.append(self.player)
 
         # Set up enemies
@@ -87,6 +88,18 @@ class GameView(arcade.View):
 
         # Start time
         self.start_time = time.time()
+
+    def attach_inventory(self):
+        self.window.views["InventoryView"] = {
+            # Shows the inventory
+            "keys": return_to_view("GameView-same"),
+            "color": arcade.color.BLACK,
+            "ui": get_inventory_ui(self),
+        }
+        return self
+
+    def update_inventory(self):
+        self.attach_inventory()
 
     def remove_enemy_from_world(self, enemy: Enemy):
         self.entities_list.remove(enemy)
@@ -171,6 +184,7 @@ class GameView(arcade.View):
                     assets.sounds.click.play(volume=self.window.sfx_vol)
                     self.display_text = ""
                     self.player.inventory.add_item(self.cur_item)
+                    self.update_inventory()
                     self.cur_item = None
             case arcade.key.ESCAPE:
                 assets.sounds.click.play(volume=self.window.sfx_vol)
