@@ -3,6 +3,8 @@ import time
 import arcade
 from pyglet.math import Vec2
 
+from arcade.experimental import Shadertoy
+
 import assets
 from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.entities.player import Player
@@ -33,6 +35,12 @@ class GameView(arcade.View):
         self.start_time = None
         self.bgm = None
 
+        # shader setup
+        self.shadertoy = None
+        self.channel0 = None
+        self.channel1 = None
+        self.load_shader()
+
         # special purpose bgm
         self.bgm2 = None
 
@@ -45,7 +53,6 @@ class GameView(arcade.View):
 
         # sprite lists
         self.entities_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
 
         # Setup camera
         self.scene_camera = arcade.Camera(*self.window.size)
@@ -59,6 +66,20 @@ class GameView(arcade.View):
             size=(self.player.width, self.player.height),
             main_source=assets.sprites.resolve("shadow.glsl"),
         )
+
+    def load_shader(self):
+        shader_file_path = assets.sprites.resolve("shadow.glsl")
+        window_size = self.window.get_size()
+        self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
+        self.channel0 = self.shadertoy.ctx.framebuffer(
+            color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
+        )
+        self.channel1 = self.shadertoy.ctx.framebuffer(
+            color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
+        )
+        self.shadertoy.channel_0 = self.channel0.color_attachments[0]
+        self.shadertoy.channel_1 = self.channel1.color_attachments[0]
+        print("Torch load_shader")
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
@@ -220,8 +241,12 @@ class GameView(arcade.View):
 
         # clean view
         self.clear()
-
         self.scene_camera.use()
+
+        self.channel0.use()
+        self.channel0.clear()
+
+        self.walls.draw()
 
         if self.floor is not None:
             self.floor.draw()
