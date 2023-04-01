@@ -27,6 +27,7 @@ def get_pause_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     # noinspection PyUnusedLocal
     @resume_button.event("on_click")
     def on_click_start(event):
+        print("loaded")
         assets.sounds.click.play()
         change_views(window, "GameView-same")
 

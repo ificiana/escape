@@ -522,6 +522,17 @@ files = [
 ]
 
 [[package]]
+name = "pycrypto"
+version = "2.6.1"
+description = "Cryptographic modules for Python."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
+]
+
+[[package]]
 name = "pyglet"
 version = "2.0.dev23"
 description = "Cross-platform windowing and multimedia library"
@@ -863,4 +874,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10.0"
-content-hash = "a1e34094355d09fb31b2f07cd087a04c4c67bc654fd1b13b29f86ddeb4b97d34"
+content-hash = "8fa8f67a5bb8674da720134efebca56ef33268c18643a45f34f1a1cf994727ee"
