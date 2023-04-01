@@ -5,16 +5,16 @@
   <image width="32" height="32" source="../sprites/wall.png"/>
  </tile>
  <tile id="3">
-  <image width="32" height="16" source="../sprites/arrow-down.png"/>
+  <image width="32" height="32" source="../sprites/arrow-down.png"/>
  </tile>
  <tile id="4">
-  <image width="16" height="32" source="../sprites/arrow-left.png"/>
+  <image width="32" height="32" source="../sprites/arrow-left.png"/>
  </tile>
  <tile id="5">
-  <image width="16" height="32" source="../sprites/arrow-right.png"/>
+  <image width="32" height="32" source="../sprites/arrow-right.png"/>
  </tile>
  <tile id="6">
-  <image width="32" height="16" source="../sprites/arrow-up.png"/>
+  <image width="32" height="32" source="../sprites/arrow-up.png"/>
  </tile>
  <tile id="11">
   <image width="64" height="64" source="../sprites/enemy.png"/>

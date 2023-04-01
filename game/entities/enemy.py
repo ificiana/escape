@@ -1,15 +1,16 @@
 import random
 
-import arcade
 from pyglet.math import Vec2
 
 from game.entities import Entity
 
 
 class Enemy(Entity):
-    def __init__(self, initial_pos, barriers, arrows=None):
+    def __init__(self, initial_pos, game_view, barriers, arrows=None):
         super().__init__("enemy.png")
         self.speed = 1.8
+        self.health = 100
+        self.game_view = game_view
         self.position = initial_pos
         self.rng = random.Random(f"{str(self.position)}1")
         self.arrows = arrows
@@ -32,9 +33,9 @@ class Enemy(Entity):
                 self.movement = Vec2(-1, 0)
             elif self.collides_with_list(self.arrows_right):
                 self.movement = Vec2(1, 0)
+        print(self.arrows)
 
         self.collision_radius = 2
-        self.physics_engine = arcade.PhysicsEngineSimple(self, barriers)
 
     def move(self, reverse=False):
         n = Vec2(-1, -1) if reverse else Vec2(1, 1)
@@ -52,15 +53,15 @@ class Enemy(Entity):
                 self.state = 300
             self.forward(self.speed)
 
-    # def take_damage(
-    #     self,
-    #     amount: int = 20,
-    # ):
-    #     self.health -= amount
-    #     print(self.health)
-    #     if self.health <= 0:
-    #         print("DEATH")
-    #         self.game_view.remove_enemy_from_world(self)
+    def take_damage(
+        self,
+        amount: int = 20,
+    ):
+        self.health -= amount
+        print(self.health)
+        if self.health <= 0:
+            print("DEATH")
+            self.game_view.remove_enemy_from_world(self)
 
     def update(self):
         if self.arrows:
@@ -74,5 +75,3 @@ class Enemy(Entity):
                 self.movement = Vec2(1, 0)
 
         self.move()
-        if self.physics_engine.update():
-            self.move(True)

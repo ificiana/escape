@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="1">
  <tileset firstgid="1" source="sprites.tsx"/>
  <layer id="2" name="floor" width="80" height="50" locked="1">
   <data encoding="base64" compression="zlib">
@@ -18,7 +18,37 @@
  </layer>
  <layer id="4" name="pickables" width="80" height="50" locked="1">
   <data encoding="base64" compression="zlib">
-   eJztzgEJAEAIBLArYYXPZf8UpngE2RIsAQAAAAAAAAAAAAAAAACAv17S24eLajvAOQNaagCc
+   eJztzjERAAAIBKBPYy77pzCCk+cCCUgAAAAAAAAAAAAAAAAAAOBWJf19AHYDKYYAhw==
+  </data>
+ </layer>
+ <layer id="5" name="arrow_up" width="80" height="50" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJzt2LENADAIAzC2/v9xZ6ZOFIHsC7KQSEQAAAAAAOxxugMAQJGJGzcxM/DmtgEAAAAAMn9TgFp6Fv67auQAKw==
+  </data>
+ </layer>
+ <layer id="6" name="arrow_down" width="80" height="50" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJzt1rENADAIAzAG/r+ZC7oVIYR9QNgSIgAAAHjJgdyum8BdegUAYIY/DAB2sNkA++lyAAAAAIC/CovsAB0=
+  </data>
+ </layer>
+ <layer id="7" name="arrow_right" width="80" height="50" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJzt18kJAEAIA0Bf9l+yPSx4LMxUIBgCiQAAAADgR7l9ADSRbQAAAF7ZlDf5CwAAMMX+ALrpGYA5Ohd2FSCsACs=
+  </data>
+ </layer>
+ <layer id="9" name="arrow_left" width="80" height="50" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJzt1zEKACAMA8Au/f+XnV2KCKWIdy/IEkgiAAAA6JLTAQAAAHjW7af0RQEAavYS/EPfAYBTdgMAAMBuAbk5AB8=
+  </data>
+ </layer>
+ <layer id="11" name="enemies" width="80" height="50" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJzt1sENACAIA0AGcP95fTmACVHS3E3QBxSqAAAAeG39DgBE0CWkMtsApHDTgFT6Dbg1qTcmZQH62G0A4PAXAAAA9NitcwBt
+  </data>
+ </layer>
+ <layer id="10" name="player" width="80" height="50" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJztzgENAAAIA6AXsH9dY3w6SEACAAAAAAAAAAAAAAAAAHdNOwAAjyyd+AAO
   </data>
  </layer>
 </map>

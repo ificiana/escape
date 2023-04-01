@@ -43,13 +43,11 @@ class Player(Entity):
 
     def attack(self):
         nearest_enemy, nearest_dist = None, 99999
-        for entity in self.game_view.entities_list:
-            if entity == self:
-                continue
-            distance = self.get_position() - entity.get_position()
+        for enemy in self.game_view.enemies:
+            distance = self.get_position() - enemy.get_position()
             if distance.mag < nearest_dist:
                 nearest_dist = distance.mag
-                nearest_enemy = entity
+                nearest_enemy = enemy
         if nearest_enemy is not None and nearest_dist < 64 * 1.5:
             # TODO: Play attack animation
             nearest_enemy.take_damage(25)
