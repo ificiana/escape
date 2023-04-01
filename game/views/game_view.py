@@ -85,10 +85,8 @@ class GameView(arcade.View):
         # Set up the player
         self.player = Player(self)
         self.player.position = level_map.sprite_lists["player"][0].position
-        self.player.center_x = self.window.width / 2
-        self.player.center_y = self.window.height / 2
         self.window.player = self.player
-        # self.entities_list.append(self.player)
+
 
         # Set up the enemies
         arrows = level_map.sprite_lists["arrows"]
