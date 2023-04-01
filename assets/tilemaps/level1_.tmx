@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="1">
  <tileset firstgid="1" source="sprites.tsx"/>
- <layer id="1" name="walls" width="30" height="20">
+ <layer id="1" name="walls" width="30" height="20" locked="1">
   <data encoding="base64" compression="zlib">
    eJzVlksOwCAIROEC3P+4rkwM4aso7SRNGh14WmZRBABseAh0EXu3vFqdtp/p9RUuBrnc53FXv+TVaj3f7LUz+wputu9t7qr5DV5ztfnys/D5oODz5stnHckH95Hgq7ivt0bG2k1J/f/AlfJ8yt3N1Sk3Wt/B3VUXV9KLXFncTK6q/nEG90QFzQ==
   </data>
  </layer>
- <layer id="2" name="arrows" width="30" height="20" locked="1">
+ <layer id="5" name="floor" width="30" height="20" locked="1">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDHXAhkOcla6uGAWjYBSMglEAAwBGcAAM
+   eJztwTEBAAAAwqD1T20JT6AAAHgaCWAAAQ==
+  </data>
+ </layer>
+ <layer id="6" name="objects" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20JT6AAAHgaCWAAAQ==
+  </data>
+ </layer>
+ <layer id="7" name="arrow_up" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjAIGBnYqqRkFIwOMpoVRQAuAL12x41CDS89Ap1EAf5wAOQ==
+  </data>
+ </layer>
+ <layer id="8" name="arrow_down" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi6gGWgHYAEcLllMLlxFIyC4QCGSp7C5k58bh8q/hrOYDQORgE1AQC3YAAh
+  </data>
+ </layer>
+ <layer id="9" name="arrow_right" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDGXANsD6R8HwBKPpYhTQCpCStkhNh4Mp3QIAa+gAJQ==
+  </data>
+ </layer>
+ <layer id="10" name="arrow_left" width="30" height="20" locked="1">
+  <data encoding="base64" compression="zlib">
+   eJxjYBj6gHWgHTAKRsEgBiMtfwxG/5LqpsHoh5EORuNkFJAKAJhYAB8=
   </data>
  </layer>
  <layer id="4" name="enemies" width="30" height="20" locked="1">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF1AA8A+2AUTBiATXS3mj6pQ8YSuE8lNw6CoYOICVdUZIGB0P6BQBerwBh
+   eJxjYBgF1AA8RIqNglFAbUCNdDaaVukDhlI4DyW3joKhA0hJV5SkwcGQfgG+3wBt
   </data>
  </layer>
  <layer id="3" name="player" width="30" height="20" locked="1">

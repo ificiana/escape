@@ -1,76 +1,81 @@
-import arcade
+from typing import Union
+
+import arcade.gui
+from pyglet.math import Vec2
 
 import assets
-from game.views import change_views
 
 
-class InventoryView(arcade.View):
-    def __init__(self, game, items=None):
-        super().__init__()
-        self.game = game
-        self.items = items or []
-        self.selected_item = None
-        self.show_menu = False
-        self.background_sprite = None
-        self.close_button_sprite = None
+class Item(arcade.Sprite):
+    def __init__(self, sprite_file: str, pos: Vec2, angle: float, name: str = None):
+        super().__init__(assets.items.resolve(sprite_file))
+        self.name = name or sprite_file.split(".")[0]
+        self.center_x, self.center_y = pos
+        self.angle = angle
 
-        self.setup()
+    def get_position(self):
+        return Vec2(self.center_x, self.center_y)
 
-    def setup(self):
-        # Create a background sprite
-        if self.background_sprite is None:
-            self.background_sprite = arcade.SpriteSolidColor(
-                *self.game.size, arcade.color.GRAY
-            )
 
-        # Create a close button sprite
-        if self.close_button_sprite is None:
-            self.close_button_sprite = arcade.Sprite(
-                ":resources:onscreen_controls/shaded_light/close.png"
-            )
-            self.close_button_sprite.center_x = self.game.width - 50
-            self.close_button_sprite.center_y = 50
+class Inventory:
+    def __init__(self):
+        self.items = {}
+        self.quantities = {}
 
-    def on_draw(self):
-        arcade.start_render()
-        self.background_sprite.draw()
-        arcade.draw_text(
-            "Inventory",
-            self.game.width / 2,
-            self.game.height - 40,
-            arcade.color.BLACK,
-            28,
-            anchor_x="center",
-        )
+    def add_item(self, item: Item):
+        self.items[item.name] = item
+        self.quantities[item.name] = self.quantities.get(item.name, 0) + 1
+        item.remove_from_sprite_lists()
+        print(f"added {item.name} to the inventory")
 
-        # Draw items
-        for i, item in enumerate(self.items):
-            item_sprite = arcade.Sprite(assets.items.resolve(f"{item}.png"))
-            # item_sprite = arcade.Sprite(f"assets/items/{item}.png")
-            item_sprite.name = item
-            item_sprite.center_x = 80
-            item_sprite.center_y = 510 - i * 100
-            item_sprite.draw()
-            arcade.draw_text(
-                item_sprite.name,
-                item_sprite.center_x,
-                item_sprite.center_y - 50,
-                arcade.color.BLACK,
-                14,
-                anchor_x="center",
-            )
+    def remove_item(self, item_name):
+        self.quantities[item_name] = max(self.quantities.get(item_name, 0) - 1, 0)
+        if self.quantities[item_name] == 0:
+            return self.items.pop(item_name)
+        return self.items[item_name]
 
-        self.close_button_sprite.draw()
 
-    def on_mouse_press(self, x, y, button, modifiers):
-        if (
-            button == arcade.MOUSE_BUTTON_LEFT
-            and self.close_button_sprite.collides_with_point((x, y))
-            and isinstance(self.game.current_view, InventoryView)
-        ):
-            change_views(self.game, "GameView-same")
+def get_inventory_ui(
+    window: arcade.Window,
+) -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
+    # Create a horizontal BoxGroup to align buttons
+    h_box = arcade.gui.UIBoxLayout(vertical=False)
 
-    def on_key_press(self, symbol, modifiers):
-        match symbol:
-            case arcade.key.ESCAPE:
-                change_views(self.game, "GameView-same")
+    text_area0 = arcade.gui.UITextArea(
+        x=270,
+        y=220,
+        width=600,
+        height=300,
+        text="INVENTORY",
+        text_color=arcade.csscolor.WHITE,
+        font_size=30,
+        font_name="Melted Monster",
+    )
+    text_area = arcade.gui.UITextArea(
+        x=195,
+        y=200,
+        width=600,
+        height=250,
+        text="Press ESC to return to Game",
+        text_color=arcade.csscolor.WHITE,
+        font_size=15,
+    )
+    text_area1 = arcade.gui.UITextArea(
+        x=350,
+        y=200,
+        width=100,
+        height=50,
+        text="TODO",
+        text_color=arcade.csscolor.WHITE,
+        font_size=20,
+        font_name="Melted Monster",
+    )
+
+    return [
+        arcade.gui.UIAnchorWidget(
+            anchor_x="center", anchor_y="center", align_y=-50, child=h_box
+        ),
+        text_area0,
+        text_area,
+        text_area1,
+    ]

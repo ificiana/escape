@@ -1,46 +1,101 @@
-import math
-
-import arcade
+import random
 from pyglet.math import Vec2
-
 from game.entities import Entity
 
 
 class Enemy(Entity):
-    def __init__(self, player, barrier_list):
-        super().__init__("slimeBlock.png")
-        self.angle = -90
-        self.speed = 3.0
-        self.player = player
-        self.barrier_list = barrier_list
-        start = Vec2(300, 900)
-        end = Vec2(1200, 1280)
-        self.patrol_path = self.calculate_path(start, end)
-        self.patrol_path_index = 0
-        self.center_x, self.center_y = self.patrol_path[self.patrol_path_index]
-        self.state = "patrolling"
-        self.moving_forward = True
+    def __init__(self, initial_pos, game_view, barriers, arrows):
+        super().__init__("enemy.png")
+        self.speed = 1.8
+        self.health = 100
+        self.game_view = game_view
+        self.position = initial_pos
+        self.rng = random.Random(f"{str(self.position)}1")
+        self.arrows = arrows
+        self.barriers = barriers
+        self.is_inside_view = True
+        self.movement = Vec2(0, 0)
 
-    def calculate_path(self, start, end):
-        return arcade.astar_calculate_path(start, end, self.barrier_list, True)
+        if overlap := self.collides_with_list(self.arrows):
+            match overlap[0].properties["dir"]:
+                case "up":
+                    self.movement = Vec2(0, 1)
+                case "down":
+                    self.movement = Vec2(0, -1)
+                case "left":
+                    self.movement = Vec2(-1, 0)
+                case "right":
+                    self.movement = Vec2(1, 0)
+
+    def move(self, reverse=False):
+        if not self.is_inside_view:
+            return
+        n = Vec2(-1, -1) if reverse else Vec2(1, 1)
+        pos = Vec2(*self.position)
+        self.position = pos + n * self.movement * Vec2(self.speed, self.speed)
+
+        # TODO: remove from final, for debug
+        for barrier in self.barriers:
+            if self.collides_with_list(barrier):
+                print("hitting walls, fixme", self.position)
+
+    def is_close_to_player(self, player_position: Vec2):
+        distance = player_position - self.get_position()
+        if distance.mag <= 100 * self.speed:
+            return True
+        return False
+
+    def chase_player(self, player_position: Vec2):
+        self.movement = (player_position - self.get_position()).normalize()
+
+    def back_to_patrolling(self):
+        self.movement = Vec2(0, 0)
+
+    def take_damage(
+        self,
+        amount: int = 20,
+    ):
+        self.health -= amount
+        print(self.health)
+        if self.health <= 0:
+            print("DEATH")
+            self.game_view.remove_enemy_from_world(self)
 
     def update(self):
-        if self.state == "patrolling":
-            # Patrolling
-            point = self.patrol_path[self.patrol_path_index]
-            direction = Vec2(point[0], point[1]) - self.get_position()
-            if direction.mag < 5:
-                self.patrol_path_index += 1 if self.moving_forward else -1
-                if self.patrol_path_index == len(self.patrol_path) - 1:
-                    self.moving_forward = False
-                elif self.patrol_path_index == 0:
-                    self.moving_forward = True
-        elif self.state == "chasing":
-            # Calculate direction to the player
-            direction = self.player.get_position() - self.get_position()
-        if direction.mag != 0:
-            direction = direction.normalize()
-            self.angle = math.degrees(direction.heading)
-        # Move towards the player
-        self.center_x += direction.x * self.speed
-        self.center_y += direction.y * self.speed
+        campos = self.game_view.scene_camera.position
+        offset = Vec2(
+            self.game_view.window.width / 1.8, self.game_view.window.height / 1.8
+        )
+        self.is_inside_view = (
+            campos.x + self.game_view.window.width / 2 + offset.x
+            >= self.center_x
+            >= campos.x + self.game_view.window.width / 2 - offset.x
+            and campos.y + self.game_view.window.height / 2 + offset.y
+            >= self.center_y
+            >= campos.y + self.game_view.window.height / 2 - offset.y
+        )
+
+        if not self.is_inside_view:
+            return
+
+        if overlap := self.collides_with_list(self.arrows):
+            match overlap[0].properties["dir"]:
+                case "up":
+                    self.movement = Vec2(0, 1)
+                case "down":
+                    self.movement = Vec2(0, -1)
+                case "left":
+                    self.movement = Vec2(-1, 0)
+                case "right":
+                    self.movement = Vec2(1, 0)
+
+        if self.health <= 0:
+            print("DEATH")
+            # Decrement counter for the number of enemies that touched the player when enemy dies
+            self.game_view.player.num_touching_player = max(
+                0, self.game_view.player.num_touching_player - 1
+            )
+            self.game_view.remove_enemy_from_world(self)
+
+            # Call the `move` method to move the enemy
+        self.move()

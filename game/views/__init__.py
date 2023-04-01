@@ -17,6 +17,7 @@ class BaseView(arcade.View):
         self.bg_color: arcade.csscolor = None
         self.next = None
         self.bgm = None
+        self.keys = None
 
         # store the views data
         self.views: dict = views or {}
@@ -31,6 +32,7 @@ class BaseView(arcade.View):
         self.next = self.views[view].get("next")
         self.bgm = self.views[view].get("bgm")
         self.next_bgm_diff = self.views[view].get("next_bgm_diff")
+        self.keys = self.views[view].get("keys")
         return self
 
     def on_show_view(self):
@@ -42,7 +44,9 @@ class BaseView(arcade.View):
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
         if self.bgm and self.window.change_bgm:
-            self.window.bgm = change_music(self.window.bgm, self.bgm, looping=True)
+            self.window.bgm = change_music(
+                self.window, self.window.bgm, self.bgm, looping=True
+            )
         self.window.change_bgm = False
 
     def on_hide_view(self):
@@ -68,11 +72,17 @@ class BaseView(arcade.View):
         """If the user presses the mouse button, navigate to the next View."""
 
         if self.next:
-            assets.sounds.click.play()
+            assets.sounds.click.play(volume=self.window.sfx_vol)
             self.window.ui_manager.clear()
             if self.next_bgm_diff:
                 self.window.change_bgm = True
             self.window.show_view(self.configure(self.next))
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        """Handle Keyboard Input."""
+
+        if self.keys:
+            self.keys(self.window, symbol)
 
 
 def change_views(window: arcade.Window, dest_view: str):
@@ -85,3 +95,13 @@ def change_views(window: arcade.Window, dest_view: str):
             window.show_view(window.get_level_view(window.level))
     else:
         window.show_view(BaseView(window.views).configure(dest_view))
+
+
+def return_to_view(view_name):
+    def f_(window: arcade.Window, key):
+        match key:
+            case arcade.key.ESCAPE:
+                assets.sounds.click.play(volume=window.sfx_vol)
+                change_views(window, view_name)
+
+    return f_
