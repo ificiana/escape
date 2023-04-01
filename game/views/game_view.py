@@ -47,7 +47,6 @@ class GameView(arcade.View):
         # Setup camera
         self.scene_camera = arcade.Camera(*self.window.size)
         self.gui_camera = arcade.Camera(*self.window.size)
-
         # select the level
         self.select_level(level)
 
@@ -101,6 +100,11 @@ class GameView(arcade.View):
             arrows = None
 
         barriers = [self.walls, self.objects]
+
+        # TEST  with single enemy
+        # enemy = level_map.sprite_lists["enemies"][-1]
+        # e = Enemy(initial_pos=enemy.position, arrows=arrows, barriers=barriers, game_view=self)
+        # self.enemies.append(e)
 
         for enemy in level_map.sprite_lists["enemies"]:
             if use_guided_path:
@@ -244,12 +248,12 @@ class GameView(arcade.View):
         self.enemies.draw()
 
         # TODO: remove this after debug
-        for i in self.walls:
-            i.draw_hit_box()
-        if self.enemies[0].arrows:
-            for i in self.enemies[0].arrows:
-                for j in i:
-                    j.draw_hit_box()
+        # for i in self.walls:
+        #     i.draw_hit_box()
+        # if self.enemies[0].arrows:
+        #     for i in self.enemies[0].arrows:
+        #         for j in i:
+        #             j.draw_hit_box()
 
         self.player.draw()
 

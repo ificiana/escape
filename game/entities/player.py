@@ -11,7 +11,7 @@ class Player(Entity):
         super().__init__("mc_idle.png")
         self.center_x, self.center_y = Vec2(0, 0)
         self.angle = -90
-        self.normal_speed = 2.0
+        self.normal_speed = 4.0
         self.speed = self.normal_speed
         self.game_view = game_view
         self.inventory = Inventory()

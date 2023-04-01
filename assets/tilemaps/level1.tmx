@@ -43,7 +43,7 @@
  </layer>
  <layer id="11" name="enemies" width="80" height="50" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt1sENACAIA0AGcP95fTmACVHS3E3QBxSqAAAAeG39DgBE0CWkMtsApHDTgFT6Dbg1qTcmZQH62G0A4PAXAAAA9NitcwBt
+   eJzt1ssJADAIREELSP/15mQBQj6wzFTgQZ5WAQAA8Nr6PQAQQUtIZbcBSOGmAan0DZjSDeA2nQEAmr8AAADgjA19dABh
   </data>
  </layer>
  <layer id="10" name="player" width="80" height="50" locked="1">

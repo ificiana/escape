@@ -1,7 +1,6 @@
 import random
-
 from pyglet.math import Vec2
-
+from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.entities import Entity
 
 
@@ -14,6 +13,7 @@ class Enemy(Entity):
         self.position = initial_pos
         self.rng = random.Random(f"{str(self.position)}1")
         self.arrows = arrows
+        self.is_inside_view = True
         if arrows:
             (
                 self.arrows_left,
@@ -33,11 +33,12 @@ class Enemy(Entity):
                 self.movement = Vec2(-1, 0)
             elif self.collides_with_list(self.arrows_right):
                 self.movement = Vec2(1, 0)
-        print(self.arrows)
 
         self.collision_radius = 2
 
     def move(self, reverse=False):
+        if not self.is_inside_view:
+            return
         n = Vec2(-1, -1) if reverse else Vec2(1, 1)
         if self.arrows:
             pos = Vec2(*self.position)
@@ -64,6 +65,20 @@ class Enemy(Entity):
             self.game_view.remove_enemy_from_world(self)
 
     def update(self):
+        campos = self.game_view.scene_camera.position
+        offset = Vec2(SCREEN_WIDTH / 1.8, SCREEN_HEIGHT / 1.8)
+        if (
+            self.center_x > campos.x + SCREEN_WIDTH / 2 + offset.x
+            or self.center_x < campos.x + SCREEN_WIDTH / 2 - offset.x
+            or self.center_y > campos.y + SCREEN_HEIGHT / 2 + offset.y
+            or self.center_y < campos.y + SCREEN_HEIGHT / 2 - offset.y
+        ):
+            self.is_inside_view = False
+        else:
+            self.is_inside_view = True
+
+        if not self.is_inside_view:
+            return
         if self.arrows:
             if self.collides_with_list(self.arrows_up):
                 self.movement = Vec2(0, 1)
