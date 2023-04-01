@@ -1,4 +1,6 @@
 import random
+
+import arcade
 from pyglet.math import Vec2
 from game.entities import Entity
 
@@ -12,9 +14,11 @@ class Enemy(Entity):
         self.position = initial_pos
         self.rng = random.Random(f"{str(self.position)}1")
         self.arrows = arrows
-        self.barriers = barriers
+        self.barriers = arcade.SpriteList(barriers)
         self.is_inside_view = True
         self.movement = Vec2(0, 0)
+        self.is_chasing = False
+        self.init_pos = initial_pos
 
         if overlap := self.collides_with_list(self.arrows):
             match overlap[0].properties["dir"]:
@@ -27,29 +31,42 @@ class Enemy(Entity):
                 case "right":
                     self.movement = Vec2(1, 0)
 
-    def move(self, reverse=False):
+    def move(self):
         if not self.is_inside_view:
             return
-        n = Vec2(-1, -1) if reverse else Vec2(1, 1)
         pos = Vec2(*self.position)
-        self.position = pos + n * self.movement * Vec2(self.speed, self.speed)
+        self.position = pos + self.movement * Vec2(self.speed, self.speed)
 
-        # TODO: remove from final, for debug
-        for barrier in self.barriers:
-            if self.collides_with_list(barrier):
-                print("hitting walls, fixme", self.position)
+        # # TODO: remove from final, for debug
+        # for barrier in self.barriers:
+        #     if self.collides_with_list(barrier):
+        #         print("hitting walls, fixme", self.position)
 
     def is_close_to_player(self, player_position: Vec2):
         distance = player_position - self.get_position()
-        if distance.mag <= 100 * self.speed:
-            return True
-        return False
+        return distance.mag <= 100 * self.speed
 
     def chase_player(self, player_position: Vec2):
+        self.is_chasing = True
         self.movement = (player_position - self.get_position()).normalize()
 
     def back_to_patrolling(self):
-        self.movement = Vec2(0, 0)
+        if not self.is_chasing:
+            return
+        if self.get_position() != self.init_pos:
+            self.movement = (Vec2(*self.init_pos) - self.get_position()).normalize()
+        else:
+            self.is_chasing = False
+            if overlap := self.collides_with_list(self.arrows):
+                match overlap[0].properties["dir"]:
+                    case "up":
+                        self.movement = Vec2(0, 1)
+                    case "down":
+                        self.movement = Vec2(0, -1)
+                    case "left":
+                        self.movement = Vec2(-1, 0)
+                    case "right":
+                        self.movement = Vec2(1, 0)
 
     def take_damage(
         self,
@@ -59,7 +76,7 @@ class Enemy(Entity):
         print(self.health)
         if self.health <= 0:
             print("DEATH")
-            self.game_view.remove_enemy_from_world(self)
+            self.kill()
 
     def update(self):
         campos = self.game_view.scene_camera.position
@@ -78,16 +95,17 @@ class Enemy(Entity):
         if not self.is_inside_view:
             return
 
-        if overlap := self.collides_with_list(self.arrows):
-            match overlap[0].properties["dir"]:
-                case "up":
-                    self.movement = Vec2(0, 1)
-                case "down":
-                    self.movement = Vec2(0, -1)
-                case "left":
-                    self.movement = Vec2(-1, 0)
-                case "right":
-                    self.movement = Vec2(1, 0)
+        if not self.is_chasing:
+            if overlap := self.collides_with_list(self.arrows):
+                match overlap[0].properties["dir"]:
+                    case "up":
+                        self.movement = Vec2(0, 1)
+                    case "down":
+                        self.movement = Vec2(0, -1)
+                    case "left":
+                        self.movement = Vec2(-1, 0)
+                    case "right":
+                        self.movement = Vec2(1, 0)
 
         if self.health <= 0:
             print("DEATH")
@@ -95,7 +113,7 @@ class Enemy(Entity):
             self.game_view.player.num_touching_player = max(
                 0, self.game_view.player.num_touching_player - 1
             )
-            self.game_view.remove_enemy_from_world(self)
+            self.kill()
 
-            # Call the `move` method to move the enemy
+        # Call the `move` method to move the enemy
         self.move()
