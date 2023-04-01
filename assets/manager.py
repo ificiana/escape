@@ -35,9 +35,9 @@ class AudioManager:
         self.heart = arcade.Sound(self.path.resolve("cinematic_heartbeat.wav"))
         self.horror = arcade.Sound(self.path.resolve("horror_ambience.wav"))
         self.whoosh = arcade.Sound(self.path.resolve("woosh_hit.wav"))
-        # self.glacier = arcade.Sound(self.path.resolve("glacier.mp3"))
+        self.glacier = arcade.Sound(self.path.resolve("glacier.mp3"))
         self.japan = arcade.Sound(self.path.resolve("japan.mp3"))
-        # self.insomnia = arcade.Sound(self.path.resolve("insomnia.mp3"))
+        self.insomnia = arcade.Sound(self.path.resolve("insomnia.mp3"))
 
 
 sounds = AudioManager("sounds")

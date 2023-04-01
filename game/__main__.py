@@ -61,7 +61,7 @@ class Game(arcade.Window):
             "MenuView": {
                 # This shows the menus
                 "color": arcade.color.BLACK,
-                # "bgm": assets.sounds.glacier,
+                "bgm": assets.sounds.glacier,
                 "text": [
                     arcade.Text(
                         "Escape!!",
