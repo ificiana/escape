@@ -102,3 +102,11 @@ We use pre-commit to run some checks before committing. To set it up, run:
 `pre-commit install`
 
 This will install the pre-commit hook into your local git repository. Now, whenever you commit, the pre-commit hook will run and check for any errors. If there are any errors, the commit will fail and you will have to fix them before committing again.
+
+## Sources
+
+The following sources were used for the sound effects:
+
+- [Glacier](https://freemusicarchive.org/music/SalmonLikeTheFish/Music_for_the_Sleepy_Traveler/03_-_Glacier/) by [SalmonLikeTheFish](https://freemusicarchive.org/music/SalmonLikeTheFish/) is under the licence [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+- [Insomnia](https://freemusicarchive.org/music/David_Hilowitz/Paralytic_Insomnia) by [David Hilowitz](https://freemusicarchive.org/music/David_Hilowitz/) is under the licence [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
+- [Japan](https://freemusicarchive.org/music/Yakov_Golman/Piano_album_1/Yakov_Golman_-_Japan/) by [Yakov Golman](https://freemusicarchive.org/music/Yakov_Golman/) is under the licence [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
