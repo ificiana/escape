@@ -53,21 +53,19 @@ class GameView(arcade.View):
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
 
-        use_guided_path = True
+        # use_guided_path = True
 
         # if guided path is used, enemies get stuck to the wall...
         # if not used, the enemies just fly past like jets!!? huh? fixme
 
-        #### Fixed you. enemies never get stuck to wall.
+        # Fixed you. enemies never get stuck to wall.
         # No need of physics engine for enemies. Game runs faster
-
         # I'll let you choose what to keep
 
+        # let's use guided path
+
         level_map = arcade.TileMap(
-            # assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True,  # <- real one
-            assets.tilemaps.resolve(
-                "level1.tmx" if use_guided_path else "level1.tmx"
-            ),  # <- test
+            assets.tilemaps.resolve(f"level{level}.tmx"),
             use_spatial_hash=True,
         )
         self.window.level = level
@@ -89,37 +87,22 @@ class GameView(arcade.View):
         self.player.position = level_map.sprite_lists["player"][0].position
 
         # Set up the enemies
-        if use_guided_path:
-            arrows = [
-                level_map.sprite_lists["arrow_left"],
-                level_map.sprite_lists["arrow_right"],
-                level_map.sprite_lists["arrow_up"],
-                level_map.sprite_lists["arrow_down"],
-            ]
-        else:
-            arrows = None
-
+        arrows = level_map.sprite_lists["arrows"]
         barriers = [self.walls, self.objects]
 
-        # TEST  with single enemy
-        # enemy = level_map.sprite_lists["enemies"][-1]
-        # e = Enemy(initial_pos=enemy.position, arrows=arrows, barriers=barriers, game_view=self)
-        # self.enemies.append(e)
-
         for enemy in level_map.sprite_lists["enemies"]:
-            if use_guided_path:
-                e = Enemy(
-                    initial_pos=enemy.position,
-                    arrows=arrows,
-                    barriers=barriers,
-                    game_view=self,
-                )
-            else:
-                e = Enemy(initial_pos=enemy.position, barriers=barriers, game_view=self)
+            e = Enemy(
+                initial_pos=enemy.position,
+                arrows=arrows,
+                barriers=barriers,
+                game_view=self,
+            )
             self.enemies.append(e)
 
         # Create physics engine for collision
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player, barriers)
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player, barriers + [self.enemies]
+        )
 
         # Start time
         self.start_time = time()
@@ -247,13 +230,10 @@ class GameView(arcade.View):
             self.pickables.draw()
         self.enemies.draw()
 
-        # TODO: remove this after debug
-        # for i in self.walls:
-        #     i.draw_hit_box()
-        # if self.enemies[0].arrows:
-        #     for i in self.enemies[0].arrows:
-        #         for j in i:
-        #             j.draw_hit_box()
+        # TODO: remove from final, for debug
+        if self.enemies[0].arrows:
+            for i in self.enemies[0].arrows:
+                i.draw_hit_box()
 
         self.player.draw()
 

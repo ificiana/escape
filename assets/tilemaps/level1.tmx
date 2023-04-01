@@ -21,24 +21,9 @@
    eJztzjERAAAIBKBPYy77pzCCk+cCCUgAAAAAAAAAAAAAAAAAAOBWJf19AHYDKYYAhw==
   </data>
  </layer>
- <layer id="5" name="arrow_up" width="80" height="50" locked="1">
+ <layer id="5" name="arrows" width="80" height="50" locked="1">
   <data encoding="base64" compression="zlib">
-   eJzt2LENADAIAzC2/v9xZ6ZOFIHsC7KQSEQAAAAAAOxxugMAQJGJGzcxM/DmtgEAAAAAMn9TgFp6Fv67auQAKw==
-  </data>
- </layer>
- <layer id="6" name="arrow_down" width="80" height="50" locked="1">
-  <data encoding="base64" compression="zlib">
-   eJzt1rENADAIAzAG/r+ZC7oVIYR9QNgSIgAAAHjJgdyum8BdegUAYIY/DAB2sNkA++lyAAAAAIC/CovsAB0=
-  </data>
- </layer>
- <layer id="7" name="arrow_right" width="80" height="50" locked="1">
-  <data encoding="base64" compression="zlib">
-   eJzt18kJAEAIA0Bf9l+yPSx4LMxUIBgCiQAAAADgR7l9ADSRbQAAAF7ZlDf5CwAAMMX+ALrpGYA5Ohd2FSCsACs=
-  </data>
- </layer>
- <layer id="9" name="arrow_left" width="80" height="50" locked="1">
-  <data encoding="base64" compression="zlib">
-   eJzt1zEKACAMA8Au/f+XnV2KCKWIdy/IEkgiAAAA6JLTAQAAAHjW7af0RQEAavYS/EPfAYBTdgMAAMBuAbk5AB8=
+   eJzt2DkSgCAQBEACj///2Mhwq7Y4FKU7RiWQgaEUAAAAIlvj83vFe1u/CazjSI6TK3xN9t+OnF1mAQDtenfK7B4XddE32Jfhn6xtZlbbKd2fjNXa9Xub6bwE9BHluPUOAOup7R/ODUBWlDPuTQHGuHNXzsLzLhUcAI8=
   </data>
  </layer>
  <layer id="11" name="enemies" width="80" height="50" locked="1">
