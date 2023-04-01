@@ -42,14 +42,14 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     # noinspection PyUnusedLocal
     @start_button.event("on_click")
     def on_click_start(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         print("loaded")
         change_views(window, "Storybook")
 
     # noinspection PyUnusedLocal
     @about_button.event("on_click")
     def on_click_about(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "About")
 
     # noinspection PyUnusedLocal
@@ -60,29 +60,22 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     # noinspection PyUnusedLocal
     @settings_button.event("on_click")
     def on_click_settings(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "Settings")
 
     # noinspection PyUnusedLocal
     @credits_button.event("on_click")
     def on_click_credits(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         window.change_bgm = True
         change_views(window, "Credits")
 
     # noinspection PyUnusedLocal
     @level_button.event("on_click")
     def on_click_continue(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "Levels")
 
     return arcade.gui.UIAnchorWidget(
         anchor_x="center_x", anchor_y="center_y", child=v_box
     )
-
-
-def return_to_menu_binding(window: arcade.Window, key):
-    match key:
-        case arcade.key.ESCAPE:
-            assets.sounds.click.play()
-            change_views(window, "MenuView")

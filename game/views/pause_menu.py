@@ -27,20 +27,22 @@ def get_pause_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     # noinspection PyUnusedLocal
     @resume_button.event("on_click")
     def on_click_start(event):
-        assets.sounds.click.play()
-        change_views(window, "GameView-same")
+        assets.sounds.click.play(volume=window.sfx_vol)
+        change_views(window, "GameView")
 
     # noinspection PyUnusedLocal
     @quit_button.event("on_click")
     def on_click_quit(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         window.change_bgm = True
+        window.views["GameView"] = window.get_level_view(1)
+        window.inventory.clear()
         change_views(window, "MenuView")
 
     # noinspection PyUnusedLocal
     @inventory_button.event("on_click")
     def on_click_settings(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "InventoryView")
 
     return arcade.gui.UIAnchorWidget(

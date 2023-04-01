@@ -8,8 +8,8 @@ from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.entities.player import Player
 from game.entities.enemy import Enemy
 from game.sounds import change_music
-from game.views import change_views
-from game.views.inventory import Item
+from game.views import change_views, return_to_view
+from game.views.inventory import Item, get_inventory_ui
 
 arcade.enable_timings()
 
@@ -21,6 +21,7 @@ class GameView(arcade.View):
         super().__init__()
 
         # declare objects and entities
+        self.cur_item = None
         self.walls = None
         self.floor = None
         self.objects = None
@@ -29,6 +30,7 @@ class GameView(arcade.View):
         self.physics_engine = None
         self.start_time = None
         self.bgm = None
+
         # special purpose bgm
         self.bgm2 = None
 
@@ -52,6 +54,7 @@ class GameView(arcade.View):
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
+
         level_map = arcade.TileMap(
             assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
         )
@@ -61,18 +64,18 @@ class GameView(arcade.View):
         self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
         self.objects = level_map.sprite_lists["objects"]
-        pickables = level_map.sprite_lists["pickables"]
         self.pickables = arcade.SpriteList(use_spatial_hash=True)
 
-        for item in pickables:
+        for item in level_map.sprite_lists["pickables"]:
             self.pickables.append(
-                Item("knife.png", "knife", Vec2(*item.position), item.angle)
+                Item(item.properties["file"], Vec2(*item.position), item.angle)
             )
 
         # Set up the player
         self.player = Player(self)
         self.player.center_x = self.window.width / 2
         self.player.center_y = self.window.height / 2
+        self.window.player = self.player
         self.entities_list.append(self.player)
 
         # Set up enemies
@@ -85,6 +88,21 @@ class GameView(arcade.View):
 
         # Start time
         self.start_time = time.time()
+
+    def attach_inventory(self):
+        self.window.views["InventoryView"] = {
+            # Shows the inventory
+            "keys": return_to_view("GameView"),
+            "color": arcade.color.BLACK,
+            "ui": get_inventory_ui(self.window),
+        }
+        return self
+
+    def update_inventory(self):
+        self.attach_inventory()
+
+    def clear_inventory(self):
+        self.window.inventory.clear()
 
     def remove_enemy_from_world(self, enemy: Enemy):
         self.entities_list.remove(enemy)
@@ -141,11 +159,15 @@ class GameView(arcade.View):
         self.physics_engine.update()
 
     def gameover(self):
+        self.clear_inventory()
+        self.window.views["GameView"] = self.window.get_level_view(1)
         change_views(self.window, "GameOver")
 
     def on_key_press(self, symbol: int, modifiers: int):
         """Handle Keyboard Input."""
-        # Navigate with WASD or Arrow keys"""
+
+        # Navigate with WASD or Arrow keys
+
         match symbol:
             case arcade.key.DOWN | arcade.key.S:
                 self.movement.y = -1
@@ -160,10 +182,17 @@ class GameView(arcade.View):
             case arcade.key.G:
                 self.gameover()
             case arcade.key.I:
-                assets.sounds.click.play()
+                assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "InventoryView")
+            case arcade.key.F:
+                if self.cur_item:
+                    assets.sounds.click.play(volume=self.window.sfx_vol)
+                    self.display_text = ""
+                    self.window.inventory.add_item(self.cur_item)
+                    self.update_inventory()
+                    self.cur_item = None
             case arcade.key.ESCAPE:
-                assets.sounds.click.play()
+                assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "Pause")
 
         # add fail-check
@@ -221,5 +250,5 @@ class GameView(arcade.View):
             align="center",
             font_size=24,
             bold=True,
-            color=arcade.color.BLACK,
+            color=arcade.color.WHITE,
         ).draw()

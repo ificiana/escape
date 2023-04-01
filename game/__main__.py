@@ -1,13 +1,15 @@
 import arcade
 import arcade.gui
+import pyglet.media
 
 import assets
 from assets import fonts
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT, LEVEL_COUNT
-from game.views import BaseView
+from game.views import BaseView, return_to_view
 from game.views.game_view import GameView
-from game.views.inventory import InventoryView
-from game.views.menu import get_menu_view_ui, return_to_menu_binding
+from game.views.gameover import get_gameover_ui
+from game.views.inventory import Inventory
+from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
@@ -22,11 +24,12 @@ class Game(arcade.Window):
         self.views = None
         self.ui_manager = arcade.gui.UIManager()
         self.ui_manager.enable()
-        self.bgm = None
+        self.bgm: pyglet.media.Player | None = None
         self.change_bgm = False
-        self.level = 1
+        self.level: int = 1
         self.music_vol = 1.0
         self.sfx_vol = 1.0
+        self.inventory = Inventory()
 
     def setup(self):
         arcade.load_font(fonts.resolve("Melted Monster.ttf"))
@@ -88,13 +91,13 @@ class Game(arcade.Window):
             },
             "Settings": {
                 # This shows the pre-game storyline
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "ui": get_settings_ui(self),
             },
             "About": {
                 # This shows the about section
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -117,7 +120,7 @@ class Game(arcade.Window):
             },
             "Credits": {
                 # This shows the credits section
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "bgm": assets.sounds.japan,
                 "next_bgm_diff": True,
@@ -143,6 +146,7 @@ class Game(arcade.Window):
             "Levels": {
                 # This shows the settings section
                 # TODO: implement a proper levels view
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -162,7 +166,7 @@ class Game(arcade.Window):
                 # This shows when the game is paused
                 "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("GameView"),
                 "text": [
                     arcade.Text(
                         "Escape!!",
@@ -183,7 +187,7 @@ class Game(arcade.Window):
             "InventoryView": InventoryView(self)
             # TODO: Add rest of the levels
         }| {f"Level{i}": GameView(i) for i in range(1, LEVEL_COUNT+1)}
-        print(self.views["Level1"])
+
         entrypoint = "StartView"
         # entrypoint = "GameView"  # <- use this for game debug
         view = BaseView(self.views)

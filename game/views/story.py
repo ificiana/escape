@@ -61,14 +61,14 @@ def get_storybook_ui(
     def on_click_prev(event):
         if data["cur_page"] == 1:
             return
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         data["cur_page"] = max(1, data["cur_page"] - 1)
         text_area.text = data["pages"][data["cur_page"]]
 
     # noinspection PyUnusedLocal
     @next_button.event("on_click")
     def on_click_next(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         if data["cur_page"] == data["max_page"]:
             change_views(window, "GameView")
             return
@@ -78,7 +78,7 @@ def get_storybook_ui(
     # noinspection PyUnusedLocal
     @skip_button.event("on_click")
     def on_click_skip(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "GameView")
 
     return [
