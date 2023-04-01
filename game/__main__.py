@@ -188,10 +188,7 @@ class Game(arcade.Window):
             # TODO: Add rest of the Views here
         } | {f"Level-{n}": self.get_level_view(n) for n in range(1, 2)}
 
-        self.views["GameView"].attach_inventory()
-
-        entrypoint = "StartView"
-        # entrypoint = "GameView"  # <- use this for game debug
+        entrypoint = "GameView"  # <- use this for game debug
         view = BaseView(self.views)
         self.show_view(view.configure(entrypoint))
         print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")

@@ -1,4 +1,4 @@
-import time
+from time import time
 
 import arcade
 from pyglet.math import Vec2
@@ -6,7 +6,6 @@ from pyglet.math import Vec2
 from arcade.experimental import Shadertoy
 
 import assets
-from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
 from game.entities.player import Player
 from game.entities.enemy import Enemy
 from game.sounds import change_music
@@ -52,12 +51,11 @@ class GameView(arcade.View):
         self.mouse_pos = Vec2(0, 0)
 
         # sprite lists
-        self.entities_list = arcade.SpriteList()
+        self.enemies = arcade.SpriteList()
 
         # Setup camera
         self.scene_camera = arcade.Camera(*self.window.size)
         self.gui_camera = arcade.Camera(*self.window.size)
-
         # select the level
         self.select_level(level)
 
@@ -68,24 +66,34 @@ class GameView(arcade.View):
         )
 
     def load_shader(self):
+        # Where is the shader file? Must be specified as a path.
         shader_file_path = assets.sprites.resolve("shadow.glsl")
+
+        # Size of the window
         window_size = self.window.get_size()
+
+        # Create the shader toy
         self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
+
+        # Create the channels 0 and 1 frame buffers.
+        # Make the buffer the size of the window, with 4 channels (RGBA)
         self.channel0 = self.shadertoy.ctx.framebuffer(
             color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
         )
         self.channel1 = self.shadertoy.ctx.framebuffer(
             color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
         )
+
+        # Assign the frame buffers to the channels
         self.shadertoy.channel_0 = self.channel0.color_attachments[0]
         self.shadertoy.channel_1 = self.channel1.color_attachments[0]
-        print("Torch load_shader")
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
 
         level_map = arcade.TileMap(
-            assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
+            assets.tilemaps.resolve(f"level{level}.tmx"),
+            use_spatial_hash=True,  # <- real one
         )
         self.window.level = level
 
@@ -95,28 +103,40 @@ class GameView(arcade.View):
         self.objects = level_map.sprite_lists["objects"]
         self.pickables = arcade.SpriteList(use_spatial_hash=True)
 
-        for item in level_map.sprite_lists["pickables"]:
-            self.pickables.append(
-                Item(item.properties["file"], Vec2(*item.position), item.angle)
-            )
+        if level_map.sprite_lists.get("pickables") is not None:
+            for item in level_map.sprite_lists["pickables"]:
+                self.pickables.append(
+                    Item(item.properties["file"], Vec2(*item.position), item.angle)
+                )
 
         # Set up the player
         self.player = Player(self)
-        self.player.center_x = self.window.width / 2
-        self.player.center_y = self.window.height / 2
-        self.window.player = self.player
-        self.entities_list.append(self.player)
+        self.player.position = level_map.sprite_lists["player"][0].position
 
-        # Set up enemies
-        self.entities_list.append(Enemy(self.player, self))
+        # Set up the enemies
+        arrows = [
+            level_map.sprite_lists["arrow_left"],
+            level_map.sprite_lists["arrow_right"],
+            level_map.sprite_lists["arrow_up"],
+            level_map.sprite_lists["arrow_down"],
+        ]
+
+        barriers = [self.walls, self.objects]
+
+        for enemy in level_map.sprite_lists["enemies"]:
+            e = Enemy(
+                initial_pos=enemy.position,
+                arrows=arrows,
+                barriers=barriers,
+                game_view=self,
+            )
+            self.enemies.append(e)
 
         # Create physics engine for collision
-        self.physics_engine = arcade.PhysicsEngineSimple(
-            self.player, [self.walls, self.objects]
-        )
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player, barriers)
 
         # Start time
-        self.start_time = time.time()
+        self.start_time = time()
 
     def attach_inventory(self):
         self.window.views["InventoryView"] = {
@@ -131,7 +151,7 @@ class GameView(arcade.View):
         self.attach_inventory()
 
     def remove_enemy_from_world(self, enemy: Enemy):
-        self.entities_list.remove(enemy)
+        self.enemies.remove(enemy)
 
     def set_display_text(self, text: str):
         self.display_text = text
@@ -183,6 +203,8 @@ class GameView(arcade.View):
         )
         self.scene_camera.move_to(cam_pos)
         self.physics_engine.update()
+
+        self.enemies.update()
 
     def gameover(self):
         change_views(self.window, "GameOver")
@@ -239,31 +261,59 @@ class GameView(arcade.View):
     def on_draw(self):
         """Draw this view"""
 
-        # clean view
+        # Try Shaders
+
         self.clear()
         self.scene_camera.use()
-
+        # Select the channel 0 frame buffer to draw on
         self.channel0.use()
         self.channel0.clear()
-
+        # Draw the walls
         self.walls.draw()
+        self.objects.draw()
 
-        if self.floor is not None:
-            self.floor.draw()
-        self.walls.draw()
-        if self.objects is not None:
-            self.objects.draw()
-        if self.pickables is not None:
-            self.pickables.draw()
-        self.entities_list.draw()
+        self.channel1.use()
+        self.channel1.clear()
+        # Draw the bombs
+        self.floor.draw()
+        self.enemies.draw()
 
-        self.torch.draw(self.player.angle)
+        # Select this window to draw on
+        self.window.use()
+        # Clear to background color
+        self.window.clear()
+        # Run the shader and render to the window
+        p = (
+            self.player.position[0] - self.scene_camera.position[0],
+            self.player.position[1] - self.scene_camera.position[1],
+        )
+
+        self.shadertoy.program["lightPosition"] = p
+        self.shadertoy.program["angle"] = self.player.angle
+        self.shadertoy.program["lightSize"] = 300
+        self.shadertoy.render()
+        # Draw the player
+        self.player.draw()
+
+        # self.clear()
+        # self.scene_camera.use()
+        # self.walls.draw()
+        # if self.floor is not None:
+        #     self.floor.draw()
+        # self.walls.draw()
+        # if self.objects is not None:
+        #     self.objects.draw()
+        # if self.pickables is not None:
+        #     self.pickables.draw()
+        # self.enemies.draw()
+
+        # self.player.draw()
 
         # Add GUI
         self.gui_camera.use()
         arcade.Text(
             f"Health: 100, Time: "
-            f"{':'.join(map(lambda x: f'{int(x):02d}', divmod(time.time() - self.start_time, 60)))}",
+            f"{':'.join(map(lambda x: f'{int(x):02d}', divmod(time() - self.start_time, 60)))}",
             self.window.width - 200,
             self.window.height - 25,
         ).draw()
@@ -276,8 +326,8 @@ class GameView(arcade.View):
         arcade.Text(
             self.display_text,
             0,
-            SCREEN_HEIGHT / 2 + 100,
-            width=SCREEN_WIDTH,
+            self.window.height / 2 + 100,
+            width=self.window.width,
             align="center",
             font_size=24,
             bold=True,
