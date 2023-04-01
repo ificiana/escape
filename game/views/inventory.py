@@ -55,16 +55,16 @@ def get_inventory_ui(
         height=250,
         text="Press ESC to return to Game",
         text_color=arcade.csscolor.WHITE,
-        font_size=15,
+        font_size=18,
     )
     no_item = arcade.gui.UITextArea(
-        x=380,
+        x=0,
         y=220,
-        width=100,
+        width=600,
         height=80,
         text="Inventory is empty.",
         text_color=arcade.csscolor.WHITE,
-        font_size=30,
+        font_size=43,
         font_name="Melted Monster",
     )
 
