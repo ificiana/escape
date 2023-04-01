@@ -15,6 +15,7 @@ class Enemy(Entity):
         self.barriers = barriers
         self.is_inside_view = True
         self.movement = Vec2(0, 0)
+        self.num_touching_player = 0
 
         if overlap := self.collides_with_list(self.arrows):
             match overlap[0].properties["dir"]:
@@ -38,6 +39,16 @@ class Enemy(Entity):
         for barrier in self.barriers:
             if self.collides_with_list(barrier):
                 print("hitting walls, fixme", self.position)
+
+        touching_player = self.collides_with_list(self.game_view.player.sprite_lists[0])
+        if touching_player:
+            # Increment the counter for the number of enemies that touched the player
+            self.num_touching_player += 1
+            # Slow down the player's speed by half
+            self.game_view.player.change_speed(slow_factor=0.5)
+            # If two enemies have touched the player, it's game over
+            if self.num_touching_player >= 2:
+                self.game_view.game_over()
 
     def is_close_to_player(self, player_position: Vec2):
         distance = player_position - self.get_position()
@@ -89,4 +100,13 @@ class Enemy(Entity):
                 case "right":
                     self.movement = Vec2(1, 0)
 
+        if self.health <= 0:
+            print("DEATH")
+            # Decrement counter for the number of enemies that touched the player when enemy dies
+            self.game_view.player.num_touching_player = max(
+                0, self.game_view.player.num_touching_player - 1
+            )
+            self.game_view.remove_enemy_from_world(self)
+
+            # Call the `move` method to move the enemy
         self.move()

@@ -15,6 +15,7 @@ class Player(Entity):
         self.speed = self.normal_speed
         self.game_view = game_view
         self.inventory = Inventory()
+        self.enemy_touch_count = 0
 
     def update_animation(self, delta_time: float = 1 / 60):
         pass
@@ -41,6 +42,9 @@ class Player(Entity):
             self.game_view.cur_item = None
             self.game_view.set_display_text("")
 
+        if self.enemy_touch_count >= 2:
+            self.game_view.game_over()
+
     def attack(self):
         nearest_enemy, nearest_dist = None, 99999
         for enemy in self.game_view.enemies:
@@ -51,6 +55,11 @@ class Player(Entity):
         if nearest_enemy is not None and nearest_dist < 64 * 1.5:
             # TODO: Play attack animation
             nearest_enemy.take_damage(25)
+            if nearest_enemy.health > 0:
+                self.change_speed(0.5)
+            else:
+                self.change_speed(1)
+            self.enemy_touch_count += 1
 
     def change_speed(self, slow_factor: float = 0.25):
         """1.0 for normal speed and 0.0 for complete stop"""
