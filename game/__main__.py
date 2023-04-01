@@ -6,6 +6,7 @@ import assets
 from assets import fonts
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 from game.views import BaseView, return_to_view
+from game.views.about import get_about_view_ui
 from game.views.game_view import GameView
 from game.views.gameover import get_gameover_ui
 from game.views.inventory import Inventory
@@ -13,7 +14,6 @@ from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
-from game.views.about import get_about_view_ui
 
 
 class Game(arcade.Window):
@@ -102,33 +102,33 @@ class Game(arcade.Window):
                     arcade.Text(
                         "This is a team submission by",
                         self.width / 2,
-                        self.height -60,
+                        self.height - 60,
                         font_size=20,
                         font_name="Melted Monster",
                         anchor_x="center",
-                        color=arcade.color.WHITE
+                        color=arcade.color.WHITE,
                     ),
                     arcade.Text(
                         "BeeTLes for PyWeek35",
                         self.width / 2,
-                        self.height -120,
+                        self.height - 120,
                         font_size=35,
                         font_name="Melted Monster",
                         anchor_x="center",
-                        color=arcade.color.WHITE
+                        color=arcade.color.WHITE,
                     ),
                     arcade.Text(
                         "Click to Return",
                         self.width / 2,
-                         self.height -442,
+                        self.height - 442,
                         arcade.color.WHITE,
                         font_size=10,
                         anchor_x="center",
                     ),
                 ],
-                "color": arcade.color.BLACK, 
-                "ui":[get_about_view_ui(self) ] , 
-                "next": "MenuView"
+                "color": arcade.color.BLACK,
+                "ui": [get_about_view_ui(self)],
+                "next": "MenuView",
             },
             "Credits": {
                 # This shows the credits section
@@ -140,56 +140,39 @@ class Game(arcade.Window):
                     arcade.Text(
                         "Credits and contributions",
                         self.width / 2,
-                        self.height -62,
+                        self.height - 62,
                         font_size=30,
                         anchor_x="center",
                         font_name="Melted Monster",
                     ),
                     arcade.Text(
-                        "Glacier by SalmonLikeTheFish",
+                        "'Glacier' by SalmonLikeTheFish",
                         self.width / 2,
-                        self.height -202,
+                        self.height - 202,
                         font_size=15,
                         anchor_x="center",
                         font_name="Melted Monster",
                     ),
                     arcade.Text(
-                        "Insomnia by David Hilowitz",
+                        "'Insomnia' by David Hilowitz",
                         self.width / 2,
-                        self.height -232,
+                        self.height - 232,
                         font_size=15,
                         anchor_x="center",
                         font_name="Melted Monster",
                     ),
                     arcade.Text(
-                        "Japan by Yakov Golman",
+                        "'Japan' by Yakov Golman",
                         self.width / 2,
-                        self.height -262,
+                        self.height - 262,
                         font_size=15,
                         anchor_x="center",
                         font_name="Melted Monster",
                     ),
                     arcade.Text(
-                        "All other sound effects in /assets/sounds",
+                        "Art and Graphics by Nayel Abed Razi",
                         self.width / 2,
-                        self.height -292,
-                        font_size=15,
-                        anchor_x="center",
-                        font_name="Melted Monster",
-                    ),
-                    arcade.Text(
-                        " are under the Mixkit Sound",
-                        self.width / 2,
-                        self.height -322,
-                        font_size=15,
-                        anchor_x="center",
-                        font_name="Melted Monster",
-                    ),
-
-                    arcade.Text(
-                        "Effects Free License",
-                        self.width / 2,
-                        self.height -352,
+                        self.height - 292,
                         font_size=15,
                         anchor_x="center",
                         font_name="Melted Monster",
@@ -197,7 +180,7 @@ class Game(arcade.Window):
                     arcade.Text(
                         "Click to Return",
                         self.width / 2,
-                         self.height -442,
+                        self.height - 442,
                         arcade.color.WHITE,
                         font_size=10,
                         anchor_x="center",
