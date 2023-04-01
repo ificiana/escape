@@ -21,7 +21,6 @@ sprites = AssetManager("sprites")
 tilemaps = AssetManager("tilemaps")
 fonts = AssetManager("fonts")
 items = AssetManager("items")
-shaders = AssetManager("shaders")
 
 
 class AudioManager:
