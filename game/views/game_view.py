@@ -169,6 +169,12 @@ class GameView(arcade.View):
 
         self.scene_camera.use()
 
+        if self.floor is not None:
+            self.floor.draw()
+        self.walls.draw()
+        if self.objects is not None:
+            self.objects.draw()
+
         self.torch.draw(self.player.angle)
 
         # Draw other entities and walls
