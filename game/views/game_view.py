@@ -5,8 +5,8 @@ from pyglet.math import Vec2
 
 import assets
 from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
-from game.entities.player import Player
 from game.entities.enemy import Enemy
+from game.entities.player import Player
 from game.sounds import change_music
 from game.views import change_views, return_to_view
 from game.views.inventory import Item, get_inventory_ui
