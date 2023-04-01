@@ -1,31 +1,44 @@
-#version 330 core
+#define N 100
+#define FOV 60
 
-uniform vec2 resolution;
-uniform vec2 player_pos;
-uniform sampler2D tex;
-uniform sampler2D shadow_tex;
-uniform float ambient_intensity;
-uniform float light_intensity;
+uniform vec2 lightPosition;
+uniform float lightSize;
+uniform float angle;
 
-in vec2 frag_pos;
+float terrain(vec2 samplePoint)
+{
+    float samplePointAlpha = texture(iChannel0, samplePoint).a;
+    float sampleStepped = step(0.1, samplePointAlpha);
+    float returnValue = 1.0 - sampleStepped;
+    return returnValue;
+}
 
-out vec4 frag_color;
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    float distanceToLight = length(lightPosition - fragCoord);
+    vec2 normalizedFragCoord = fragCoord/iResolution.xy;
+    vec2 normalizedLightCoord = lightPosition.xy/iResolution.xy;
+    float lightAmount = 1.0;
+    vec2 dir = normalizedFragCoord - normalizedLightCoord;
+    float thisAngle = atan(dir.y, dir.x);
 
-void main() {
-    vec4 tex_color = texture(tex, frag_pos);
-
-    // calculate distance between current pixel and player position
-    float dist = length(player_pos - frag_pos);
-
-    // calculate light intensity based on distance and ambient intensity
-    float light = ambient_intensity + (light_intensity - ambient_intensity) / (1.0 + pow(dist, 2.0));
-
-    // get shadow intensity from shadow texture
-    float shadow = texture(shadow_tex, frag_pos).r;
-
-    // combine light and shadow to get final intensity
-    float intensity = light * shadow;
-
-    // apply intensity to texture color
-    frag_color = tex_color * vec4(intensity, intensity, intensity, 1.0);
+    // TODO: Fix the angle comparison, angle is is changing somehow
+    if(thisAngle < radians(angle)-radians(FOV/2) || thisAngle > radians(angle)+radians(FOV/2))
+    {
+        // amount of light where it is shadow (0.0 - 1.0)
+        lightAmount = 0.0;
+    }
+    else
+    {
+        for(float i = 0.0; i < N; i++)
+        {
+            float t = i / N;
+            vec2 samplePoint = mix(normalizedFragCoord, normalizedLightCoord, t);
+            float shadowAmount = terrain(samplePoint);
+            lightAmount *= shadowAmount;
+        }
+    }
+    lightAmount *= 1.0 - smoothstep(0.0, lightSize, distanceToLight);
+    vec4 blackColor = vec4(0.0, 0.0, 0.0, 1.0);
+    fragColor = mix(blackColor, texture(iChannel1, normalizedFragCoord), lightAmount);
 }

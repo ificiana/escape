@@ -1,126 +1,50 @@
 from arcade.experimental import Shadertoy
+from pyglet.math import Vec2
+
+from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
-class TorchShaderToy(Shadertoy):
+class Torch(Shadertoy):
     """ShaderToy program to create a torch with shadow effect."""
 
-    def __init__(self, size, main_source, shadow_source):
-        super().__init__(size, main_source)
+    def __init__(self, size, main_source):
+        super().__init__()
+        # self.shadertoy = None
+        # self.channel0 = None
+        # self.channel1 = None
+        self.load_shader(size, main_source)
+        print("Torch init")
 
-        # Define the uniforms
-        self.set_uniform("time", 0.0)
-        self.set_uniform("resolution", (0.0, 0.0))
-        self.set_uniform("torch_pos", (0.5, 0.5))
-        self.set_uniform("torch_radius", 0.2)
-        self.set_uniform("light_intensity", 1.0)
-
-        # Set the fragment shader code
-        self.set_fragment_shader(
-            """
-            #define MAX_STEPS 50
-            #define MAX_DIST 200.0
-            #define EPSILON 0.001
-
-            uniform vec2 resolution;
-            uniform float time;
-            uniform vec2 torch_pos;
-            uniform float torch_radius;
-            uniform float light_intensity;
-
-            float scene(vec3 p)
-            {
-                float d = length(p.xy - torch_pos) - torch_radius;
-                return d;
-            }
-
-            float trace(vec3 origin, vec3 direction)
-            {
-                float total_dist = 0.0;
-                for(int i = 0; i < MAX_STEPS; i++)
-                {
-                    vec3 p = origin + total_dist * direction;
-                    float d = scene(p);
-                    total_dist += d;
-                    if(d < EPSILON || total_dist > MAX_DIST)
-                        break;
-                }
-                return total_dist;
-            }
-
-            vec3 calcNormal(vec3 p)
-            {
-                vec2 offset = vec2(0.001, 0.0);
-                float d1 = scene(p - offset.xyy);
-                float d2 = scene(p + offset.xyy);
-                float d3 = scene(p - offset.yxy);
-                float d4 = scene(p + offset.yxy);
-                float d5 = scene(p - offset.yyx);
-                float d6 = scene(p + offset.yyx);
-                return normalize(vec3(d1 - d2, d3 - d4, d5 - d6));
-            }
-
-            vec3 calcLight(vec3 p, vec3 n, vec3 dir)
-            {
-                vec3 l = normalize(vec3(0.0, 0.0, 1.0));
-                float intensity = max(dot(n, l), 0.0);
-                vec3 color = vec3(1.0, 0.5, 0.2) * intensity * light_intensity;
-
-                // Calculate the shadow factor
-                vec3 shadow_dir = normalize(l + dir);
-                float dist_to_light = trace(p + n * EPSILON, shadow_dir);
-                float shadow = dist_to_light > length(l) ? 1.0 : 0.5;
-
-                return color * shadow;
-            }
-
-            void mainImage(out vec4 fragColor, in vec2 fragCoord)
-            {
-                vec2 uv = (fragCoord.xy / resolution.xy)
-            * 2.0 - 1.0;
-            uv.x *= resolution.x / resolution.y;
-
-            // Camera position and direction
-            vec3 ro = vec3(0.0, 0.0, -3.0);
-            vec3 rd = normalize(vec3(uv, 1.0));
-
-            // Trace the ray and get the distance to the closest object
-            float dist = trace(ro, rd);
-
-            // Calculate the intersection point
-            vec3 p = ro + rd * dist;
-
-            // Calculate the surface normal at the intersection point
-            vec3 n = calcNormal(p);
-
-            // Calculate the light color and shadow factor
-            vec3 light_color = calcLight(p, n, rd);
-
-            // Combine the light color and background color
-            vec3 bg_color = vec3(0.1, 0.1, 0.2);
-            vec3 color = mix(bg_color, light_color, light_intensity);
-
-            // Output the final color
-            fragColor = vec4(color, 1.0);
-        }
-    """
+    def load_shader(self, size, main_source):
+        shader_file_path = main_source
+        window_size = size
+        self.shadertoy = Shadertoy.create_from_file(window_size, shader_file_path)
+        self.channel0 = self.shadertoy.ctx.framebuffer(
+            color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
         )
+        self.channel1 = self.shadertoy.ctx.framebuffer(
+            color_attachments=[self.shadertoy.ctx.texture(window_size, components=4)]
+        )
+        self.shadertoy.channel_0 = self.channel0.color_attachments[0]
+        self.shadertoy.channel_1 = self.channel1.color_attachments[0]
+        print("Torch load_shader")
 
-
-def on_update(self, delta_time):
-    # Update the time uniform
-    self.set_uniform("time", self.time)
-
-
-def set_torch_pos(self, x, y):
-    # Set the torch position uniform
-    self.set_uniform("torch_pos", (x, y))
-
-
-def set_torch_radius(self, radius):
-    # Set the torch radius uniform
-    self.set_uniform("torch_radius", radius)
-
-
-def set_light_intensity(self, intensity):
-    # Set the light intensity uniform
-    self.set_uniform("light_intensity", intensity)
+    def draw(self):
+        print("Torch draw")
+        # self.channel0.use()
+        # self.channel0.clear()
+        #
+        # self.channel1.use()
+        # self.channel1.clear()
+        # # Draw everything that can be hidden in shadows bur does not cast shadow
+        # # self.walls.draw()
+        #
+        # # self.use()
+        # # self.clear()
+        self.shadertoy.program["lightPosition"] = Vec2(
+            SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2
+        )
+        self.shadertoy.program["lightSize"] = 300
+        # self.shadertoy.program["angle"] = self.mc.angle
+        self.shadertoy.render()
+        print("Torch draw end")
