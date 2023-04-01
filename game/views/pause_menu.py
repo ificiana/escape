@@ -36,6 +36,7 @@ def get_pause_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
         assets.sounds.click.play(volume=window.sfx_vol)
         window.change_bgm = True
         window.views["GameView"] = window.get_level_view(1)
+        window.inventory.clear()
         change_views(window, "MenuView")
 
     # noinspection PyUnusedLocal

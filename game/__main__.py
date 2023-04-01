@@ -5,10 +5,10 @@ import pyglet.media
 import assets
 from assets import fonts
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
-from game.entities.player import Player
 from game.views import BaseView, return_to_view
 from game.views.game_view import GameView
 from game.views.gameover import get_gameover_ui
+from game.views.inventory import Inventory
 from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
@@ -27,7 +27,7 @@ class Game(arcade.Window):
         self.level: int = 1
         self.music_vol = 1.0
         self.sfx_vol = 1.0
-        self.player: Player | None = None
+        self.inventory = Inventory()
 
     def setup(self):
         arcade.load_font(fonts.resolve("Melted Monster.ttf"))
