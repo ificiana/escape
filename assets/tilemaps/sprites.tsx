@@ -44,6 +44,9 @@
   <image width="102" height="64" source="../sprites/bed_side.png"/>
  </tile>
  <tile id="20">
+  <properties>
+   <property name="file" value="chair.png"/>
+  </properties>
   <image width="40" height="67" source="../sprites/chair.png"/>
  </tile>
  <tile id="21">
@@ -68,12 +71,15 @@
   <image width="115" height="100" source="../sprites/str_tablw_fr.png"/>
  </tile>
  <tile id="33">
-  <image width="121" height="100" source="../sprites/table_front.png"/>
+  <image width="121" height="75" source="../sprites/table_front.png"/>
  </tile>
  <tile id="34">
-  <image width="96" height="150" source="../sprites/table_side.png"/>
+  <image width="96" height="125" source="../sprites/table_side.png"/>
  </tile>
  <tile id="37">
+  <properties>
+   <property name="file" value="knife.png"/>
+  </properties>
   <image width="70" height="70" source="../items/knife.png"/>
  </tile>
 </tileset>

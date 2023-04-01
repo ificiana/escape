@@ -1,76 +1,125 @@
-import arcade
+from typing import Union
+
+import arcade.gui
+from pyglet.math import Vec2
 
 import assets
-from game.views import change_views
 
 
-class InventoryView(arcade.View):
-    def __init__(self, game, items=None):
-        super().__init__()
-        self.game = game
-        self.items = items or []
-        self.selected_item = None
-        self.show_menu = False
-        self.background_sprite = None
-        self.close_button_sprite = None
+class Item(arcade.Sprite):
+    def __init__(self, sprite_file: str, pos: Vec2, angle: float, name: str = None):
+        super().__init__(assets.items.resolve(sprite_file))
+        self.name = name or sprite_file.split(".")[0]
+        self.center_x, self.center_y = pos
+        self.angle = angle
 
-        self.setup()
+    def get_position(self):
+        return Vec2(self.center_x, self.center_y)
 
-    def setup(self):
-        # Create a background sprite
-        if self.background_sprite is None:
-            self.background_sprite = arcade.SpriteSolidColor(
-                *self.game.size, arcade.color.GRAY
+
+class Inventory:
+    def __init__(self):
+        self.items = {}
+        self.quantities = {}
+
+    def add_item(self, item: Item):
+        self.items[item.name] = item
+        self.quantities[item.name] = self.quantities.get(item.name, 0) + 1
+        item.remove_from_sprite_lists()
+        print(f"added {item.name} to the inventory")
+
+    def remove_item(self, item_name):
+        self.quantities[item_name] = max(self.quantities.get(item_name, 0) - 1, 0)
+        if self.quantities[item_name] == 0:
+            return self.items.pop(item_name)
+        return self.items[item_name]
+
+
+def get_inventory_ui(
+    game: arcade.View,
+) -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
+    text_area0 = arcade.gui.UITextArea(
+        x=270,
+        y=220,
+        width=600,
+        height=300,
+        text="INVENTORY",
+        text_color=arcade.csscolor.WHITE,
+        font_size=30,
+        font_name="Melted Monster",
+    )
+    text_area = arcade.gui.UITextArea(
+        x=195,
+        y=200,
+        width=600,
+        height=250,
+        text="Press ESC to return to Game",
+        text_color=arcade.csscolor.WHITE,
+        font_size=15,
+    )
+    no_item = arcade.gui.UITextArea(
+        x=380,
+        y=220,
+        width=100,
+        height=80,
+        text="Inventory is empty.",
+        text_color=arcade.csscolor.WHITE,
+        font_size=30,
+        font_name="Melted Monster",
+    )
+
+    inventory: Inventory = game.player.inventory
+    items_view = arcade.gui.UIBoxLayout(vertical=True)
+    if inventory.items:
+        for item in inventory.items:
+            item_view = arcade.gui.UISpriteWidget(
+                x=10, y=200, width=120, height=120, sprite=inventory.items[item]
+            )
+            v_box = arcade.gui.UIBoxLayout(vertical=True)
+            h_box = arcade.gui.UIBoxLayout(vertical=False, space_between=100)
+
+            use_button = arcade.gui.UIFlatButton(text="USE", width=80)
+            v_box.add(use_button.with_space_around(bottom=10))
+
+            drop_button = arcade.gui.UIFlatButton(text="DROP", width=80)
+            v_box.add(drop_button.with_space_around(bottom=30))
+
+            item_name = arcade.gui.UITextArea(
+                x=0,
+                y=0,
+                width=100,
+                height=80,
+                text=inventory.items[item].name,
+                text_color=arcade.csscolor.WHITE,
+                font_size=30,
+                font_name="Melted Monster",
             )
 
-        # Create a close button sprite
-        if self.close_button_sprite is None:
-            self.close_button_sprite = arcade.Sprite(
-                ":resources:onscreen_controls/shaded_light/close.png"
-            )
-            self.close_button_sprite.center_x = self.game.width - 50
-            self.close_button_sprite.center_y = 50
+            h_box.add(item_view)
+            h_box.add(item_name)
+            h_box.add(v_box)
+            items_view.add(h_box)
 
-    def on_draw(self):
-        arcade.start_render()
-        self.background_sprite.draw()
-        arcade.draw_text(
-            "Inventory",
-            self.game.width / 2,
-            self.game.height - 40,
-            arcade.color.BLACK,
-            28,
-            anchor_x="center",
-        )
+            # pylint: disable=W0640
+            # noinspection PyUnusedLocal
+            @use_button.event("on_click")
+            def on_click_use(event):
+                assets.sounds.click.play()
 
-        # Draw items
-        for i, item in enumerate(self.items):
-            item_sprite = arcade.Sprite(assets.items.resolve(f"{item}.png"))
-            # item_sprite = arcade.Sprite(f"assets/items/{item}.png")
-            item_sprite.name = item
-            item_sprite.center_x = 80
-            item_sprite.center_y = 510 - i * 100
-            item_sprite.draw()
-            arcade.draw_text(
-                item_sprite.name,
-                item_sprite.center_x,
-                item_sprite.center_y - 50,
-                arcade.color.BLACK,
-                14,
-                anchor_x="center",
-            )
+            # pylint: disable=W0640
+            # noinspection PyUnusedLocal
+            @drop_button.event("on_click")
+            def on_click_drop(event):
+                assets.sounds.click.play()
 
-        self.close_button_sprite.draw()
-
-    def on_mouse_press(self, x, y, button, modifiers):
-        if (
-            button == arcade.MOUSE_BUTTON_LEFT
-            and self.close_button_sprite.collides_with_point((x, y))
-            and isinstance(self.game.current_view, InventoryView)
-        ):
-            change_views(self.game, "GameView-same")
-
-    def on_key_press(self, symbol, modifiers):
-        match symbol:
-            case arcade.key.ESCAPE:
-                change_views(self.game, "GameView-same")
+    return [
+        arcade.gui.UIAnchorWidget(
+            anchor_x="left",
+            anchor_y="center",
+            align_x=100,
+            align_y=-50,
+            child=items_view if inventory.items else no_item,
+        ),
+        text_area0,
+        text_area,
+    ]
