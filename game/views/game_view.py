@@ -67,7 +67,9 @@ class GameView(arcade.View):
         self.pickables = arcade.SpriteList(use_spatial_hash=True)
 
         for item in level_map.sprite_lists["pickables"]:
-            self.pickables.append(Item("knife.png", Vec2(*item.position), item.angle))
+            self.pickables.append(
+                Item(item.properties["file"], Vec2(*item.position), item.angle)
+            )
 
         # Set up the player
         self.player = Player(self)
