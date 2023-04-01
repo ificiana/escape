@@ -169,7 +169,7 @@ class GameView(arcade.View):
 
         self.scene_camera.use()
 
-        self.torch.draw()
+        self.torch.draw(self.player.angle)
 
         # Draw other entities and walls
         self.entities_list.draw()
