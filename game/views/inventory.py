@@ -72,9 +72,13 @@ class Inventory:
             return self.items.pop(item_name)
         return self.items[item_name]
 
+    def clear(self):
+        self.items.clear()
+        self.quantities.clear()
+
 
 def get_inventory_ui(
-    game: arcade.View,
+    window: arcade.Window,
 ) -> Union[arcade.gui.UIWidget, list[arcade.gui.UIWidget]]:
     text_area0 = arcade.gui.UITextArea(
         x=270,
@@ -93,20 +97,20 @@ def get_inventory_ui(
         height=250,
         text="Press ESC to return to Game",
         text_color=arcade.csscolor.WHITE,
-        font_size=15,
+        font_size=18,
     )
     no_item = arcade.gui.UITextArea(
-        x=380,
+        x=0,
         y=220,
-        width=200,
-        height=150,
+        width=600,
+        height=80,
         text="Inventory is empty.",
         text_color=arcade.csscolor.WHITE,
-        font_size=30,
+        font_size=43,
         font_name="Melted Monster",
     )
 
-    inventory: Inventory = game.player.inventory
+    inventory: Inventory = window.inventory
     items_view = arcade.gui.UIBoxLayout(vertical=True)
     if inventory.items:
         for item in inventory.items:
@@ -145,7 +149,7 @@ def get_inventory_ui(
             @use_button.event("on_click")
             def on_click_use(event):
                 assets.sounds.click.play()
-                inventory.items[item].use(game)
+                inventory.items[item].use(window)
 
             # pylint: disable=W0640
             # noinspection PyUnusedLocal

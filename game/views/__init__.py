@@ -1,4 +1,4 @@
-from typing import Union, Self
+from typing import Union
 
 import arcade
 
@@ -22,7 +22,7 @@ class BaseView(arcade.View):
         # store the views data
         self.views: dict = views or {}
 
-    def configure(self, view: str) -> "Self":
+    def configure(self, view: str) -> "BaseView":
         """Configure the View"""
         if isinstance(self.views[view], arcade.View):
             return self.views[view]
@@ -87,14 +87,7 @@ class BaseView(arcade.View):
 
 def change_views(window: arcade.Window, dest_view: str):
     window.ui_manager.clear()
-    if dest_view.startswith("GameView"):
-        if dest_view.endswith("same"):
-            window.show_view(BaseView(window.views).configure("GameView"))
-        else:
-            # Reset the level and all entities
-            window.show_view(window.get_level_view(window.level))
-    else:
-        window.show_view(BaseView(window.views).configure(dest_view))
+    window.show_view(BaseView(window.views).configure(dest_view))
 
 
 def return_to_view(view_name):

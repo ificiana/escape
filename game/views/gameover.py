@@ -38,13 +38,16 @@ def get_gameover_ui(
     def on_click_menu(event):
         assets.sounds.click.play(volume=window.sfx_vol)
         window.change_bgm = True
+        window.views["GameView"] = window.get_level_view(1)
+        window.inventory.clear()
         change_views(window, "MenuView")
 
     # noinspection PyUnusedLocal
     @restart_button.event("on_click")
     def on_click_restart(event):
         assets.sounds.click.play(volume=window.sfx_vol)
-        change_views(window, "GameView")
+        window.inventory.clear()
+        change_views(window, f"Level-{window.level}")
 
     return [
         arcade.gui.UIAnchorWidget(anchor_x="center", anchor_y="bottom", child=h_box),

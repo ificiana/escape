@@ -14,10 +14,11 @@ class Player(Entity):
         self.scale = 0.5
         self.center_x, self.center_y = Vec2(0, 0)
         self.angle = -90
-        self.normal_speed = 2.0
+        self.normal_speed = 4.0
         self.speed = self.normal_speed
         self.game_view = game_view
         self.inventory = Inventory()
+        self.enemy_touch_count = 0
         self.holding_item = None
 
         self.walk_textures = []
@@ -62,18 +63,32 @@ class Player(Entity):
             self.game_view.cur_item = None
             self.game_view.set_display_text("")
 
+        self.hit_by_enemy()
+
+    def hit_by_enemy(self):
+        enemies_touching_playing = len(self.collides_with_list(self.game_view.enemies))
+        if enemies_touching_playing >= 2:
+            self.game_view.gameover()
+        elif enemies_touching_playing >= 1:
+            self.change_speed(slow_factor=0.5)
+        else:
+            self.change_speed(slow_factor=1)
+
     def attack(self):
         nearest_enemy, nearest_dist = None, 99999
-        for entity in self.game_view.entities_list:
-            if entity == self:
-                continue
-            distance = self.get_position() - entity.get_position()
+        for enemy in self.game_view.enemies:
+            distance = self.get_position() - enemy.get_position()
             if distance.mag < nearest_dist:
                 nearest_dist = distance.mag
-                nearest_enemy = entity
+                nearest_enemy = enemy
         if nearest_enemy is not None and nearest_dist < 64 * 1.5:
             # TODO: Play attack animation
             nearest_enemy.take_damage(25)
+            if nearest_enemy.health > 0:
+                self.change_speed(0.5)
+            else:
+                self.change_speed(1)
+            self.enemy_touch_count += 1
 
     def change_speed(self, slow_factor: float = 0.25):
         """1.0 for normal speed and 0.0 for complete stop"""
