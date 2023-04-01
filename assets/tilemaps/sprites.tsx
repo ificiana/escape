@@ -68,10 +68,10 @@
   <image width="115" height="100" source="../sprites/str_tablw_fr.png"/>
  </tile>
  <tile id="33">
-  <image width="121" height="100" source="../sprites/table_front.png"/>
+  <image width="121" height="75" source="../sprites/table_front.png"/>
  </tile>
  <tile id="34">
-  <image width="96" height="150" source="../sprites/table_side.png"/>
+  <image width="96" height="125" source="../sprites/table_side.png"/>
  </tile>
  <tile id="37">
   <image width="70" height="70" source="../items/knife.png"/>

@@ -4,10 +4,11 @@ import arcade
 from pyglet.math import Vec2
 
 import assets
-from game.entities.enemy import Enemy
 from game.entities.player import Player
+from game.entities.enemy import Enemy
 from game.sounds import change_music
 from game.views import change_views
+from game.views.inventory import Item
 
 arcade.enable_timings()
 
@@ -19,15 +20,21 @@ class GameView(arcade.View):
         super().__init__()
 
         # declare objects and entities
+        self.cur_item = None
         self.walls = None
         self.floor = None
         self.objects = None
+        self.pickables = None
         self.player = None
         self.physics_engine = None
         self.start_time = None
         self.bgm = None
+
         # special purpose bgm
         self.bgm2 = None
+
+        # in game text popup
+        self.display_text = ""
 
         # movement states
         self.movement = Vec2(0, 0)
@@ -66,9 +73,13 @@ class GameView(arcade.View):
         self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
         self.objects = level_map.sprite_lists["objects"]
+        self.pickables = arcade.SpriteList(use_spatial_hash=True)
+
+        for item in level_map.sprite_lists["pickables"]:
+            self.pickables.append(Item("knife.png", Vec2(*item.position), item.angle))
 
         # Set up the player
-        self.player = Player()
+        self.player = Player(self)
         self.player.position = level_map.sprite_lists["player"][0].position
 
         # Set up the enemies
@@ -99,6 +110,12 @@ class GameView(arcade.View):
         # Start time
         self.start_time = time()
 
+    def remove_enemy_from_world(self, enemy: Enemy):
+        self.enemies.remove(enemy)
+
+    def set_display_text(self, text: str):
+        self.display_text = text
+
     def on_show_view(self):
         """This is run once when we switch to this view"""
 
@@ -109,13 +126,19 @@ class GameView(arcade.View):
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
         self.window.bgm = change_music(
-            self.window.bgm, assets.sounds.horror, looping=True, volume=0.2, speed=0.5
+            self.window,
+            self.window.bgm,
+            assets.sounds.horror,
+            looping=True,
+            volume=0.2,
+            speed=0.5,
         )
         if self.bgm is None:
             self.bgm = change_music(
-                self.bgm, assets.sounds.heart, volume=0.6, looping=True
+                self.window, self.bgm, assets.sounds.heart, volume=0.6, looping=True
             )
-            # self.bgm2 = change_music(self.bgm2, assets.sounds.insomnia, volume=0.2, looping=True)
+            # self.bgm2 = change_music(self.window, self.bgm2,
+            # assets.sounds.insomnia, volume=0.2, looping=True)
         else:
             self.bgm.play()
             # self.bgm2.play()
@@ -133,6 +156,7 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time: float):
         self.player.move(self.movement, self.screen_to_world_point(self.mouse_pos))
+        self.player.update_player()
         cam_pos = Vec2(
             self.player.center_x - self.window.width / 2,
             self.player.center_y - self.window.height / 2,
@@ -147,7 +171,9 @@ class GameView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int):
         """Handle Keyboard Input."""
-        # Navigate with WASD or Arrow keys"""
+
+        # Navigate with WASD or Arrow keys
+
         match symbol:
             case arcade.key.DOWN | arcade.key.S:
                 self.movement.y = -1
@@ -162,10 +188,16 @@ class GameView(arcade.View):
             case arcade.key.G:
                 self.gameover()
             case arcade.key.I:
-                assets.sounds.click.play()
+                assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "InventoryView")
+            case arcade.key.F:
+                if self.cur_item:
+                    assets.sounds.click.play(volume=self.window.sfx_vol)
+                    self.display_text = ""
+                    self.player.inventory.add_item(self.cur_item)
+                    self.cur_item = None
             case arcade.key.ESCAPE:
-                assets.sounds.click.play()
+                assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "Pause")
 
         # add fail-check
@@ -197,6 +229,8 @@ class GameView(arcade.View):
         self.walls.draw()
         if self.objects is not None:
             self.objects.draw()
+        if self.pickables is not None:
+            self.pickables.draw()
         self.enemies.draw()
 
         # TODO: remove this after debug
@@ -223,3 +257,13 @@ class GameView(arcade.View):
             self.window.height - 25,
         ).draw()
         arcade.Text("Press ESC to pause; press I to enter the inventory", 10, 10).draw()
+        arcade.Text(
+            self.display_text,
+            0,
+            self.window.height / 2 + 100,
+            width=self.window.width,
+            align="center",
+            font_size=24,
+            bold=True,
+            color=arcade.color.WHITE,
+        ).draw()

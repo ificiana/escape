@@ -52,6 +52,16 @@ class Enemy(Entity):
                 self.state = 300
             self.forward(self.speed)
 
+    # def take_damage(
+    #     self,
+    #     amount: int = 20,
+    # ):
+    #     self.health -= amount
+    #     print(self.health)
+    #     if self.health <= 0:
+    #         print("DEATH")
+    #         self.game_view.remove_enemy_from_world(self)
+
     def update(self):
         if self.arrows:
             if self.collides_with_list(self.arrows_up):
