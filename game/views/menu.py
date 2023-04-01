@@ -42,13 +42,13 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     # noinspection PyUnusedLocal
     @start_button.event("on_click")
     def on_click_start(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "Storybook")
 
     # noinspection PyUnusedLocal
     @about_button.event("on_click")
     def on_click_about(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "About")
 
     # noinspection PyUnusedLocal
@@ -59,20 +59,20 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     # noinspection PyUnusedLocal
     @settings_button.event("on_click")
     def on_click_settings(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "Settings")
 
     # noinspection PyUnusedLocal
     @credits_button.event("on_click")
     def on_click_credits(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         window.change_bgm = True
         change_views(window, "Credits")
 
     # noinspection PyUnusedLocal
     @continue_button.event("on_click")
     def on_click_continue(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "Levels")
 
     return arcade.gui.UIAnchorWidget(

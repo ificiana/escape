@@ -36,14 +36,14 @@ def get_gameover_ui(
     # noinspection PyUnusedLocal
     @menu_button.event("on_click")
     def on_click_menu(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         window.change_bgm = True
         change_views(window, "MenuView")
 
     # noinspection PyUnusedLocal
     @restart_button.event("on_click")
     def on_click_restart(event):
-        assets.sounds.click.play()
+        assets.sounds.click.play(volume=window.sfx_vol)
         change_views(window, "GameView")
 
     return [

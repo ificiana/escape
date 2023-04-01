@@ -72,7 +72,7 @@ class BaseView(arcade.View):
         """If the user presses the mouse button, navigate to the next View."""
 
         if self.next:
-            assets.sounds.click.play()
+            assets.sounds.click.play(volume=self.window.sfx_vol)
             self.window.ui_manager.clear()
             if self.next_bgm_diff:
                 self.window.change_bgm = True

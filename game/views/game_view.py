@@ -160,10 +160,10 @@ class GameView(arcade.View):
             case arcade.key.G:
                 self.gameover()
             case arcade.key.I:
-                assets.sounds.click.play()
+                assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "InventoryView")
             case arcade.key.ESCAPE:
-                assets.sounds.click.play()
+                assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "Pause")
 
         # add fail-check
