@@ -78,10 +78,3 @@ def get_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
     return arcade.gui.UIAnchorWidget(
         anchor_x="center_x", anchor_y="center_y", child=v_box
     )
-
-
-def return_to_menu_binding(window: arcade.Window, key):
-    match key:
-        case arcade.key.ESCAPE:
-            assets.sounds.click.play()
-            change_views(window, "MenuView")

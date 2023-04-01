@@ -4,10 +4,10 @@ import arcade.gui
 import assets
 from assets import fonts
 from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
-from game.views import BaseView
+from game.views import BaseView, return_to_view
 from game.views.game_view import GameView
-from game.views.inventory import InventoryView
-from game.views.menu import get_menu_view_ui, return_to_menu_binding
+from game.views.inventory import get_inventory_ui
+from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
@@ -86,13 +86,13 @@ class Game(arcade.Window):
             },
             "Settings": {
                 # This shows the pre-game storyline
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "ui": get_settings_ui(self),
             },
             "About": {
                 # This shows the about section
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -115,7 +115,7 @@ class Game(arcade.Window):
             },
             "Credits": {
                 # This shows the credits section
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "bgm": assets.sounds.japan,
                 "next_bgm_diff": True,
@@ -141,7 +141,7 @@ class Game(arcade.Window):
             "Levels": {
                 # This shows the settings section
                 # TODO: implement a proper levels view
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("MenuView"),
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
@@ -166,7 +166,7 @@ class Game(arcade.Window):
                 # This shows when the game is paused
                 "bgm": assets.sounds.tomb,
                 "color": arcade.color.BLACK,
-                "keys": return_to_menu_binding,
+                "keys": return_to_view("GameView-same"),
                 "text": [
                     arcade.Text(
                         "Escape!!",
@@ -181,10 +181,14 @@ class Game(arcade.Window):
                     get_pause_menu_view_ui(self),
                 ],
             },
+            "InventoryView": {
+                # Shows the inventory
+                "keys": return_to_view("GameView-same"),
+                "color": arcade.color.BLACK,
+                "ui": get_inventory_ui(self),
+            },
             # This shows the main game view, starts at level 1
             "GameView": self.get_level_view(1),
-            # Shows the inventory
-            "InventoryView": InventoryView(self),
             # TODO: Add rest of the Views here
         } | {f"Level-{n}": self.get_level_view(n) for n in range(1, 2)}
 

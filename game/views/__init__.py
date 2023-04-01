@@ -95,3 +95,13 @@ def change_views(window: arcade.Window, dest_view: str):
             window.show_view(window.get_level_view(window.level))
     else:
         window.show_view(BaseView(window.views).configure(dest_view))
+
+
+def return_to_view(view_name):
+    def f_(window: arcade.Window, key):
+        match key:
+            case arcade.key.ESCAPE:
+                assets.sounds.click.play(volume=window.sfx_vol)
+                change_views(window, view_name)
+
+    return f_

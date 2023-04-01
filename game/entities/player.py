@@ -3,6 +3,7 @@ import math
 from pyglet.math import Vec2
 
 from game.entities import Entity
+from game.views.inventory import Inventory
 
 
 class Player(Entity):
@@ -13,6 +14,7 @@ class Player(Entity):
         self.normal_speed = 2.0
         self.speed = self.normal_speed
         self.game_view = game_view
+        self.inventory = Inventory()
 
     def update_animation(self, delta_time: float = 1 / 60):
         pass
@@ -33,8 +35,10 @@ class Player(Entity):
                 nearest_dist = distance.mag
                 nearest_item = item
         if nearest_item is not None and nearest_dist < 64:
-            self.game_view.set_display_text("Press H to pick up")
+            self.game_view.set_display_text("Press F to pick up")
+            self.game_view.cur_item = nearest_item
         else:
+            self.game_view.cur_item = None
             self.game_view.set_display_text("")
 
     def attack(self):

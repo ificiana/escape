@@ -21,6 +21,7 @@ class GameView(arcade.View):
         super().__init__()
 
         # declare objects and entities
+        self.cur_item = None
         self.walls = None
         self.floor = None
         self.objects = None
@@ -29,6 +30,7 @@ class GameView(arcade.View):
         self.physics_engine = None
         self.start_time = None
         self.bgm = None
+
         # special purpose bgm
         self.bgm2 = None
 
@@ -52,6 +54,7 @@ class GameView(arcade.View):
 
     def select_level(self, level: int = 1):
         """Select the level and set up the game view"""
+
         level_map = arcade.TileMap(
             assets.tilemaps.resolve(f"level{level}.tmx"), use_spatial_hash=True
         )
@@ -61,13 +64,10 @@ class GameView(arcade.View):
         self.floor = level_map.sprite_lists["floor"]
         self.walls = level_map.sprite_lists["walls"]
         self.objects = level_map.sprite_lists["objects"]
-        pickables = level_map.sprite_lists["pickables"]
         self.pickables = arcade.SpriteList(use_spatial_hash=True)
 
-        for item in pickables:
-            self.pickables.append(
-                Item("knife.png", "knife", Vec2(*item.position), item.angle)
-            )
+        for item in level_map.sprite_lists["pickables"]:
+            self.pickables.append(Item("knife.png", Vec2(*item.position), item.angle))
 
         # Set up the player
         self.player = Player(self)
@@ -145,7 +145,9 @@ class GameView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int):
         """Handle Keyboard Input."""
-        # Navigate with WASD or Arrow keys"""
+
+        # Navigate with WASD or Arrow keys
+
         match symbol:
             case arcade.key.DOWN | arcade.key.S:
                 self.movement.y = -1
@@ -162,6 +164,12 @@ class GameView(arcade.View):
             case arcade.key.I:
                 assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "InventoryView")
+            case arcade.key.F:
+                if self.cur_item:
+                    assets.sounds.click.play(volume=self.window.sfx_vol)
+                    self.display_text = ""
+                    self.player.inventory.add_item(self.cur_item)
+                    self.cur_item = None
             case arcade.key.ESCAPE:
                 assets.sounds.click.play(volume=self.window.sfx_vol)
                 change_views(self.window, "Pause")
@@ -221,5 +229,5 @@ class GameView(arcade.View):
             align="center",
             font_size=24,
             bold=True,
-            color=arcade.color.BLACK,
+            color=arcade.color.WHITE,
         ).draw()
