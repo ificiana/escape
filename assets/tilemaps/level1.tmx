@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" source="sprites.tsx"/>
  <layer id="2" name="floor" width="80" height="50" locked="1">
   <data encoding="base64" compression="zlib">
@@ -16,19 +16,9 @@
    eJzt2TsKwCAQBUDvEBJIld/975heAoKoi2SmkRXUV/tSAgAAGGvLVpjZVZgBAAD4pyc6AFS6owMAMDV/5jF0bwDQzxkdACDIWXluaRkCqLZ+7O1B70JPR6d7876sNJe07I51eYz0AlJZAoI=
   </data>
  </layer>
- <layer id="6" name="enemies" width="80" height="50" locked="1">
-  <data encoding="base64" compression="zlib">
-   eJzt1rcNACAQBDAGYP95KSkooCCckD3BSR9LAQAAgDPq6wAAAHBZ8g+cnA0A6NxsZvQIrDErAHul7tXUXAAAwMj//qedddUjkKUB6gUAhQ==
-  </data>
- </layer>
  <layer id="4" name="pickables" width="80" height="50" locked="1">
   <data encoding="base64" compression="zlib">
-   eJztzjERAAAIBKBPYy77pzCCk+cCCUgAAAAAAAAAAAAAAAAAAOBWJf19AHYDKYYAhw==
-  </data>
- </layer>
- <layer id="5" name="player" width="80" height="50" locked="1">
-  <data encoding="base64" compression="zlib">
-   eJztzjENAAAIA7AZwL9dLOwhPK2CJgAAAACd+Q4AAAAAAAAAAAAAAHBqAZd2AA4=
+   eJztzgEJAEAIBLArYYXPZf8UpngE2RIsAQAAAAAAAAAAAAAAAACAv17S24eLajvAOQNaagCc
   </data>
  </layer>
 </map>
