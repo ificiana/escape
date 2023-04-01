@@ -1,0 +1,18 @@
+{
+    "level_1": {
+        "is_locked": false,
+        "high_score": 0
+    },
+    "level_2": {
+        "is_locked": true,
+        "high_score": 0
+    },
+    "level_3": {
+        "is_locked": true,
+        "high_score": 0
+    },
+    "level_4": {
+        "is_locked": true,
+        "higo_score": 0
+    }
+}

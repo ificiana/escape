@@ -4,7 +4,7 @@ import pyglet.media
 
 import assets
 from assets import fonts
-from game.config import SCREEN_WIDTH, SCREEN_HEIGHT
+from game.config import SCREEN_WIDTH, SCREEN_HEIGHT, LEVEL_COUNT
 from game.views import BaseView, return_to_view
 from game.views.game_view import GameView
 from game.views.gameover import get_gameover_ui
@@ -13,6 +13,8 @@ from game.views.menu import get_menu_view_ui
 from game.views.pause_menu import get_pause_menu_view_ui
 from game.views.settings import get_settings_ui
 from game.views.story import get_storybook_ui
+from game.views.gameover import get_gameover_ui
+from game.views.level_selection import get_level_menu_view_ui
 
 
 class Game(arcade.Window):
@@ -35,6 +37,7 @@ class Game(arcade.Window):
             assets.sounds.glacier, looping=True, volume=self.music_vol
         )
         self.views = {
+            # TODO: Add rest of the Views ,
             "StartView": {
                 # This is the first view, the entrypoint
                 "color": arcade.color.BLACK,
@@ -147,22 +150,17 @@ class Game(arcade.Window):
                 "color": arcade.color.BLACK,
                 "text": [
                     arcade.Text(
-                        "Level selections here, TODO",
+                        "Choose Your Fate",
                         self.width / 2,
-                        self.height / 2,
-                        font_size=15,
+                        self.height - 60,
+                        font_size=50,
                         anchor_x="center",
-                    ),
-                    arcade.Text(
-                        "Click to Return",
-                        self.width / 2,
-                        self.height / 2 - 75,
-                        arcade.color.WHITE,
-                        font_size=10,
-                        anchor_x="center",
+                        font_name="Melted Monster",
                     ),
                 ],
-                "next": "MenuView",
+                "ui": [
+                    get_level_menu_view_ui(self)
+                ]
             },
             "Pause": {
                 # This shows when the game is paused
@@ -184,11 +182,11 @@ class Game(arcade.Window):
                 ],
             },
             # This shows the main game view, starts at level 1
-            "GameView": self.get_level_view(1),
-            # TODO: Add rest of the Views here
-        } | {f"Level-{n}": self.get_level_view(n) for n in range(1, 2)}
-
-        self.views["GameView"].attach_inventory()
+            "GameView": GameView(1),
+            # Shows the inventory
+            "InventoryView": InventoryView(self)
+            # TODO: Add rest of the levels
+        }| {f"Level{i}": GameView(i) for i in range(1, LEVEL_COUNT+1)}
 
         entrypoint = "StartView"
         # entrypoint = "GameView"  # <- use this for game debug
@@ -197,7 +195,7 @@ class Game(arcade.Window):
         print("Loading done! Enjoy :) - Team BeaTLes (PyWeek35)")
 
     @staticmethod
-    def get_level_view(level: int) -> GameView:
+    def get_level_view(level) -> GameView:
         return GameView(level)
 
 
