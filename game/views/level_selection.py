@@ -35,7 +35,7 @@ def get_level_menu_view_ui(window: arcade.Window) -> arcade.gui.UIWidget:
                 text=f"Level {i + 1}", width=250, style={"font_name": "Melted Monster"}
             )
             # pylint: disable=W0640
-            levels[i].on_click = lambda: start_level(i + 1)
+            levels[i].on_click = lambda e: start_level(i + 1)
             hp_button = arcade.gui.UIFlatButton(
                 text=f'HS:{game_data[f"level_{i + 1}"]["high_score"]}',
                 width=250,

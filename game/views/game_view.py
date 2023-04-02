@@ -257,9 +257,9 @@ class GameView(arcade.View):
         self.enemies.draw()
 
         # TODO: remove from final, for debug
-        if self.enemies[0].arrows:
-            for i in self.enemies[0].arrows:
-                i.draw_hit_box()
+        # if self.enemies[0].arrows:
+        #     for i in self.enemies[0].arrows:
+        #         i.draw_hit_box()
 
         self.player.draw()
 
