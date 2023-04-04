@@ -27,17 +27,8 @@ First install poetry following : https://python-poetry.org/docs/
 
   `poetry run game`
 
-# What goes here?
 
-Include a README file in all your packages. This is the perfect place to explain:
-
-- What dependencies your game requires to run
-- How to build and run your game
-- The controls
-- What there is to see in the game
-- Copyright attributions (eg. CC-BY resources you have used)
-
-# Guidelines
+# Dev Guidelines
 
 - Work in the `dev` branch before merging into the `main`
 - Rebase your work before pushing, try to keep the git history clean
